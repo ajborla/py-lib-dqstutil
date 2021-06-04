@@ -1,5 +1,56 @@
+import doctest
+
 def is_numeric(s):
+    """
+    Given `s`, returns True if it is either a numeric type, or a numeric-convertible string.
+
+    :param s: str
+    :return: bool
+
+    >>> is_numeric('sgsgsg')
     False
+
+    >>> is_numeric([4,5,7])
+    False
+
+    >>> is_numeric({'a':5})
+    False
+
+    >>> is_numeric('6')
+    True
+
+    >>> is_numeric(6)
+    True
+
+    >>> is_numeric('4.1')
+    True
+
+    >>> is_numeric(4.1)
+    True
+
+    >>> is_numeric('-4.1')
+    True
+
+    >>> is_numeric(-4.1)
+    True
+
+    >>> is_numeric('4.1.4')
+    False
+
+    >>> is_numeric('56M')
+    False
+    """
+    def to_float():
+        try:
+            float(s)
+            return True
+        except:
+            return False
+
+    if type(s) is not str:
+        return type(s) is int or type(s) is float
+    else:
+        return s.isnumeric() or to_float()
 
 def is_possible_date(s):
     False
@@ -12,4 +63,7 @@ def determine_column_type(s):
 
 def inspect_dataset(dataset, header, generate_report=True):
     pass
+
+if __name__ == "__main__":
+    doctest.testmod()
 
