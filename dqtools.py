@@ -56,7 +56,35 @@ def is_numeric(s):
         return s.isnumeric() or to_complex()
 
 def is_possible_date(s):
+    """
+    Given `s`, returns True if it is possibly a date-convertible string.
+
+    :param s: str
+    :return: bool
+
+    >>> is_possible_date('sgsgsg')
     False
+
+    >>> is_possible_date('1/1/1')
+    True
+
+    >>> is_possible_date('1/1/1/')
+    False
+
+    >>> is_possible_date('1-1-1')
+    True
+
+    >>> is_possible_date('1--1-1')
+    False
+
+    >>> is_possible_date('January 1, 1999')
+    True
+    """
+    s = s.lower()
+    month_prefixes = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul',
+                      'aug', 'sep', 'oct', 'nov', 'dec']
+    return any(map(lambda m: m in s, month_prefixes)) or \
+           len(list(filter(lambda c: c == '/' or c == '-', s))) == 2
 
 def is_possible_numeric(s):
     False
