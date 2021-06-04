@@ -39,18 +39,21 @@ def is_numeric(s):
 
     >>> is_numeric('56M')
     False
+
+    >>> is_numeric(complex(3,4))
+    True
     """
-    def to_float():
+    def to_complex():
         try:
-            float(s)
+            complex(s)
             return True
         except:
             return False
 
     if type(s) is not str:
-        return type(s) is int or type(s) is float
+        return type(s) is int or type(s) is float or type(s) is complex
     else:
-        return s.isnumeric() or to_float()
+        return s.isnumeric() or to_complex()
 
 def is_possible_date(s):
     False
