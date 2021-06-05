@@ -137,7 +137,33 @@ def is_possible_numeric(s):
     return status
 
 def determine_column_type(s):
-    pass
+    """
+    Given `s`, returns string indicating its possible type, one of:
+
+        T  - text
+        N  - numeric (safely convertible to)
+        PD - possibly a date
+        PN - possibly a numeric
+
+    :param s: str
+    :return: str
+
+    >>> determine_column_type('sgsgsg')
+    'T'
+
+    >>> determine_column_type('15M')
+    'PN'
+
+    >>> determine_column_type('-4.1')
+    'N'
+
+    >>> determine_column_type('January 1, 1999')
+    'PD'
+    """
+    if is_numeric(s): return 'N'
+    if is_possible_numeric(s): return 'PN'
+    if is_possible_date(s): return 'PD'
+    return 'T'
 
 def inspect_dataset(dataset, header, generate_report=True):
     pass
