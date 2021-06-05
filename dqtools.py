@@ -88,7 +88,10 @@ def is_possible_date(s):
 
 def is_possible_numeric(s):
     """
-    Given `s`, returns True if it possibly a numeric-convertible string.
+    Given `s`, returns True if it is possibly a numeric-convertible string,
+    such as a currency value or comma-separted numeric, or a suffixed
+    value (such as a measurement). Note that version strings (often having
+    two or more decimal points) are NOT considered possible numerics.
 
     :param s: str
     :return: bool
