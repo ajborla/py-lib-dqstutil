@@ -166,7 +166,48 @@ def determine_column_type(s):
     return 'T'
 
 def inspect_dataset(dataset, header, generate_report=True):
-    pass
+    """
+    Given `dataset` and `header`, inspects `dataset` collecting
+    metadata, and either returns metadata or generates, and
+    prints, a report.
+
+    `dataset` is a list of lists, each sublist a 'row' in the
+    dataset, `header` is a list of strings, each identifying a
+    corresponding 'column' in the dataset. The metadata collected
+    includes:
+        rowskip, a list of non length-conformant row numbers
+
+    :param dataset: list
+    :param header: list
+    :param generate_report: bool
+
+    :return: None|tuple(list,)
+
+    >>> header = ['a', 'b', 'c']
+    >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3']]
+    >>> rowskip, = inspect_dataset(dataset, header, generate_report=False)
+    >>> rowskip
+    [1]
+
+    >>> header = ['a', 'b', 'c']
+    >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3']]
+    >>> inspect_dataset(dataset, header, generate_report=True)
+    Invalid (incorrect length) row numbers:[1]
+    """
+    # Collect non length-conformant row numbers
+    rowskip = []
+    rowlen = len(header)
+    for r, row in enumerate(dataset):
+        # Check for row length conformance
+        if len(row) != rowlen:
+            rowskip.append(r)
+    # Generate report if requested
+    if generate_report:
+        print('Invalid (incorrect length) row numbers:', end='')
+        print(rowskip)
+    else:
+        # Return collected metadata as tuple
+        return rowskip,
 
 if __name__ == "__main__":
     doctest.testmod()
