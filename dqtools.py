@@ -87,7 +87,51 @@ def is_possible_date(s):
            len(list(filter(lambda c: c == '/' or c == '-', s))) == 2
 
 def is_possible_numeric(s):
+    """
+    Given `s`, returns True if it possibly a numeric-convertible string.
+
+    :param s: str
+    :return: bool
+
+    >>> is_possible_numeric('sgsgsg')
     False
+
+    >>> is_possible_numeric('1/1/1')
+    False
+
+    >>> is_possible_numeric('January 1, 1999')
+    False
+
+    >>> is_possible_numeric('15M')
+    True
+
+    >>> is_possible_numeric('$14.34')
+    True
+
+    >>> is_possible_numeric('$$59')
+    False
+
+    >>> is_possible_numeric('1,456,234')
+    True
+
+    >>> is_possible_numeric('1.0.23')
+    False
+
+    >>> is_possible_numeric('1.23')
+    True
+
+    >>> is_possible_numeric('1,7kM')
+    True
+    """
+    # Tests to determine whether `s` may be a possible numeric string
+    contains_digits = any(map(lambda c: c.isdigit(), s))
+    contains_zero_or_one_decimal_point = len(list(filter(lambda c: c == '.', s))) < 2
+    contains_zero_or_one_dollar_sign = len(list(filter(lambda c: c == '$', s))) < 2
+    is_not_possible_date = not is_possible_date(s)
+    # Apply tests and return result
+    status = contains_digits and is_not_possible_date and \
+             contains_zero_or_one_decimal_point and contains_zero_or_one_dollar_sign
+    return status
 
 def determine_column_type(s):
     pass
