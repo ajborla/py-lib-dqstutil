@@ -179,18 +179,20 @@ def inspect_dataset(dataset, header, generate_report=True):
         columns, a dict, keyed by column name, each containing a
           dict of column-type-identifying codes (see the function,
           'determine_column_type' for details)
+        uniques, a dict, keyed by column name, each containing the
+          count of unique text-only values
 
     :param dataset: list
     :param header: list
     :param generate_report: bool
 
-    :return: None|tuple(list,dict)
+    :return: None|tuple(list,dict,dict)
 
     >>> header = ['a', 'b', 'c']
-    >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3'], ['a4', 'b', '3']]
-    >>> rowskip, columns, = inspect_dataset(dataset, header, generate_report=False)
-    >>> rowskip, columns
-    ([1], {'a': {'PN': 3}, 'b': {'PN': 2, 'T': 1}, 'c': {'PN': 2, 'N': 1}})
+    >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3'], ['a4', 'bib', '3']]
+    >>> rowskip, columns, uniques, = inspect_dataset(dataset, header, generate_report=False)
+    >>> rowskip, columns, uniques
+    ([1], {'a': {'PN': 3}, 'b': {'PN': 2, 'T': 1}, 'c': {'PN': 2, 'N': 1}}, {'b': 1})
 
     >>> header = ['a', 'b', 'c']
     >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3'], ['a4', 'b', '3']]
@@ -200,6 +202,10 @@ def inspect_dataset(dataset, header, generate_report=True):
     Tentative column type(s) [T - text, N - numeric, PN - possible numeric, PD - possible date]:
     <BLANKLINE>
     {'a': {'PN': 3}, 'b': {'PN': 2, 'T': 1}, 'c': {'PN': 2, 'N': 1}}
+    <BLANKLINE>
+    Unique value counts (non-numeric and non-date columns only):
+    <BLANKLINE>
+    {'b': 1}
     """
     # Column metadata repository keyed using column headers
     columns = {}
@@ -223,15 +229,39 @@ def inspect_dataset(dataset, header, generate_report=True):
                 columns[colname][coltype] += 1
             else:
                 columns[colname][coltype] = 1
+    # Collect unique value data
+    uniques = {}
+    for colname in header:
+        uniques[colname] = []
+    for r, row in enumerate(dataset):
+        # Skip non length-conformant rows
+        if r in rowskip: continue
+        # Collect unique values for non-date and non-numeric columns
+        for colname, colval in zip(header, row):
+            # Check both the column type and the current value
+            if 'T' not in columns[colname]: continue
+            if determine_column_type(colval) != 'T': continue
+            if colval not in uniques[colname]:
+                uniques[colname].append(colval)
+    # Replace collect unique values with their count
+    for colname in header:
+        uqcollen = len(uniques[colname])
+        # Remove entries with zero unique count
+        if uqcollen < 1:
+            del uniques[colname]
+        else:
+            uniques[colname] = uqcollen
     # Generate report if requested
     if generate_report:
         print('Invalid (incorrect length) row numbers:', end='')
         print(rowskip)
         print('\nTentative column type(s) [T - text, N - numeric, PN - possible numeric, PD - possible date]:\n')
         print(columns)
+        print('\nUnique value counts (non-numeric and non-date columns only):\n')
+        print(uniques)
     else:
         # Return collected metadata as tuple
-        return rowskip, columns,
+        return rowskip, columns, uniques,
 
 if __name__ == "__main__":
     doctest.testmod()
