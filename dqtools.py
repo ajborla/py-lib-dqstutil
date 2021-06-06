@@ -180,32 +180,38 @@ def inspect_dataset(dataset, header, generate_report=True):
           dict of column-type-identifying codes (see the function,
           'determine_column_type' for details)
         uniques, a dict, keyed by column name, each containing the
-          count of unique text-only values
+          count of unique values in text-only-type columns
+        duplicates, a dict, keyed by column name, each containing the
+          count of duplicate values in text-only-type columns
 
     :param dataset: list
     :param header: list
     :param generate_report: bool
 
-    :return: None|tuple(list,dict,dict)
+    :return: None|tuple(list,dict,dict,dict)
 
     >>> header = ['a', 'b', 'c']
-    >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3'], ['a4', 'bib', '3']]
-    >>> rowskip, columns, uniques, = inspect_dataset(dataset, header, generate_report=False)
-    >>> rowskip, columns, uniques
-    ([1], {'a': {'PN': 3}, 'b': {'PN': 2, 'T': 1}, 'c': {'PN': 2, 'N': 1}}, {'b': 1})
+    >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3'], ['a4', 'bib', '3'], ['ay', 'bib', 'x'], ['ay', 'bib', 'x']]
+    >>> rowskip, columns, uniques, duplicates = inspect_dataset(dataset, header, generate_report=False)
+    >>> rowskip, columns, uniques, duplicates
+    ([1], {'a': {'PN': 3, 'T': 2}, 'b': {'PN': 2, 'T': 3}, 'c': {'PN': 2, 'N': 1, 'T': 2}}, {'a': 1, 'b': 1, 'c': 1}, {'a': 1, 'b': 2, 'c': 1})
 
     >>> header = ['a', 'b', 'c']
-    >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3'], ['a4', 'b', '3']]
+    >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3'], ['a4', 'bib', '3'], ['ay', 'bib', 'x'], ['ay', 'bib', 'x']]
     >>> inspect_dataset(dataset, header, generate_report=True)
     Invalid (incorrect length) row numbers:[1]
     <BLANKLINE>
     Tentative column type(s) [T - text, N - numeric, PN - possible numeric, PD - possible date]:
     <BLANKLINE>
-    {'a': {'PN': 3}, 'b': {'PN': 2, 'T': 1}, 'c': {'PN': 2, 'N': 1}}
+    {'a': {'PN': 3, 'T': 2}, 'b': {'PN': 2, 'T': 3}, 'c': {'PN': 2, 'N': 1, 'T': 2}}
     <BLANKLINE>
     Unique value counts (non-numeric and non-date columns only):
     <BLANKLINE>
-    {'b': 1}
+    {'a': 1, 'b': 1, 'c': 1}
+    <BLANKLINE>
+    Duplicate value counts (non-numeric and non-date columns only):
+    <BLANKLINE>
+    {'a': 1, 'b': 2, 'c': 1}
     """
     # Column metadata repository keyed using column headers
     columns = {}
@@ -230,9 +236,10 @@ def inspect_dataset(dataset, header, generate_report=True):
             else:
                 columns[colname][coltype] = 1
     # Collect unique value data
-    uniques = {}
+    uniques, duplicates = {}, {}
     for colname in header:
         uniques[colname] = []
+        duplicates[colname] = []
     for r, row in enumerate(dataset):
         # Skip non length-conformant rows
         if r in rowskip: continue
@@ -243,14 +250,19 @@ def inspect_dataset(dataset, header, generate_report=True):
             if determine_column_type(colval) != 'T': continue
             if colval not in uniques[colname]:
                 uniques[colname].append(colval)
+            else:
+                duplicates[colname].append(colval)
     # Replace collect unique values with their count
     for colname in header:
         uqcollen = len(uniques[colname])
+        ducollen = len(duplicates[colname])
         # Remove entries with zero unique count
         if uqcollen < 1:
             del uniques[colname]
+            del duplicates[colname]
         else:
             uniques[colname] = uqcollen
+            duplicates[colname] = ducollen
     # Generate report if requested
     if generate_report:
         print('Invalid (incorrect length) row numbers:', end='')
@@ -259,9 +271,11 @@ def inspect_dataset(dataset, header, generate_report=True):
         print(columns)
         print('\nUnique value counts (non-numeric and non-date columns only):\n')
         print(uniques)
+        print('\nDuplicate value counts (non-numeric and non-date columns only):\n')
+        print(duplicates)
     else:
         # Return collected metadata as tuple
-        return rowskip, columns, uniques,
+        return rowskip, columns, uniques, duplicates,
 
 if __name__ == "__main__":
     doctest.testmod()
