@@ -279,9 +279,11 @@ def inspect_dataset(dataset, header, generate_report=True):
 
 def extract_unique_values(values):
     """
-    Given a list, `values`, the unique values are returned as a list.
+    Given a list, `values`, the unique values are returned as a
+    list, optionally sorted in ascending order if `sort` is set.
 
     :param values: list
+    :param sort: bool
     :return: list
 
     >>> values = {'a': 4}
@@ -301,9 +303,14 @@ def extract_unique_values(values):
     >>> extract_unique_values(values) == uniques
     True
 
-    >>> values = [1, 2, 3, 1]
-    >>> uniques = [1, 2, 3]
+    >>> values = [1, 3, 2, 1]
+    >>> uniques = [1, 3, 2]
     >>> extract_unique_values(values) == uniques
+    True
+
+    >>> values = [1, 3, 2, 1]
+    >>> uniques = [1, 3, 2]
+    >>> extract_unique_values(values, sort=True) == sorted(uniques)
     True
     """
     # Exclude obvious non-candidates
@@ -313,9 +320,10 @@ def extract_unique_values(values):
     elem_type = type(values[0])
     if not all(map(lambda v: type(v) is elem_type, values)):
         return None
-    # Generate and return list of unique values
+    # Generate and return list of unique values (sorted (ascending)
+    # if requested)
     uniques = [v for i, v in enumerate(values) if v not in values[:i]]
-    return uniques
+    return sorted(uniques) if sort else uniques
 
 if __name__ == "__main__":
     doctest.testmod()
