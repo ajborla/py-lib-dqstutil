@@ -284,6 +284,18 @@ def extract_unique_values(values):
     :param values: list
     :return: list
 
+    >>> values = {'a': 4}
+    >>> extract_unique_values(values) is None
+    True
+
+    >>> values = []
+    >>> extract_unique_values(values) is None
+    True
+
+    >>> values = ['d', 4, {'a': 4}, [3,4,5]]
+    >>> extract_unique_values(values) is None
+    True
+
     >>> values = ['a', 't', 'z', 'k', 'v', 'z', 't']
     >>> uniques = ['a', 't', 'z', 'k', 'v']
     >>> extract_unique_values(values) == uniques
@@ -294,7 +306,16 @@ def extract_unique_values(values):
     >>> extract_unique_values(values) == uniques
     True
     """
-    pass
+    # Exclude obvious non-candidates
+    if type(values) is not list or len(values) < 1:
+        return None
+    # Ensure homogeneity of list elements
+    elem_type = type(values[0])
+    if not all(map(lambda v: type(v) is elem_type, values)):
+        return None
+    # Generate and return list of unique values
+    uniques = [v for i, v in enumerate(values) if v not in values[:i]]
+    return uniques
 
 if __name__ == "__main__":
     doctest.testmod()
