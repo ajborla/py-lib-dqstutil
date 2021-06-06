@@ -176,24 +176,35 @@ def inspect_dataset(dataset, header, generate_report=True):
     corresponding 'column' in the dataset. The metadata collected
     includes:
         rowskip, a list of non length-conformant row numbers
+        columns, a dict, keyed by column name, each containing a
+          dict of column-type-identifying codes (see the function,
+          'determine_column_type' for details)
 
     :param dataset: list
     :param header: list
     :param generate_report: bool
 
-    :return: None|tuple(list,)
+    :return: None|tuple(list,dict)
 
     >>> header = ['a', 'b', 'c']
-    >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3']]
-    >>> rowskip, = inspect_dataset(dataset, header, generate_report=False)
-    >>> rowskip
-    [1]
+    >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3'], ['a4', 'b', '3']]
+    >>> rowskip, columns, = inspect_dataset(dataset, header, generate_report=False)
+    >>> rowskip, columns
+    ([1], {'a': {'PN': 3}, 'b': {'PN': 2, 'T': 1}, 'c': {'PN': 2, 'N': 1}})
 
     >>> header = ['a', 'b', 'c']
-    >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3']]
+    >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3'], ['a4', 'b', '3']]
     >>> inspect_dataset(dataset, header, generate_report=True)
     Invalid (incorrect length) row numbers:[1]
+    <BLANKLINE>
+    Tentative column type(s) [T - text, N - numeric, PN - possible numeric, PD - possible date]:
+    <BLANKLINE>
+    {'a': {'PN': 3}, 'b': {'PN': 2, 'T': 1}, 'c': {'PN': 2, 'N': 1}}
     """
+    # Column metadata repository keyed using column headers
+    columns = {}
+    for colname in header:
+        columns[colname] = {}
     # Collect non length-conformant row numbers
     rowskip = []
     rowlen = len(header)
@@ -201,13 +212,26 @@ def inspect_dataset(dataset, header, generate_report=True):
         # Check for row length conformance
         if len(row) != rowlen:
             rowskip.append(r)
+    # Collect column type data
+    for r, row in enumerate(dataset):
+        # Skip non length-conformant rows
+        if r in rowskip: continue
+        # Check column type conformance
+        for colname, colval in zip(header, row):
+            coltype = determine_column_type(colval)
+            if coltype in columns[colname]:
+                columns[colname][coltype] += 1
+            else:
+                columns[colname][coltype] = 1
     # Generate report if requested
     if generate_report:
         print('Invalid (incorrect length) row numbers:', end='')
         print(rowskip)
+        print('\nTentative column type(s) [T - text, N - numeric, PN - possible numeric, PD - possible date]:\n')
+        print(columns)
     else:
         # Return collected metadata as tuple
-        return rowskip,
+        return rowskip, columns,
 
 if __name__ == "__main__":
     doctest.testmod()
