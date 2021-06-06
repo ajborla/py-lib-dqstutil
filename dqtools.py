@@ -277,6 +277,25 @@ def inspect_dataset(dataset, header, generate_report=True):
         # Return collected metadata as tuple
         return rowskip, columns, uniques, duplicates,
 
+def extract_unique_values(values):
+    """
+    Given a list, `values`, the unique values are returned as a list.
+
+    :param values: list
+    :return: list
+
+    >>> values = ['a', 't', 'z', 'k', 'v', 'z', 't']
+    >>> uniques = ['a', 't', 'z', 'k', 'v']
+    >>> extract_unique_values(values) == uniques
+    True
+
+    >>> values = [1, 2, 3, 1]
+    >>> uniques = [1, 2, 3]
+    >>> extract_unique_values(values) == uniques
+    True
+    """
+    pass
+
 if __name__ == "__main__":
     doctest.testmod()
 
