@@ -279,11 +279,20 @@ def inspect_dataset(dataset, header, generate_report=True):
 
 def extract_unique_values(values):
     """
-    Given a list, `values`, the unique values are returned as a
-    list, optionally sorted in ascending order if `sort` is set.
+    Given a list, `values`, a type-specific unique-value determination
+    algorithm is selected, and applied, with the unique values returned
+    as a list, optionally sorted in ascending order if `sort` is set.
+    Optional, too, is `sep`, used as a separator where `values`'
+    elements are multi-(non-list)-element lists (elements are
+    concatenated to create the entity on which uniqueness is determined).
+
+    Return list comprises the unique values in `values`, and in the case
+    where elements were lists, these are the list-contained values. Refer
+    to the tests for examples.
 
     :param values: list
     :param sort: bool
+    :param sep: str
     :return: list
 
     >>> values = {'a': 4}
@@ -312,6 +321,46 @@ def extract_unique_values(values):
     >>> uniques = [1, 3, 2]
     >>> extract_unique_values(values, sort=True) == sorted(uniques)
     True
+
+    >>> values = [['a1'], ['b1'], ['c1'], ['a2'], ['b1'], ['c1'], ['a1'], ['b2'], ['c1']]
+    >>> uniques = ['a1', 'b1', 'c1', 'a2', 'b2']
+    >>> sorted(extract_unique_values(values)) == sorted(uniques)
+    True
+
+    >>> values = [[1], [2], [3], [1]]
+    >>> uniques = [1, 2, 3]
+    >>> extract_unique_values(values) == uniques
+    True
+
+    >>> values = [['a1', 'b1', 'c1'], ['a2', 'b2', 'c2'], ['a3', 'b3', 'c3'], ['a2', 'b2', 'c2']]
+    >>> uniques = ['a1|b1|c1', 'a2|b2|c2', 'a3|b3|c3']
+    >>> sorted(extract_unique_values(values)) == sorted(uniques)
+    True
+
+    >>> values = [['a1'], ['b1'], [], ['a2'], ['b1']]
+    >>> extract_unique_values(values) is None
+    True
+
+    >>> values = [['a1'], ['b1'], 0, ['a2'], ['b1']]
+    >>> extract_unique_values(values) is None
+    True
+
+    >>> values = [['a1', 'b1', 'c1'], [], ['a3', 'b3', 'c3'], ['a2', 'b2', 'c2']]
+    >>> extract_unique_values(values) is None
+    True
+
+    >>> values = [['a1', 'b1', 'c1'], ['a2', 'c2'], ['a3', 'b3', 'c3'], ['a2', 'b2', 'c2']]
+    >>> extract_unique_values(values) is None
+    True
+
+    >>> values = [['a1', 'b1', 'c1'], ['a2', 0, 'c2'], ['a3', 'b3', 'c3'], ['a2', 'b2', 'c2']]
+    >>> extract_unique_values(values) is None
+    True
+
+    >>> values = [[11, 12, 13], [34, 0, 85], [11, 12, 13]]
+    >>> uniques = ['11|12|13', '34|0|85']
+    >>> sorted(extract_unique_values(values)) == sorted(uniques)
+    True
     """
     # Exclude obvious non-candidates
     if type(values) is not list or len(values) < 1:
@@ -320,9 +369,29 @@ def extract_unique_values(values):
     elem_type = type(values[0])
     if not all(map(lambda v: type(v) is elem_type, values)):
         return None
-    # Generate and return list of unique values (sorted (ascending)
-    # if requested)
-    uniques = [v for i, v in enumerate(values) if v not in values[:i]]
+    # Select algorithm based on element type: list or other
+    if elem_type is list:
+        elem_len = len(values[0])
+        # Ensure all sublists are non-empty, have identical length,
+        # and do not, themselves contain lists
+        if elem_len == 0:
+            return None
+        contains_no_list = lambda v: all(map(lambda x: type(x) is not list, v))
+        is_homogenous = lambda v, w: all(map(lambda x: type(x) is type(w), v))
+        if not all(map(lambda v: len(v) == elem_len and \
+                       contains_no_list(v) and is_homogenous(v, v[0]), values)):
+            return None
+        if elem_len > 1:
+            # Unique values returned as string, concatenation of individual values
+            to_str = lambda v: map(lambda x: str(x), v)
+            uniques = [sep.join(to_str(v)) for v in set([tuple(v) for v in values])]
+        else:
+            # Unique values returned as original type
+            uniques = [v[0] for v in set([tuple(v) for v in values])]
+    else:
+        # Non-list element type; unique values returned as original type
+        uniques = [v for i, v in enumerate(values) if v not in values[:i]]
+    # Sorted (ascending) unique value list, if requested
     return sorted(uniques) if sort else uniques
 
 if __name__ == "__main__":
