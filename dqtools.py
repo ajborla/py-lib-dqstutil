@@ -462,6 +462,52 @@ def gen_freq_table(dataset, header, colname, sort_by_value=False, reverse=False)
                            reverse=reverse)}
     return None
 
+def extract_rows(dataset, rowrange):
+    """
+    Given  a `dataset`, and a `rowrange` (a two-element tuple|list
+    containing integers), extracts, and returns, from `dataset`,
+    the set of rows numbered from `rowrange[0]` through `rowrange[1`,
+    inclusive. Note row numbering is from 0 through len(dataset)-1.
+
+    :param dataset: list
+    :param rowrange: list
+
+    :return: None|list
+
+    >>> dummy = [[],[],[]]
+    >>> extract_rows(dummy, [-1,2]) is None
+    True
+
+    >>> dummy = [[],[],[]]
+    >>> extract_rows(dummy, [2,1]) is None
+    True
+
+    >>> dummy = [[],[],[]]
+    >>> extract_rows(dummy, [3,1]) is None
+    True
+
+    >>> dummy = [[],[],[]]
+    >>> extract_rows(dummy, [1,4]) is None
+    True
+
+    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> exp_ds = [['a2', 'b2', 'c2'], ['a3', 'b3', 'c3']]
+    >>> ret_ds = extract_rows(orig_ds, [1,2])
+    >>> ret_ds == exp_ds and ret_ds is not exp_ds
+    True
+
+    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> exp_ds = [['a2', 'b2', 'c2']]
+    >>> ret_ds = extract_rows(orig_ds, [1,1])
+    >>> ret_ds == exp_ds and ret_ds is not exp_ds
+    True
+    """
+    lb, ub = rowrange
+    if lb < 0 or lb > ub: return None
+    if ub < lb or ub > len(dataset)-1: return None
+    row_subset = dataset[lb:(ub+1)] if lb != ub else [dataset[lb]]
+    return row_subset
+
 if __name__ == "__main__":
     doctest.testmod()
 
