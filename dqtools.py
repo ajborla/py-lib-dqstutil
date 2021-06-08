@@ -394,6 +394,50 @@ def extract_unique_values(values):
     # Sorted (ascending) unique value list, if requested
     return sorted(uniques) if sort else uniques
 
+def gen_freq_table(dataset, header, colname):
+    """
+    Given  a `dataset`, its `header`, a column name, `colname`, generates
+    a frequency table keyed by `colname`, and including both the count and
+    relative percentage as a tuple. Returned table is sorted by key, that
+    is, by `colname`, ascending.
+
+    :param dataset: list
+    :param header: list
+    :param colname: str
+
+    :return: dict
+
+    >>> header = ['a', 'b', 'c']
+    >>> ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3'], ['a3', 'b3', 'c3']]
+    >>> gen_freq_table(ds, header, 'Z') is None
+    True
+
+    >>> header = ['a', 'b', 'c']
+    >>> ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3'], ['a3', 'b3', 'c3']]
+    >>> fqt = {'b1':(1, 25.0), 'b2':(1, 25.0), 'b3':(2, 50.0)}
+    >>> ret_fqt = gen_freq_table(ds, header, 'b')
+    >>> all([fqt[k][0] == ret_fqt[k][0] for k in fqt if k in ret_fqt]) and fqt.keys() == ret_fqt.keys()
+    True
+    """
+    freq_table, total_rows = {}, len(dataset)
+    if colname in header:
+        # Compute frequency counts
+        idx = header.index(colname)
+        for row in dataset:
+            colval = row[idx]
+            if colval not in freq_table:
+                freq_table[colval] = [1, 0]
+            else:
+                freq_table[colval][0] += 1
+        # Compute frequency percentages
+        for colval in freq_table:
+            freq_table[colval][1] = (freq_table[colval][0] / total_rows) * 100
+            freq_table[colval] = tuple(freq_table[colval])
+        # Sort table
+        return {k: v for k, v in \
+                sorted(freq_table.items(), key=lambda item: item[0])}
+    return None
+
 if __name__ == "__main__":
     doctest.testmod()
 
