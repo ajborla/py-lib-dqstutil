@@ -492,16 +492,20 @@ def gen_freq_table(dataset, header, colname, sort_by_value=False, reverse=False)
                            reverse=reverse)}
     return None
 
-def remove_column(dataset, header, colname):
+def remove_column(dataset, header, colname, inplace=False):
     """
     Given  a `dataset`, its `header`, and a single column name,
     `colname`, removes the nominated column from `dataset` and
     from the `header`. A copy of the dataset, and of the header,
-    is modified and returned.
+    is modified and returned, unless `inplace` is True, in
+    which case, the original dataset and original header, with
+    modifications, are returned. Note dataset copy is a copy of
+    the container and copies of the elements too.
 
     :param dataset: list
     :param header: list
     :param colname: str
+    :param inplace: bool
 
     :return: list, list|None, None
 
@@ -527,10 +531,24 @@ def remove_column(dataset, header, colname):
     >>> cmphd = lambda: all(map(lambda p, q: p == q, ret_hd, new_hd))
     >>> ret_ds is not orig_ds and cmpds() and ret_hd is not orig_hd and cmphd()
     True
+
+    >>> # Remove 'b' column from original dataset, update original header, return both
+    >>> orig_hd = ['a', 'b', 'c']
+    >>> #     ==> ['a', 'c']
+    >>> new_hd = ['a', 'c']
+    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> #     ==> [['a1', 'c1'],['a2', 'c2'],['a3', 'c3']]
+    >>> new_ds = [['a1', 'c1'],['a2', 'c2'],['a3', 'c3']]
+    >>> ret_ds, ret_hd = remove_column(orig_ds, orig_hd, 'b', inplace=True)
+    >>> cmpds = lambda: all(map(lambda p,q,r: p is q and p == q and p == r, ret_ds, orig_ds, new_ds))
+    >>> cmphd = lambda: all(map(lambda p,q,r: p == q and p == r, ret_hd, orig_hd, new_hd))
+    >>> ret_ds is orig_ds and cmpds() and ret_hd is orig_hd and cmphd()
+    True
     """
     if type(colname) is str and colname in header:
-        dataset = [x[:] for x in dataset]
-        header = header[:]
+        # `inplace` flag determines whether originals or copies modified
+        dataset = dataset if inplace else [x[:] for x in dataset]
+        header = header if inplace else header[:]
         idx = header.index(colname)
         for row in dataset:
             del row[idx]
