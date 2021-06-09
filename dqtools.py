@@ -501,12 +501,74 @@ def extract_row_range(dataset, rowrange):
     >>> ret_ds = extract_row_range(orig_ds, [1,1])
     >>> ret_ds == exp_ds and ret_ds is not exp_ds
     True
-
     """
     lb, ub = rowrange
     if lb < 0 or lb > ub: return None
     if ub < lb or ub > len(dataset)-1: return None
     return dataset[lb:(ub+1)] if lb != ub else [dataset[lb]]
+
+def extract_rows(dataset, header, predicate):
+    """
+    Given  a `dataset`, its `header`, a 2-argument function, `predicate`,
+    applies the function to each row of the dataset, and retains the row
+    if the function application returns True.
+
+    For each row of the dataset, `predicate` receives the row, as well
+    as `header`. `predicate` uses the arguments to craft a boolean
+    expression that returns True if the row is to be retained. Example
+    function implementations:
+
+        `lambda row, header: row[header.index('c')] > 'c1'`
+        `def predicate(row, header): return row[header.index('c')] > 'c1'`
+
+    :param dataset: list
+    :param header: list
+    :param predicate: function
+
+    :return: list
+
+    >>> # Pass non-function predicate
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> predicate = []
+    >>> extract_rows(dummy, header, predicate) is None
+    True
+
+    >>> # Pass 3-arg predicate
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> predicate = lambda x,y,z: None
+    >>> extract_rows(dummy, header, predicate) is None
+    True
+
+    >>> # Extract all rows
+    >>> header = ['a', 'b', 'c']
+    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> exp_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> predicate = lambda row, header: True
+    >>> ret_ds = extract_rows(orig_ds, header, predicate)
+    >>> ret_ds is not orig_ds and ret_ds == exp_ds
+    True
+
+    >>> # Extract selected rows
+    >>> header = ['a', 'b', 'c']
+    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> exp_ds = [['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> predicate = lambda row, header: row[header.index('c')] > 'c1'
+    >>> ret_ds = extract_rows(orig_ds, header, predicate)
+    >>> ret_ds is not orig_ds and ret_ds == exp_ds
+    True
+    """
+    # Ensure valid `predicate`
+    if type(predicate) is not type(lambda x,y: None) or \
+       predicate.__code__.co_argcount != 2:
+        return None
+    # Extract row(s) meeting `predicate` conditions
+    row_subset = []
+    for row in dataset:
+        if predicate(row, header):
+            row_subset.append(row)
+    return row_subset
 
 if __name__ == "__main__":
     doctest.testmod()
