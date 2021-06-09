@@ -1,5 +1,36 @@
 import doctest
 
+def _is_valid_colnames(header, colnames):
+    """
+    Given a list of column name, `colnames`, returns True if each
+    element is also in the list, `header`.
+
+    :param header: list
+    :param colnames: list
+    :return: bool
+
+    >>> _is_valid_colnames(['a', 'b', 'c'], ['b', 'c'])
+    True
+
+    >>> _is_valid_colnames(['a', 'b', 'c'], ['e', 'c'])
+    False
+
+    >>> _is_valid_colnames(['a', 'b', 'c'], {})
+    False
+
+    >>> _is_valid_colnames(['a', 'b', 'c'], [])
+    False
+
+    >>> _is_valid_colnames(['a', 'b', 'c'], [1, 2])
+    False
+
+    """
+    valid_colnames = \
+        type(header) is list and len(header) > 0 and \
+        type(colnames) is list and len(colnames) > 0 and \
+        all(map(lambda x: x in header, colnames))
+    return valid_colnames
+
 def is_numeric(s):
     """
     Given `s`, returns True if it is either a numeric type, or a numeric-convertible string.
@@ -606,13 +637,11 @@ def extract_rows(dataset, header, predicate, colnames=None):
     if colnames is None:
         return row_subset, header[:]
     # Extract only nominated columns for each row
-    if type(colnames) is list and len(colnames) > 0:
-        valid_colnames = all(list(map(lambda x: x in header, colnames)))
-        if valid_colnames:
-            # Extract nominated columns ***TODO***
-            new_subset, new_header = [], []
-            return new_subset, new_header
-            # Extract nominated columns ***TODO***
+    if _is_valid_colnames(header, colnames):
+        # Extract nominated columns ***TODO***
+        new_subset, new_header = [], []
+        return new_subset, new_header
+        # Extract nominated columns ***TODO***
     # Fallthrough case
     return None
 
