@@ -23,7 +23,6 @@ def _is_valid_colnames(header, colnames):
 
     >>> _is_valid_colnames(['a', 'b', 'c'], [1, 2])
     False
-
     """
     valid_colnames = \
         type(header) is list and len(header) > 0 and \
@@ -308,7 +307,7 @@ def inspect_dataset(dataset, header, generate_report=True):
         # Return collected metadata as tuple
         return rowskip, columns, uniques, duplicates,
 
-def extract_unique_values(values):
+def extract_unique_values(values, sort=False, sep='|'):
     """
     Given a list, `values`, a type-specific unique-value determination
     algorithm is selected, and applied, with the unique values returned
@@ -492,6 +491,53 @@ def gen_freq_table(dataset, header, colname, sort_by_value=False, reverse=False)
                     sorted(freq_table.items(), key=lambda item: item[0],
                            reverse=reverse)}
     return None
+
+def remove_column(dataset, header, colname):
+    """
+    Given  a `dataset`, its `header`, and a single column name,
+    `colname`, removes the nominated column from `dataset` and
+    from the `header`. A copy of the dataset, and of the header,
+    is modified and returned.
+
+    :param dataset: list
+    :param header: list
+    :param colname: str
+
+    :return: list, list|None, None
+
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> ret_ds, ret_hd = remove_column(dummy, header, [])
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> ret_ds, ret_hd = remove_column(dummy, header, 'd')
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> # Remove 'b' column from dataset copy, update header copy, return both
+    >>> orig_hd = ['a', 'b', 'c']
+    >>> new_hd = ['a', 'c']
+    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> new_ds = [['a1', 'c1'],['a2', 'c2'],['a3', 'c3']]
+    >>> ret_ds, ret_hd = remove_column(orig_ds, orig_hd, 'b')
+    >>> cmpds = lambda: all(map(lambda p, q: p is not q and p == q, ret_ds, new_ds))
+    >>> cmphd = lambda: all(map(lambda p, q: p == q, ret_hd, new_hd))
+    >>> ret_ds is not orig_ds and cmpds() and ret_hd is not orig_hd and cmphd()
+    True
+    """
+    if type(colname) is str and colname in header:
+        dataset = [x[:] for x in dataset]
+        header = header[:]
+        idx = header.index(colname)
+        for row in dataset:
+            del row[idx]
+        del header[idx]
+        return dataset, header
+    # Fallthrough case
+    return None, None,
 
 def extract_row_range(dataset, rowrange):
     """
