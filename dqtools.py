@@ -507,11 +507,18 @@ def extract_row_range(dataset, rowrange):
     if ub < lb or ub > len(dataset)-1: return None
     return dataset[lb:(ub+1)] if lb != ub else [dataset[lb]]
 
-def extract_rows(dataset, header, predicate):
+def extract_rows(dataset, header, predicate, colnames=None):
     """
     Given  a `dataset`, its `header`, a 2-argument function, `predicate`,
-    applies the function to each row of the dataset, and retains the row
-    if the function application returns True.
+    and, optionally, a list of column names, `colnames`, applies the
+    function to each row of the dataset, and retains the row if the
+    function application returns True.
+
+    If `colnames` is supplied, keeps the nominated columns from the
+    retained rows, discarding all others. A copy of the header is updated
+    to reflect these changes. In all cases copies of the dataset and
+    header (whether modified or not) are returned (there is no 'inplace'
+    modification).
 
     For each row of the dataset, `predicate` receives the row, as well
     as `header`. `predicate` uses the arguments to craft a boolean
@@ -524,8 +531,9 @@ def extract_rows(dataset, header, predicate):
     :param dataset: list
     :param header: list
     :param predicate: function
+    :param colnames: None|ist
 
-    :return: list
+    :return: list, list
 
     >>> # Pass non-function predicate
     >>> header = ['a', 'b', 'c']
@@ -546,7 +554,7 @@ def extract_rows(dataset, header, predicate):
     >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
     >>> exp_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
     >>> predicate = lambda row, header: True
-    >>> ret_ds = extract_rows(orig_ds, header, predicate)
+    >>> ret_ds, _ = extract_rows(orig_ds, header, predicate)
     >>> ret_ds is not orig_ds and ret_ds == exp_ds
     True
 
@@ -555,9 +563,35 @@ def extract_rows(dataset, header, predicate):
     >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
     >>> exp_ds = [['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
     >>> predicate = lambda row, header: row[header.index('c')] > 'c1'
-    >>> ret_ds = extract_rows(orig_ds, header, predicate)
+    >>> ret_ds, _ = extract_rows(orig_ds, header, predicate)
     >>> ret_ds is not orig_ds and ret_ds == exp_ds
     True
+
+    >>> # `colnames` is an empty list
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> predicate = lambda row,header: True
+    >>> colnames = []
+    >>> extract_rows(dummy, header, predicate, colnames) is None
+    True
+
+    >>> # `colnames` contains a non-column name
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> predicate = lambda row,header: True
+    >>> colnames = ['a', 'd']
+    >>> extract_rows(dummy, header, predicate, colnames) is None
+    True
+
+    >>> # Extract selected rows and columns *** TODO ***
+    >>> orig_hd = ['a', 'b', 'c']
+    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> exp_hd = ['a', 'c']
+    >>> exp_ds = [['a2', 'c2'],['a3', 'c3']]
+    >>> predicate = lambda row, header: row[header.index('c')] > 'c1'
+    >>> ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, predicate)
+    >>> ret_ds is not orig_ds and ret_ds == exp_ds and ret_hd is not orig_hd and ret_hd == exp_hd
+    False
     """
     # Ensure valid `predicate`
     if type(predicate) is not type(lambda x,y: None) or \
@@ -567,8 +601,20 @@ def extract_rows(dataset, header, predicate):
     row_subset = []
     for row in dataset:
         if predicate(row, header):
-            row_subset.append(row)
-    return row_subset
+            row_subset.append(row[:])
+    # Return whole row set if no column names nominated
+    if colnames is None:
+        return row_subset, header[:]
+    # Extract only nominated columns for each row
+    if type(colnames) is list and len(colnames) > 0:
+        valid_colnames = all(list(map(lambda x: x in header, colnames)))
+        if valid_colnames:
+            # Extract nominated columns ***TODO***
+            new_subset, new_header = [], []
+            return new_subset, new_header
+            # Extract nominated columns ***TODO***
+    # Fallthrough case
+    return None
 
 if __name__ == "__main__":
     doctest.testmod()
