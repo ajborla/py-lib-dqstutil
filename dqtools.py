@@ -805,15 +805,25 @@ def extract_rows(dataset, header, predicate, colnames=None):
     >>> extract_rows(dummy, header, predicate, colnames) is None
     True
 
-    >>> # Extract selected rows and columns *** TODO ***
+    >>> # Extract selected rows: whole rows returned
+    >>> orig_hd = ['a', 'b', 'c']
+    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> exp_hd = ['a', 'b', 'c']
+    >>> exp_ds = [['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> predicate = lambda row, header: row[header.index('c')] > 'c1'
+    >>> ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, predicate)
+    >>> ret_ds is not orig_ds and ret_ds == exp_ds and ret_hd is not orig_hd and ret_hd == exp_hd
+    True
+
+    >>> # Extract selected rows: columns 'a', and 'c', returned
     >>> orig_hd = ['a', 'b', 'c']
     >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
     >>> exp_hd = ['a', 'c']
     >>> exp_ds = [['a2', 'c2'],['a3', 'c3']]
     >>> predicate = lambda row, header: row[header.index('c')] > 'c1'
-    >>> ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, predicate)
+    >>> ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, predicate, ['a', 'c'])
     >>> ret_ds is not orig_ds and ret_ds == exp_ds and ret_hd is not orig_hd and ret_hd == exp_hd
-    False
+    True
     """
     # Ensure valid `predicate`
     if type(predicate) is not type(lambda x,y: None) or \
@@ -829,10 +839,13 @@ def extract_rows(dataset, header, predicate, colnames=None):
         return row_subset, header[:]
     # Extract only nominated columns for each row
     if _is_valid_colnames(header, colnames):
-        # Extract nominated columns ***TODO***
-        new_subset, new_header = [], []
+        # Extract nominated columns
+        columns_to_remove = [x for x in header if x not in set(colnames)]
+        new_subset, new_header = \
+            remove_columns(row_subset, header[:],
+                           columns_to_remove,
+                           inplace=True)
         return new_subset, new_header
-        # Extract nominated columns ***TODO***
     # Fallthrough case
     return None
 
