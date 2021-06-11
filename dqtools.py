@@ -492,6 +492,82 @@ def gen_freq_table(dataset, header, colname, sort_by_value=False, reverse=False)
                            reverse=reverse)}
     return None
 
+def add_column(dataset, header, colname, coldata, inplace=False):
+    """
+    Given  a `dataset`, its `header`, and a single column name,
+    `colname`, and a list of data, `coldata` with an element for
+    each row in `dataset`, adds `colname` to the dataset and fills
+    it with the data from `coldata`. A copy of the dataset, and
+    header is modified unless `inplace` is True, in which case,
+    the original dataset and original header, with modifications,
+    are returned. Note dataset copy is a copy of the container and
+    copies of the elements too.
+
+    :param dataset: list
+    :param header: list
+    :param colname: str
+    :param coldata: list
+    :param inplace: bool
+
+    :return: list, list|None, None
+
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> ret_ds, ret_hd = add_column(dummy, header, [], dummy)
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> ret_ds, ret_hd = add_column(dummy, header, '', dummy)
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> ret_ds, ret_hd = add_column(dummy, header, 'a', dummy)
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> # Add column 'd' to dataset copy, update header copy, return both
+    >>> orig_hd = ['a', 'b', 'c']
+    >>> new_hd = ['a', 'b', 'c', 'd']
+    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> new_ds = [['a1', 'b1', 'c1', 'd1'],['a2', 'b2', 'c2', 'd2'],['a3', 'b3', 'c3', 'd3']]
+    >>> coldata = ['d1', 'd2', 'd3']
+    >>> ret_ds, ret_hd = add_column(orig_ds, orig_hd, 'd', coldata)
+    >>> cmpds = lambda: all(map(lambda p, q: p is not q and p == q, ret_ds, new_ds))
+    >>> cmphd = lambda: all(map(lambda p, q: p == q, ret_hd, new_hd))
+    >>> ret_ds is not orig_ds and cmpds() and ret_hd is not orig_hd and cmphd()
+    True
+
+    >>> orig_hd = ['a', 'b', 'c']
+    >>> #     ==> ['a', 'b', 'c', 'd']
+    >>> new_hd = ['a', 'b', 'c', 'd']
+    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> #     ==> [['a1', 'b1', 'c1', 'd1'],['a2', 'b2', 'c2', 'd2'],['a3', 'b3', 'c3', 'd3']]
+    >>> new_ds = [['a1', 'b1', 'c1', 'd1'],['a2', 'b2', 'c2', 'd2'],['a3', 'b3', 'c3', 'd3']]
+    >>> coldata = ['d1', 'd2', 'd3']
+    >>> ret_ds, ret_hd = add_column(orig_ds, orig_hd, 'd', coldata, inplace=True)
+    >>> cmpds = lambda: all(map(lambda p,q,r: p is q and p == q and p == r, ret_ds, orig_ds, new_ds))
+    >>> cmphd = lambda: all(map(lambda p,q,r: p == q and p == r, ret_hd, orig_hd, new_hd))
+    >>> ret_ds is orig_ds and cmpds() and ret_hd is orig_hd and cmphd()
+    True
+    """
+    if type(colname) is str and len(colname) > 0 \
+       and colname not in header \
+       and len(coldata) == len(dataset):
+        # `inplace` flag determines whether originals or copies modified
+        dataset = dataset if inplace else [x[:] for x in dataset]
+        header = header if inplace else header[:]
+        # Column is appended to dataset, column name appended to header
+        header.append(colname)
+        for row, newcol in zip(dataset, coldata):
+            row.append(newcol)
+        return dataset, header
+    # Fallthrough case
+    return None, None
+
 def remove_column(dataset, header, colname, inplace=False):
     """
     Given  a `dataset`, its `header`, and a single column name,
