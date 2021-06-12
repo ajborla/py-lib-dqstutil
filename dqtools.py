@@ -633,6 +633,77 @@ def remove_column(dataset, header, colname, inplace=False):
     # Fallthrough case
     return None, None,
 
+def modify_column(dataset, header, colname, coldata, inplace=False):
+    """
+    Given  a `dataset`, its `header`, and a single column name,
+    `colname`, and a list of data, `coldata` with an element for
+    each row in `dataset`, replaces the data in the column,
+    `colname` with the data from `coldata`. A copy of the dataset,
+    is modified unless `inplace` is True, in which case, the
+    original dataset, with modifications, and the original header,
+    are returned. Note dataset copy is a copy of the container and
+    copies of the elements too.
+
+    :param dataset: list
+    :param header: list
+    :param colname: str
+    :param coldata: list
+    :param inplace: bool
+
+    :return: list, list|None, None
+
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> ret_ds, ret_hd = modify_column(dummy, header, [], dummy)
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> ret_ds, ret_hd = modify_column(dummy, header, '', dummy)
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> ret_ds, ret_hd = modify_column(dummy, header, 'd', dummy)
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> # Modify column 'b' in dataset copy, return copy and copy of header
+    >>> header = ['a', 'b', 'c']
+    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> new_ds = [['a1', 'X1', 'c1'],['a2', 'X2', 'c2'],['a3', 'X3', 'c3']]
+    >>> coldata = ['X1', 'X2', 'X3']
+    >>> ret_ds, ret_hd = modify_column(orig_ds, header, 'b', coldata)
+    >>> cmpds = lambda: all(map(lambda p, q: p is not q and p == q, ret_ds, new_ds))
+    >>> ret_ds is not orig_ds and cmpds()
+    True
+
+    >>> # Modify column 'b' in dataset, return original dataset and original header
+    >>> header = ['a', 'b', 'c']
+    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> new_ds = [['a1', 'X1', 'c1'],['a2', 'X2', 'c2'],['a3', 'X3', 'c3']]
+    >>> coldata = ['X1', 'X2', 'X3']
+    >>> ret_ds, ret_hd = modify_column(orig_ds, header, 'b', coldata, inplace=True)
+    >>> cmpds = lambda: all(map(lambda p,q,r: p is q and p == q and p == r, ret_ds, orig_ds, new_ds))
+    >>> ret_ds is orig_ds and cmpds()
+    True
+    """
+    if type(colname) is str and len(colname) > 0 \
+       and colname in header \
+       and len(coldata) == len(dataset):
+        # `inplace` flag determines whether originals or copies modified
+        dataset = dataset if inplace else [x[:] for x in dataset]
+        header = header if inplace else header[:]
+        # Column is modified
+        idx = header.index(colname)
+        for row, newcol in zip(dataset, coldata):
+            row[idx] = newcol
+        return dataset, header
+    # Fallthrough case
+    return None, None
+
 def remove_columns(dataset, header, colnames, inplace=False):
     """
     Given a `dataset`, its `header`, and a list of column names,
