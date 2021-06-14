@@ -704,6 +704,110 @@ def modify_column(dataset, header, colname, coldata, inplace=False):
     # Fallthrough case
     return None, None
 
+def transform_column(dataset, header, colname, transform, inplace=False):
+    """
+    Given  a `dataset`, its `header`, a column name, `colname`, and a
+    1 or 3-argument function, `transform`, applies the function to
+    column `colname` (to all dataset rows) replacing its contents. A
+    copy of the dataset is modified unless `inplace` is True, in
+    which case, the original dataset, with modifications, and the
+    original header, are returned. Note dataset copy is a copy of the
+    container and copies of the elements too.
+
+    For each row of the dataset, `transform` receives `colname`'s
+    contents, and, if implemented as a 3-argument function, receives
+    the current row, and the header, so allowing access to other
+    columns, and tranforms it; its return value then replaces it.
+    Example function implementations:
+
+        `lambda c: c.lower()`
+        `def transform(c): return c.lower()`
+
+        `lambda c, r, h: c + r[h.index('c2')]`
+        `def transform(c, r, h): return c + r[h.index('c2')]`
+
+    :param dataset: list
+    :param header: list
+    :param colname: str
+    :param transform: function
+    :param inplace: bool
+
+    :return: list, list|None, None
+
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> transform = lambda x: None
+    >>> ret_ds, ret_hd = transform_column(dummy, header, [], transform)
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> transform = lambda x: None
+    >>> ret_ds, ret_hd = transform_column(dummy, header, '', transform)
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> transform = lambda x: None
+    >>> ret_ds, ret_hd = transform_column(dummy, header, 'd', transform)
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> transform = {}
+    >>> ret_ds, ret_hd = transform_column(dummy, header, 'a', transform)
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> header = ['a', 'b', 'c']
+    >>> dummy = [[],[],[]]
+    >>> transform = lambda x,y: None
+    >>> ret_ds, ret_hd = transform_column(dummy, header, 'a', transform)
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> # Copy of dataset is modified
+    >>> header = ['a', 'b', 'c']
+    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> new_ds = [['a1', 'B1', 'c1'],['a2', 'B2', 'c2'],['a3', 'B3', 'c3']]
+    >>> ret_ds, _ = transform_column(orig_ds, header, 'b', lambda x: x.upper())
+    >>> cmpds = lambda: all(map(lambda p, q: p is not q and p == q, ret_ds, new_ds))
+    >>> ret_ds is not orig_ds and cmpds()
+    True
+
+    >>> # Original dataset is modified
+    >>> header = ['a', 'b', 'c']
+    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> new_ds = [['a1', 'B1', 'c1'],['a2', 'B2', 'c2'],['a3', 'B3', 'c3']]
+    >>> ret_ds, _ = transform_column(orig_ds, header, 'b', lambda x: x.upper(), inplace=True)
+    >>> cmpds = lambda: all(map(lambda p,q,r: p is q and p == q and p == r, ret_ds, orig_ds, new_ds))
+    >>> ret_ds is orig_ds and cmpds()
+    True
+    """
+    if type(colname) is str and len(colname) > 0 \
+       and colname in header \
+       and type(transform) is type(lambda x: None):
+        # Check expected arity of `transform` function
+        targc = transform.__code__.co_argcount
+        if targc not in [1, 3]:
+            return None, None
+        # `inplace` flag determines whether originals or copies modified
+        dataset = dataset if inplace else [x[:] for x in dataset]
+        header = header if inplace else header[:]
+        # Column is transformed using `transform` function
+        idx = header.index(colname)
+        for row in dataset:
+            colval = row[idx]
+            row[idx] = \
+                transform(colval) if targc == 1 else \
+                transform(colval, row, header)
+        return dataset, header
+    # Fallthrough case
+    return None, None
+
 def remove_columns(dataset, header, colnames, inplace=False):
     """
     Given a `dataset`, its `header`, and a list of column names,
