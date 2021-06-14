@@ -32,7 +32,8 @@ def _is_valid_colnames(header, colnames):
 
 def is_numeric(s):
     """
-    Given `s`, returns True if it is either a numeric type, or a numeric-convertible string.
+    Given `s`, returns True if it is either a numeric type, or a
+    numeric-convertible string.
 
     :param s: str
     :return: bool
@@ -87,7 +88,8 @@ def is_numeric(s):
 
 def is_possible_date(s):
     """
-    Given `s`, returns True if it is possibly a date-convertible string.
+    Given `s`, returns True if it is possibly a date-convertible
+    string.
 
     :param s: str
     :return: bool
@@ -118,10 +120,11 @@ def is_possible_date(s):
 
 def is_possible_numeric(s):
     """
-    Given `s`, returns True if it is possibly a numeric-convertible string,
-    such as a currency value or comma-separted numeric, or a suffixed
-    value (such as a measurement). Note that version strings (often having
-    two or more decimal points) are NOT considered possible numerics.
+    Given `s`, returns True if it is possibly a numeric-convertible
+    string, such as a currency value or comma-separted numeric, or a
+    suffixed value (such as a measurement). Note that version strings
+    (often having two or more decimal points) are NOT considered
+    possible numerics.
 
     :param s: str
     :return: bool
@@ -313,12 +316,12 @@ def extract_unique_values(values, sort=False, sep='|'):
     algorithm is selected, and applied, with the unique values returned
     as a list, optionally sorted in ascending order if `sort` is set.
     Optional, too, is `sep`, used as a separator where `values`'
-    elements are multi-(non-list)-element lists (elements are
-    concatenated to create the entity on which uniqueness is determined).
+    elements are multi-(non-list)-element lists (elements are joined
+    to create the entity on which uniqueness is determined).
 
-    Return list comprises the unique values in `values`, and in the case
-    where elements were lists, these are the list-contained values. Refer
-    to the tests for examples.
+    Return list comprises the unique values in `values`, and in the
+    case where elements are lists, these are the list-contained values.
+    Refer to the tests for examples.
 
     :param values: list
     :param sort: bool
@@ -426,12 +429,12 @@ def extract_unique_values(values, sort=False, sep='|'):
 
 def gen_freq_table(dataset, header, colname, sort_by_value=False, reverse=False):
     """
-    Given  a `dataset`, its `header`, a column name, `colname`, generates
-    a frequency table keyed by `colname`, and including both the count and
-    relative percentage as a tuple. Returned table is sorted by key, that
-    is, by `colname`, ascending. The value of optional boolean arguments,
-    `sort_by_value` and `reverse`, determine alternate ordering of the
-    table entries.
+    Given  a `dataset`, its `header`, a column name, `colname`,
+    generates a frequency table keyed by `colname`, and including both
+    the count and relative percentage as a tuple. Returned table is
+    sorted by key, that is, by `colname`, ascending. The value of
+    optional boolean arguments, `sort_by_value` and `reverse`,
+    determine alternate ordering of the table entries.
 
     :param dataset: list
     :param header: list
@@ -982,24 +985,24 @@ def extract_row_range(dataset, rowrange):
 
 def extract_rows(dataset, header, predicate, colnames=None):
     """
-    Given  a `dataset`, its `header`, a 2-argument function, `predicate`,
-    and, optionally, a list of column names, `colnames`, applies the
-    function to each row of the dataset, and retains the row if the
-    function application returns True.
+    Given  a `dataset`, its `header`, a 2-argument function,
+    `predicate`, and, optionally, a list of column names, `colnames`,
+    applies the function to each row of the dataset, and retains the
+    row if the function application returns True.
 
     If `colnames` is supplied, keeps the nominated columns from the
-    retained rows, discarding all others. A copy of the header is updated
-    to reflect these changes. In all cases copies of the dataset and
-    header (whether modified or not) are returned (there is no 'inplace'
-    modification).
+    retained rows, discarding all others. A copy of the header is
+    updated to reflect these changes. In all cases copies of the dataset
+    and header (whether modified or not) are returned (there is no
+    'inplace' modification).
 
     For each row of the dataset, `predicate` receives the row, as well
     as `header`. `predicate` uses the arguments to craft a boolean
     expression that returns True if the row is to be retained. Example
     function implementations:
 
-        `lambda row, header: row[header.index('c')] > 'c1'`
-        `def predicate(row, header): return row[header.index('c')] > 'c1'`
+      `lambda row, header: row[header.index('c')] > 'c1'`
+      `def predicate(row, header): return row[header.index('c')] > 'c1'`
 
     :param dataset: list
     :param header: list
