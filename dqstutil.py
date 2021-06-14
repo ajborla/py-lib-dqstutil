@@ -24,11 +24,12 @@ def _is_valid_colnames(header, colnames):
     >>> _is_valid_colnames(['a', 'b', 'c'], [1, 2])
     False
     """
-    valid_colnames = \
-        type(header) is list and len(header) > 0 and \
-        type(colnames) is list and len(colnames) > 0 and \
-        all(map(lambda x: x in header, colnames))
-    return valid_colnames
+    return \
+        type(header) is list \
+        and len(header) > 0 \
+        and type(colnames) is list \
+        and len(colnames) > 0 \
+        and all(map(lambda x: x in header, colnames))
 
 def is_numeric(s):
     """
