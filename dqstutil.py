@@ -83,9 +83,14 @@ def is_numeric(s):
             return False
 
     if type(s) is not str:
-        return type(s) is int or type(s) is float or type(s) is complex
+        return \
+            type(s) is int \
+            or type(s) is float \
+            or type(s) is complex
     else:
-        return s.isnumeric() or to_complex()
+        return \
+            s.isnumeric() \
+            or to_complex()
 
 def is_possible_date(s):
     """
