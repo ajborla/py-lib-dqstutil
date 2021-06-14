@@ -118,11 +118,18 @@ def is_possible_date(s):
     >>> is_possible_date('January 1, 1999')
     True
     """
+    month_prefixes = [
+        'jan', 'feb', 'mar', 'apr',
+        'may', 'jun', 'jul', 'aug',
+        'sep', 'oct', 'nov', 'dec'
+    ]
     s = s.lower()
-    month_prefixes = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul',
-                      'aug', 'sep', 'oct', 'nov', 'dec']
-    return any(map(lambda m: m in s, month_prefixes)) or \
-           len(list(filter(lambda c: c == '/' or c == '-', s))) == 2
+    is_date_separator = lambda c: c == '/' or c == '-'
+    # Valid candidate must contain a month name or exactly two
+    # date separator characters
+    return \
+        any(map(lambda m: m in s, month_prefixes)) \
+        or len(list(filter(is_date_separator, s))) == 2
 
 def is_possible_numeric(s):
     """
