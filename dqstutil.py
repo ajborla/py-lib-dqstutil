@@ -172,15 +172,21 @@ def is_possible_numeric(s):
     >>> is_possible_numeric('1,7kM')
     True
     """
-    # Tests to determine whether `s` may be a possible numeric string
-    contains_digits = any(map(lambda c: c.isdigit(), s))
-    contains_zero_or_one_decimal_point = len(list(filter(lambda c: c == '.', s))) < 2
-    contains_zero_or_one_dollar_sign = len(list(filter(lambda c: c == '$', s))) < 2
-    is_not_possible_date = not is_possible_date(s)
-    # Apply tests and return result
-    status = contains_digits and is_not_possible_date and \
-             contains_zero_or_one_decimal_point and contains_zero_or_one_dollar_sign
-    return status
+    # Tests for string `s` numeric-format compliance
+    contains_one_or_more_digits = \
+        any(map(lambda c: c.isdigit(), s))
+    contains_zero_or_one_decimal_point = \
+        len(list(filter(lambda c: c == '.', s))) < 2
+    contains_zero_or_one_dollar_sign = \
+        len(list(filter(lambda c: c == '$', s))) < 2
+    is_not_possible_date = \
+        not is_possible_date(s)
+    # Apply tests, return result
+    return \
+        contains_one_or_more_digits \
+        and is_not_possible_date \
+        and contains_zero_or_one_decimal_point \
+        and contains_zero_or_one_dollar_sign
 
 def determine_column_type(s):
     """
