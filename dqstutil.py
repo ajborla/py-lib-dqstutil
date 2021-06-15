@@ -515,7 +515,8 @@ def extract_unique_values(values, sort=False, sep='|'):
     # Sorted (ascending) unique value list, if requested
     return sorted(uniques) if sort else uniques
 
-def gen_freq_table(dataset, header, colname, sort_by_value=False, reverse=False):
+def gen_freq_table(dataset, header, colname, sort_by_value=False,
+                   reverse=False):
     """
     Given  a `dataset`, its `header`, a column name, `colname`,
     generates a frequency table keyed by `colname`, and including both
@@ -533,29 +534,55 @@ def gen_freq_table(dataset, header, colname, sort_by_value=False, reverse=False)
     :return: dict
 
     >>> header = ['a', 'b', 'c']
-    >>> ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3'], ['a3', 'b3', 'c3']]
+    >>> ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'], \
+            ['a3', 'b3', 'c3'] \
+        ]
     >>> gen_freq_table(ds, header, 'Z') is None
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3'], ['a3', 'b3', 'c3']]
+    >>> ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'], \
+            ['a3', 'b3', 'c3'] \
+        ]
     >>> fqt = {'b1':(1, 25.0), 'b2':(1, 25.0), 'b3':(2, 50.0)}
     >>> ret_fqt = gen_freq_table(ds, header, 'b')
-    >>> all([fqt[k][0] == ret_fqt[k][0] for k in fqt if k in ret_fqt]) and fqt.keys() == ret_fqt.keys()
+    >>> all([fqt[k][0] == ret_fqt[k][0] \
+            for k in fqt if k in ret_fqt]) \
+                            and fqt.keys() == ret_fqt.keys()
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3'], ['a3', 'b3', 'c3']]
+    >>> ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'], \
+            ['a3', 'b3', 'c3'] \
+        ]
     >>> fqt = {'b3':(2, 50.0), 'b1':(1, 25.0), 'b2':(1, 25.0), }
     >>> ret_fqt = gen_freq_table(ds, header, 'b', sort_by_value=True)
-    >>> all([fqt[k][0] == ret_fqt[k][0] for k in fqt if k in ret_fqt]) and fqt.keys() == ret_fqt.keys()
+    >>> all([fqt[k][0] == ret_fqt[k][0] \
+            for k in fqt if k in ret_fqt]) \
+                            and fqt.keys() == ret_fqt.keys()
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3'], ['a3', 'b3', 'c3']]
+    >>> ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'], \
+            ['a3', 'b3', 'c3'] \
+        ]
     >>> fqt = {'b3':(2, 50.0), 'b2':(1, 25.0), 'b1':(1, 25.0)}
     >>> ret_fqt = gen_freq_table(ds, header, 'b', reverse=True)
-    >>> all([fqt[k][0] == ret_fqt[k][0] for k in fqt if k in ret_fqt]) and fqt.keys() == ret_fqt.keys()
+    >>> all([fqt[k][0] == ret_fqt[k][0] \
+            for k in fqt if k in ret_fqt]) \
+                            and fqt.keys() == ret_fqt.keys()
     True
     """
     freq_table, total_rows = {}, len(dataset)
@@ -570,17 +597,21 @@ def gen_freq_table(dataset, header, colname, sort_by_value=False, reverse=False)
                 freq_table[colval][0] += 1
         # Compute frequency percentages
         for colval in freq_table:
-            freq_table[colval][1] = (freq_table[colval][0] / total_rows) * 100
+            freq_table[colval][1] = \
+                (freq_table[colval][0] / total_rows) * 100
             freq_table[colval] = tuple(freq_table[colval])
         # Sort table
         if sort_by_value:
             return {k: v for k, v in \
-                    sorted(freq_table.items(), key=lambda item: item[1][0],
+                    sorted(freq_table.items(),
+                           key=lambda item: item[1][0],
                            reverse=reverse)}
         else:
             return {k: v for k, v in \
-                    sorted(freq_table.items(), key=lambda item: item[0],
+                    sorted(freq_table.items(),
+                           key=lambda item: item[0],
                            reverse=reverse)}
+    # Fallthrough case
     return None
 
 def add_column(dataset, header, colname, coldata, inplace=False):
