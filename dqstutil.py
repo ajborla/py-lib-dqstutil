@@ -217,11 +217,14 @@ def determine_column_type(s):
     if is_possible_date(s): return 'PD'
     return 'T'
 
-def inspect_dataset(dataset, header, generate_report=True):
+def inspect_dataset(dataset, header, generate_report=True,
+                    printer=print):
     """
     Given `dataset` and `header`, inspects `dataset` collecting
-    metadata, and either returns metadata or generates, and
-    prints, a report.
+    metadata, and either returns metadata or generates, and prints,
+    a report. By default, data is printed using the built-in `print`
+    function, but allows an alternate function (such as `pprint`) to
+    be used via the `printer` argument.
 
     `dataset` is a list of lists, each sublist a 'row' in the
     dataset, `header` is a list of strings, each identifying a
@@ -239,6 +242,7 @@ def inspect_dataset(dataset, header, generate_report=True):
     :param dataset: list
     :param header: list
     :param generate_report: bool
+    :param printer: function
 
     :return: None|tuple(list,dict,dict,dict)
 
@@ -349,13 +353,13 @@ PN - possible numeric, PD - possible date]:
             'Duplicate value counts (non-numeric and non-date' \
             ' columns only):'
         print(row_rep_header, end='')
-        print(rowskip)
+        printer(rowskip)
         print('', col_rep_header, '', sep='\n')
-        print(columns)
+        printer(columns)
         print('', unique_rep_header, '', sep='\n')
-        print(uniques)
+        printer(uniques)
         print('', dup_rep_header, '', sep='\n')
-        print(duplicates)
+        printer(duplicates)
     else:
         # Return collected metadata as tuple
         return (rowskip, columns, uniques, duplicates)
