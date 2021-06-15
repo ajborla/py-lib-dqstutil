@@ -409,7 +409,11 @@ def extract_unique_values(values, sort=False, sep='|'):
     >>> extract_unique_values(values, sort=True) == sorted(uniques)
     True
 
-    >>> values = [['a1'], ['b1'], ['c1'], ['a2'], ['b1'], ['c1'], ['a1'], ['b2'], ['c1']]
+    >>> values = [ \
+            ['a1'], ['b1'], ['c1'], \
+            ['a2'], ['b1'], ['c1'], \
+            ['a1'], ['b2'], ['c1'] \
+        ]
     >>> uniques = ['a1', 'b1', 'c1', 'a2', 'b2']
     >>> sorted(extract_unique_values(values)) == sorted(uniques)
     True
@@ -419,7 +423,12 @@ def extract_unique_values(values, sort=False, sep='|'):
     >>> extract_unique_values(values) == uniques
     True
 
-    >>> values = [['a1', 'b1', 'c1'], ['a2', 'b2', 'c2'], ['a3', 'b3', 'c3'], ['a2', 'b2', 'c2']]
+    >>> values = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'], \
+            ['a2', 'b2', 'c2'] \
+        ]
     >>> uniques = ['a1|b1|c1', 'a2|b2|c2', 'a3|b3|c3']
     >>> sorted(extract_unique_values(values)) == sorted(uniques)
     True
@@ -432,15 +441,30 @@ def extract_unique_values(values, sort=False, sep='|'):
     >>> extract_unique_values(values) is None
     True
 
-    >>> values = [['a1', 'b1', 'c1'], [], ['a3', 'b3', 'c3'], ['a2', 'b2', 'c2']]
+    >>> values = [ \
+            ['a1', 'b1', 'c1'], \
+            [], \
+            ['a3', 'b3', 'c3'], \
+            ['a2', 'b2', 'c2'] \
+        ]
     >>> extract_unique_values(values) is None
     True
 
-    >>> values = [['a1', 'b1', 'c1'], ['a2', 'c2'], ['a3', 'b3', 'c3'], ['a2', 'b2', 'c2']]
+    >>> values = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'c2'], \
+            ['a3', 'b3', 'c3'], \
+            ['a2', 'b2', 'c2'] \
+        ]
     >>> extract_unique_values(values) is None
     True
 
-    >>> values = [['a1', 'b1', 'c1'], ['a2', 0, 'c2'], ['a3', 'b3', 'c3'], ['a2', 'b2', 'c2']]
+    >>> values = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 0, 'c2'], \
+            ['a3', 'b3', 'c3'], \
+            ['a2', 'b2', 'c2'] \
+        ]
     >>> extract_unique_values(values) is None
     True
 
@@ -460,24 +484,34 @@ def extract_unique_values(values, sort=False, sep='|'):
     if elem_type is list:
         elem_len = len(values[0])
         # Ensure all sublists are non-empty, have identical length,
-        # and do not, themselves contain lists
+        # and do not, themselves, contain lists
         if elem_len == 0:
             return None
-        contains_no_list = lambda v: all(map(lambda x: type(x) is not list, v))
-        is_homogenous = lambda v, w: all(map(lambda x: type(x) is type(w), v))
-        if not all(map(lambda v: len(v) == elem_len and \
-                       contains_no_list(v) and is_homogenous(v, v[0]), values)):
-            return None
+        contains_no_list = \
+            lambda v: all(map(lambda x: type(x) is not list, v))
+        is_homogenous = \
+            lambda v, w: all(map(lambda x: type(x) is type(w), v))
+        if not all(map(lambda v: len(v) == elem_len \
+           and contains_no_list(v) \
+           and is_homogenous(v, v[0]), values)):
+                return None
+        # Return values depend on sublist element number
         if elem_len > 1:
-            # Unique values returned as string, concatenation of individual values
+            # Unique values returned as string, concatenation of
+            # individual values
             to_str = lambda v: map(lambda x: str(x), v)
-            uniques = [sep.join(to_str(v)) for v in set([tuple(v) for v in values])]
+            uniques = \
+                [sep.join(to_str(v)) \
+                    for v in set([tuple(v) for v in values])]
         else:
             # Unique values returned as original type
-            uniques = [v[0] for v in set([tuple(v) for v in values])]
+            uniques = \
+                [v[0] for v in set([tuple(v) for v in values])]
     else:
-        # Non-list element type; unique values returned as original type
-        uniques = [v for i, v in enumerate(values) if v not in values[:i]]
+        # Non-list element type; unique values returned as original
+        # type
+        uniques = \
+            [v for i, v in enumerate(values) if v not in values[:i]]
     # Sorted (ascending) unique value list, if requested
     return sorted(uniques) if sort else uniques
 
