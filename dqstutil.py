@@ -651,38 +651,70 @@ def add_column(dataset, header, colname, coldata, inplace=False):
     >>> ret_ds is None and ret_hd is None
     True
 
-    >>> # Add column 'd' to dataset copy, update header copy, return both
+    >>> # Add column 'd' to dataset and header copies, return both
     >>> orig_hd = ['a', 'b', 'c']
     >>> new_hd = ['a', 'b', 'c', 'd']
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> new_ds = [['a1', 'b1', 'c1', 'd1'],['a2', 'b2', 'c2', 'd2'],['a3', 'b3', 'c3', 'd3']]
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> new_ds = [ \
+            ['a1', 'b1', 'c1', 'd1'], \
+            ['a2', 'b2', 'c2', 'd2'], \
+            ['a3', 'b3', 'c3', 'd3'] \
+        ]
     >>> coldata = ['d1', 'd2', 'd3']
     >>> ret_ds, ret_hd = add_column(orig_ds, orig_hd, 'd', coldata)
-    >>> cmpds = lambda: all(map(lambda p, q: p is not q and p == q, ret_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p, q: p == q, ret_hd, new_hd))
-    >>> ret_ds is not orig_ds and cmpds() and ret_hd is not orig_hd and cmphd()
+    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
+                                             and p == q, \
+                                ret_ds, new_ds))
+    >>> cmphd = lambda: all(map(lambda p, q: p == q, \
+                                ret_hd, new_hd))
+    >>> ret_ds is not orig_ds \
+        and cmpds() \
+        and ret_hd is not orig_hd \
+        and cmphd()
     True
 
+    >>> # Add column 'd' to dataset and header originals, return both
     >>> orig_hd = ['a', 'b', 'c']
-    >>> #     ==> ['a', 'b', 'c', 'd']
     >>> new_hd = ['a', 'b', 'c', 'd']
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> #     ==> [['a1', 'b1', 'c1', 'd1'],['a2', 'b2', 'c2', 'd2'],['a3', 'b3', 'c3', 'd3']]
-    >>> new_ds = [['a1', 'b1', 'c1', 'd1'],['a2', 'b2', 'c2', 'd2'],['a3', 'b3', 'c3', 'd3']]
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> new_ds = [ \
+            ['a1', 'b1', 'c1', 'd1'], \
+            ['a2', 'b2', 'c2', 'd2'], \
+            ['a3', 'b3', 'c3', 'd3'] \
+        ]
     >>> coldata = ['d1', 'd2', 'd3']
-    >>> ret_ds, ret_hd = add_column(orig_ds, orig_hd, 'd', coldata, inplace=True)
-    >>> cmpds = lambda: all(map(lambda p,q,r: p is q and p == q and p == r, ret_ds, orig_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p,q,r: p == q and p == r, ret_hd, orig_hd, new_hd))
-    >>> ret_ds is orig_ds and cmpds() and ret_hd is orig_hd and cmphd()
+    >>> ret_ds, ret_hd = add_column(orig_ds, orig_hd, 'd', coldata, \
+                                    inplace=True)
+    >>> cmpds = lambda: all(map(lambda p,q,r: p is q \
+                                              and p == q \
+                                              and p == r, \
+                                ret_ds, orig_ds, new_ds))
+    >>> cmphd = lambda: all(map(lambda p,q,r: p == q \
+                                              and p == r, \
+                                ret_hd, orig_hd, new_hd))
+    >>> ret_ds is orig_ds \
+        and cmpds() \
+        and ret_hd is orig_hd \
+        and cmphd()
     True
     """
     if type(colname) is str and len(colname) > 0 \
        and colname not in header \
        and len(coldata) == len(dataset):
-        # `inplace` flag determines whether originals or copies modified
+        # `inplace` flag determines whether originals or copies
+        # modified
         dataset = dataset if inplace else [x[:] for x in dataset]
         header = header if inplace else header[:]
-        # Column is appended to dataset, column name appended to header
+        # Column is appended to dataset, column name appended to
+        # header
         header.append(colname)
         for row, newcol in zip(dataset, coldata):
             row.append(newcol)
