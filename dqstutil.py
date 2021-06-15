@@ -243,19 +243,39 @@ def inspect_dataset(dataset, header, generate_report=True):
     :return: None|tuple(list,dict,dict,dict)
 
     >>> header = ['a', 'b', 'c']
-    >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3'], ['a4', 'bib', '3'], ['ay', 'bib', 'x'], ['ay', 'bib', 'x']]
-    >>> rowskip, columns, uniques, duplicates = inspect_dataset(dataset, header, generate_report=False)
-    >>> rowskip, columns, uniques, duplicates
-    ([1], {'a': {'PN': 3, 'T': 2}, 'b': {'PN': 2, 'T': 3}, 'c': {'PN': 2, 'N': 1, 'T': 2}}, {'a': 1, 'b': 1, 'c': 1}, {'a': 1, 'b': 2, 'c': 1})
+    >>> dataset = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'c2'], \
+            ['a3', 'b3', 'c3'], \
+            ['a4', 'bib', '3'], \
+            ['ay', 'bib', 'x'], \
+            ['ay', 'bib', 'x']  \
+        ]
+    >>> rowskip, columns, uniques, duplicates = \
+            inspect_dataset(dataset, header, generate_report=False)
+    >>> (rowskip, columns, uniques, duplicates)
+    ([1], \
+{'a': {'PN': 3, 'T': 2}, 'b': {'PN': 2, 'T': 3}, \
+'c': {'PN': 2, 'N': 1, 'T': 2}}, \
+{'a': 1, 'b': 1, 'c': 1}, {'a': 1, 'b': 2, 'c': 1})
 
     >>> header = ['a', 'b', 'c']
-    >>> dataset = [['a1', 'b1', 'c1'],['a2', 'c2'],['a3', 'b3', 'c3'], ['a4', 'bib', '3'], ['ay', 'bib', 'x'], ['ay', 'bib', 'x']]
+    >>> dataset = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'c2'], \
+            ['a3', 'b3', 'c3'], \
+            ['a4', 'bib', '3'], \
+            ['ay', 'bib', 'x'], \
+            ['ay', 'bib', 'x'] \
+        ]
     >>> inspect_dataset(dataset, header, generate_report=True)
     Invalid (incorrect length) row numbers:[1]
     <BLANKLINE>
-    Tentative column type(s) [T - text, N - numeric, PN - possible numeric, PD - possible date]:
+    Tentative column type(s) [T - text, N - numeric, \
+PN - possible numeric, PD - possible date]:
     <BLANKLINE>
-    {'a': {'PN': 3, 'T': 2}, 'b': {'PN': 2, 'T': 3}, 'c': {'PN': 2, 'N': 1, 'T': 2}}
+    {'a': {'PN': 3, 'T': 2}, 'b': {'PN': 2, 'T': 3}, \
+'c': {'PN': 2, 'N': 1, 'T': 2}}
     <BLANKLINE>
     Unique value counts (non-numeric and non-date columns only):
     <BLANKLINE>
@@ -317,17 +337,28 @@ def inspect_dataset(dataset, header, generate_report=True):
             duplicates[colname] = ducollen
     # Generate report if requested
     if generate_report:
-        print('Invalid (incorrect length) row numbers:', end='')
+        row_rep_header = \
+            'Invalid (incorrect length) row numbers:'
+        col_rep_header = \
+            'Tentative column type(s) [T - text, N - numeric,' \
+            ' PN - possible numeric, PD - possible date]:'
+        unique_rep_header = \
+            'Unique value counts (non-numeric and non-date columns' \
+            ' only):'
+        dup_rep_header = \
+            'Duplicate value counts (non-numeric and non-date' \
+            ' columns only):'
+        print(row_rep_header, end='')
         print(rowskip)
-        print('\nTentative column type(s) [T - text, N - numeric, PN - possible numeric, PD - possible date]:\n')
+        print('', col_rep_header, '', sep='\n')
         print(columns)
-        print('\nUnique value counts (non-numeric and non-date columns only):\n')
+        print('', unique_rep_header, '', sep='\n')
         print(uniques)
-        print('\nDuplicate value counts (non-numeric and non-date columns only):\n')
+        print('', dup_rep_header, '', sep='\n')
         print(duplicates)
     else:
         # Return collected metadata as tuple
-        return rowskip, columns, uniques, duplicates,
+        return (rowskip, columns, uniques, duplicates)
 
 def extract_unique_values(values, sort=False, sep='|'):
     """
