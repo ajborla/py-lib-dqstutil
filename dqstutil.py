@@ -1076,84 +1076,165 @@ def remove_columns(dataset, header, colnames, inplace=False):
     >>> ret_ds is None and ret_hd is None
     True
 
-    >>> # Remove 'b' column from dataset copy, update header copy, return both
+    >>> # Remove 'b' column from dataset, header, return copies
     >>> orig_hd = ['a', 'b', 'c']
     >>> new_hd = ['a', 'c']
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> new_ds = [['a1', 'c1'],['a2', 'c2'],['a3', 'c3']]
-    >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['b'])
-    >>> cmpds = lambda: all(map(lambda p, q: p is not q and p == q, ret_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p, q: p == q, ret_hd, new_hd))
-    >>> ret_ds is not orig_ds and cmpds() and ret_hd is not orig_hd and cmphd()
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> new_ds = [ \
+            ['a1', 'c1'], \
+            ['a2', 'c2'], \
+            ['a3', 'c3'] \
+        ]
+    >>> ret_ds, ret_hd = remove_column(orig_ds, orig_hd, 'b')
+    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
+                                             and p == q, \
+                                ret_ds, new_ds))
+    >>> cmphd = lambda: all(map(lambda p, q: p == q, \
+                                ret_hd, new_hd))
+    >>> ret_ds is not orig_ds \
+        and cmpds() \
+        and ret_hd is not orig_hd \
+        and cmphd()
     True
 
-    >>> # Remove 'b' column from original dataset, update original header, return both
+    >>> # Remove 'b' column from dataset, header, return originals
     >>> orig_hd = ['a', 'b', 'c']
-    >>> #     ==> ['a', 'c']
     >>> new_hd = ['a', 'c']
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> #     ==> [['a1', 'c1'],['a2', 'c2'],['a3', 'c3']]
-    >>> new_ds = [['a1', 'c1'],['a2', 'c2'],['a3', 'c3']]
-    >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['b'], inplace=True)
-    >>> cmpds = lambda: all(map(lambda p,q,r: p is q and p == q and p == r, ret_ds, orig_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p,q,r: p == q and p == r, ret_hd, orig_hd, new_hd))
-    >>> ret_ds is orig_ds and cmpds() and ret_hd is orig_hd and cmphd()
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> new_ds = [ \
+            ['a1', 'c1'], \
+            ['a2', 'c2'], \
+            ['a3', 'c3'] \
+        ]
+    >>> ret_ds, ret_hd = remove_column(orig_ds, orig_hd, 'b', \
+                                       inplace=True)
+    >>> cmpds = lambda: all(map(lambda p, q, r: p is q \
+                                                and p == q \
+                                                and p == r, \
+                                ret_ds, orig_ds, new_ds))
+    >>> cmphd = lambda: all(map(lambda p, q, r: p == q \
+                                                and p == r, \
+                                ret_hd, orig_hd, new_hd))
+    >>> ret_ds is orig_ds \
+        and cmpds() \
+        and ret_hd is orig_hd \
+        and cmphd()
     True
 
-    >>> # Remove 'a', 'c' columns from dataset copy, update header copy, return both
+    >>> # Remove 'a', 'c' column from dataset, header, return copies
     >>> orig_hd = ['a', 'b', 'c']
     >>> new_hd = ['b']
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> new_ds = [['b1'],['b2'],['b3']]
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> new_ds = [ \
+            ['b1'], \
+            ['b2'], \
+            ['b3'] \
+        ]
     >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['a', 'c'])
-    >>> cmpds = lambda: all(map(lambda p, q: p is not q and p == q, ret_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p, q: p == q, ret_hd, new_hd))
-    >>> ret_ds is not orig_ds and cmpds() and ret_hd is not orig_hd and cmphd()
+    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
+                                             and p == q, \
+                                ret_ds, new_ds))
+    >>> cmphd = lambda: all(map(lambda p, q: p == q, \
+                                ret_hd, new_hd))
+    >>> ret_ds is not orig_ds \
+        and cmpds() \
+        and ret_hd is not orig_hd \
+        and cmphd()
     True
 
-    >>> # Remove 'a', 'c' columns from original dataset, update original header, return both
+    >>> # Remove 'a', 'c' column from dataset, header, return originals
     >>> orig_hd = ['a', 'b', 'c']
-    >>> #     ==> ['b']
     >>> new_hd = ['b']
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> #     ==> [['b1'],['b2'],['b3']]
-    >>> new_ds = [['b1'],['b2'],['b3']]
-    >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['a', 'c'], inplace=True)
-    >>> cmpds = lambda: all(map(lambda p,q,r: p is q and p == q and p == r, ret_ds, orig_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p,q,r: p == q and p == r, ret_hd, orig_hd, new_hd))
-    >>> ret_ds is orig_ds and cmpds() and ret_hd is orig_hd and cmphd()
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> new_ds = [ \
+            ['b1'], \
+            ['b2'], \
+            ['b3'] \
+        ]
+    >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['a', 'c'], \
+                                        inplace=True)
+    >>> cmpds = lambda: all(map(lambda p, q, r: p is q \
+                                                and p == q \
+                                                and p == r, \
+                                ret_ds, orig_ds, new_ds))
+    >>> cmphd = lambda: all(map(lambda p, q, r: p == q \
+                                                and p == r, \
+                                ret_hd, orig_hd, new_hd))
+    >>> ret_ds is orig_ds \
+        and cmpds() \
+        and ret_hd is orig_hd \
+        and cmphd()
     True
 
-    >>> # Remove all columns from dataset copy, update header copy, return both
+    >>> # Remove all columns from dataset, header, return copies
     >>> orig_hd = ['a', 'b', 'c']
     >>> new_hd = []
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
     >>> new_ds = []
     >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['a', 'b', 'c'])
-    >>> cmpds = lambda: all(map(lambda p, q: p is not q and p == q, ret_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p, q: p == q, ret_hd, new_hd))
-    >>> ret_ds is not orig_ds and cmpds() and ret_hd is not orig_hd and cmphd()
+    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
+                                             and p == q, \
+                                ret_ds, new_ds))
+    >>> cmphd = lambda: all(map(lambda p, q: p == q, \
+                                ret_hd, new_hd))
+    >>> ret_ds is not orig_ds \
+        and cmpds() \
+        and ret_hd is not orig_hd \
+        and cmphd()
     True
 
-    >>> # Remove all columns from original dataset, update original header, return both
+    >>> # Remove all columns from dataset, header, return originals
     >>> orig_hd = ['a', 'b', 'c']
-    >>> #     ==> []
     >>> new_hd = []
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> #     ==> []
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
     >>> new_ds = []
-    >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['a', 'b', 'c'], inplace=True)
-    >>> cmpds = lambda: all(map(lambda p,q,r: p is q and p == q and p == r, ret_ds, orig_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p,q,r: p == q and p == r, ret_hd, orig_hd, new_hd))
-    >>> ret_ds is orig_ds and cmpds() and ret_hd is orig_hd and cmphd()
+    >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['a', 'c'], \
+                                        inplace=True)
+    >>> cmpds = lambda: all(map(lambda p, q, r: p is q \
+                                                and p == q \
+                                                and p == r, \
+                                ret_ds, orig_ds, new_ds))
+    >>> cmphd = lambda: all(map(lambda p, q, r: p == q \
+                                                and p == r, \
+                                ret_hd, orig_hd, new_hd))
+    >>> ret_ds is orig_ds \
+        and cmpds() \
+        and ret_hd is orig_hd \
+        and cmphd()
     True
     """
     if _is_valid_colnames(header, colnames):
-        # `inplace` flag determines whether originals or copies modified
+        # `inplace` flag determines whether originals or copies
+        # modified
         dataset = dataset if inplace else [x[:] for x in dataset]
         header = header if inplace else header[:]
         # Reverse column names to ensure higher indexes deleted
-        # before lower indexes, else for-loop traversal is compromised
+        # before lower indexes, else for-loop traversal is
+        # compromised
         idxs = []
         for colname in colnames:
             idxs.append(header.index(colname))
