@@ -81,7 +81,7 @@ def is_numeric(s):
         try:
             complex(s)
             return True
-        except:
+        except ValueError:
             return False
 
     if type(s) is not str:
@@ -126,8 +126,11 @@ def is_possible_date(s):
         'may', 'jun', 'jul', 'aug',
         'sep', 'oct', 'nov', 'dec'
     ]
+
+    def is_date_separator(c):
+        return c == '/' or c == '-'
+    # Lowercase `s` to simplify character comparisons
     s = s.lower()
-    is_date_separator = lambda c: c == '/' or c == '-'
     # Valid candidate must contain a month name or exactly two
     # date separator characters
     return \
@@ -217,9 +220,12 @@ def determine_column_type(s):
     >>> determine_column_type('January 1, 1999')
     'PD'
     """
-    if is_numeric(s): return 'N'
-    if is_possible_numeric(s): return 'PN'
-    if is_possible_date(s): return 'PD'
+    if is_numeric(s):
+        return 'N'
+    if is_possible_numeric(s):
+        return 'PN'
+    if is_possible_date(s):
+        return 'PD'
     return 'T'
 
 
@@ -309,7 +315,8 @@ PN - possible numeric, PD - possible date]:
     # Collect column type data
     for r, row in enumerate(dataset):
         # Skip non length-conformant rows
-        if r in rowskip: continue
+        if r in rowskip:
+            continue
         # Check column type conformance
         for colname, colval in zip(header, row):
             coltype = determine_column_type(colval)
@@ -324,12 +331,15 @@ PN - possible numeric, PD - possible date]:
         duplicates[colname] = []
     for r, row in enumerate(dataset):
         # Skip non length-conformant rows
-        if r in rowskip: continue
+        if r in rowskip:
+            continue
         # Collect unique values for non-date and non-numeric columns
         for colname, colval in zip(header, row):
             # Check both the column type and the current value
-            if 'T' not in columns[colname]: continue
-            if determine_column_type(colval) != 'T': continue
+            if 'T' not in columns[colname]:
+                continue
+            if determine_column_type(colval) != 'T':
+                continue
             if colval not in uniques[colname]:
                 uniques[colname].append(colval)
             else:
@@ -494,10 +504,13 @@ def extract_unique_values(values, sort=False, sep='|'):
         # and do not, themselves, contain lists
         if elem_len == 0:
             return None
-        contains_no_list = \
-            lambda v: all(map(lambda x: type(x) is not list, v))
-        is_homogenous = \
-            lambda v, w: all(map(lambda x: type(x) is type(w), v))
+
+        def contains_no_list(v):
+            return all(map(lambda x: type(x) is not list, v))
+
+        def is_homogenous(v, w):
+            return all(map(lambda x: type(x) is type(w), v))
+
         if not all(map(lambda v: len(v) == elem_len
            and contains_no_list(v)
            and is_homogenous(v, v[0]), values)):
@@ -506,7 +519,10 @@ def extract_unique_values(values, sort=False, sep='|'):
         if elem_len > 1:
             # Unique values returned as string, concatenation of
             # individual values
-            to_str = lambda v: map(lambda x: str(x), v)
+
+            def to_str(v):
+                return map(lambda x: str(x), v)
+
             uniques = \
                 [sep.join(to_str(v))
                     for v in set([tuple(v) for v in values])]
@@ -1031,9 +1047,10 @@ def transform_column(dataset, header, colname, transform,
     >>> ret_ds is orig_ds and cmpds()
     True
     """
-    if type(colname) is str and len(colname) > 0 \
+    if type(colname) is str \
+       and len(colname) > 0 \
        and colname in header \
-       and type(transform) is type(lambda x: None):
+       and callable(transform):
         # Check expected arity of `transform` function
         targc = transform.__code__.co_argcount
         if targc not in [1, 3]:
@@ -1317,8 +1334,10 @@ def extract_row_range(dataset, rowrange):
     True
     """
     lb, ub = rowrange
-    if lb < 0 or lb > ub: return None
-    if ub < lb or ub > len(dataset)-1: return None
+    if lb < 0 or lb > ub:
+        return None
+    if ub < lb or ub > len(dataset)-1:
+        return None
     return dataset[lb:(ub+1)] if lb != ub else [dataset[lb]]
 
 
@@ -1465,7 +1484,7 @@ def extract_rows(dataset, header, predicate, colnames=None):
     True
     """
     # Ensure valid `predicate`
-    if type(predicate) is not type(lambda x, y: None) \
+    if not callable(predicate) \
        or predicate.__code__.co_argcount != 2:
         return None
     # Extract row(s) meeting `predicate` conditions
