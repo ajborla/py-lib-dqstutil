@@ -911,7 +911,8 @@ def modify_column(dataset, header, colname, coldata, inplace=False):
     # Fallthrough case
     return None, None
 
-def transform_column(dataset, header, colname, transform, inplace=False):
+def transform_column(dataset, header, colname, transform,
+                     inplace=False):
     """
     Given  a `dataset`, its `header`, a column name, `colname`, and a
     1 or 3-argument function, `transform`, applies the function to
@@ -978,19 +979,43 @@ def transform_column(dataset, header, colname, transform, inplace=False):
 
     >>> # Copy of dataset is modified
     >>> header = ['a', 'b', 'c']
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> new_ds = [['a1', 'B1', 'c1'],['a2', 'B2', 'c2'],['a3', 'B3', 'c3']]
-    >>> ret_ds, _ = transform_column(orig_ds, header, 'b', lambda x: x.upper())
-    >>> cmpds = lambda: all(map(lambda p, q: p is not q and p == q, ret_ds, new_ds))
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> new_ds = [ \
+            ['a1', 'B1', 'c1'], \
+            ['a2', 'B2', 'c2'], \
+            ['a3', 'B3', 'c3'] \
+        ]
+    >>> ret_ds, _ = transform_column(orig_ds, header, 'b', \
+                                     lambda x: x.upper())
+    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
+                                             and p == q, \
+                                ret_ds, new_ds))
     >>> ret_ds is not orig_ds and cmpds()
     True
 
     >>> # Original dataset is modified
     >>> header = ['a', 'b', 'c']
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> new_ds = [['a1', 'B1', 'c1'],['a2', 'B2', 'c2'],['a3', 'B3', 'c3']]
-    >>> ret_ds, _ = transform_column(orig_ds, header, 'b', lambda x: x.upper(), inplace=True)
-    >>> cmpds = lambda: all(map(lambda p,q,r: p is q and p == q and p == r, ret_ds, orig_ds, new_ds))
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> new_ds = [ \
+            ['a1', 'B1', 'c1'], \
+            ['a2', 'B2', 'c2'], \
+            ['a3', 'B3', 'c3'] \
+        ]
+    >>> ret_ds, _ = transform_column(orig_ds, header, 'b', \
+                                     lambda x: x.upper(), \
+                                     inplace=True)
+    >>> cmpds = lambda: all(map(lambda p, q, r: p is q \
+                                                and p == q \
+                                                and p == r, \
+                                ret_ds, orig_ds, new_ds))
     >>> ret_ds is orig_ds and cmpds()
     True
     """
@@ -1001,7 +1026,8 @@ def transform_column(dataset, header, colname, transform, inplace=False):
         targc = transform.__code__.co_argcount
         if targc not in [1, 3]:
             return None, None
-        # `inplace` flag determines whether originals or copies modified
+        # `inplace` flag determines whether originals or copies
+        # modified
         dataset = dataset if inplace else [x[:] for x in dataset]
         header = header if inplace else header[:]
         # Column is transformed using `transform` function
