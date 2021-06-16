@@ -1277,14 +1277,27 @@ def extract_row_range(dataset, rowrange):
     >>> extract_row_range(dummy, [1,4]) is None
     True
 
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> exp_ds = [['a2', 'b2', 'c2'], ['a3', 'b3', 'c3']]
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> exp_ds = [ \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
     >>> ret_ds = extract_row_range(orig_ds, [1,2])
     >>> ret_ds == exp_ds and ret_ds is not exp_ds
     True
 
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> exp_ds = [['a2', 'b2', 'c2']]
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> exp_ds = [ \
+            ['a2', 'b2', 'c2'], \
+        ]
     >>> ret_ds = extract_row_range(orig_ds, [1,1])
     >>> ret_ds == exp_ds and ret_ds is not exp_ds
     True
