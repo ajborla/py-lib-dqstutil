@@ -1349,10 +1349,27 @@ def extract_rows(dataset, header, predicate, colnames=None):
     >>> extract_rows(dummy, header, predicate) is None
     True
 
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> exp_ds = [ \
+            ['a2', 'b2', 'c2'], \
+        ]
+
     >>> # Extract all rows
     >>> header = ['a', 'b', 'c']
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> exp_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> exp_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
     >>> predicate = lambda row, header: True
     >>> ret_ds, _ = extract_rows(orig_ds, header, predicate)
     >>> ret_ds is not orig_ds and ret_ds == exp_ds
@@ -1360,8 +1377,15 @@ def extract_rows(dataset, header, predicate, colnames=None):
 
     >>> # Extract selected rows
     >>> header = ['a', 'b', 'c']
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> exp_ds = [['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> exp_ds = [ \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3']  \
+        ]
     >>> predicate = lambda row, header: row[header.index('c')] > 'c1'
     >>> ret_ds, _ = extract_rows(orig_ds, header, predicate)
     >>> ret_ds is not orig_ds and ret_ds == exp_ds
@@ -1369,7 +1393,7 @@ def extract_rows(dataset, header, predicate, colnames=None):
 
     >>> # `colnames` is an empty list
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> dummy = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2']]
     >>> predicate = lambda row,header: True
     >>> colnames = []
     >>> extract_rows(dummy, header, predicate, colnames) is None
@@ -1377,7 +1401,7 @@ def extract_rows(dataset, header, predicate, colnames=None):
 
     >>> # `colnames` contains a non-column name
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> dummy = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2']]
     >>> predicate = lambda row,header: True
     >>> colnames = ['a', 'd']
     >>> extract_rows(dummy, header, predicate, colnames) is None
@@ -1385,22 +1409,44 @@ def extract_rows(dataset, header, predicate, colnames=None):
 
     >>> # Extract selected rows: whole rows returned
     >>> orig_hd = ['a', 'b', 'c']
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> exp_ds = [ \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3']  \
+        ]
     >>> exp_hd = ['a', 'b', 'c']
-    >>> exp_ds = [['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
     >>> predicate = lambda row, header: row[header.index('c')] > 'c1'
     >>> ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, predicate)
-    >>> ret_ds is not orig_ds and ret_ds == exp_ds and ret_hd is not orig_hd and ret_hd == exp_hd
+    >>> ret_ds is not orig_ds \
+        and ret_ds == exp_ds \
+        and ret_hd is not orig_hd \
+        and ret_hd == exp_hd
     True
 
     >>> # Extract selected rows: columns 'a', and 'c', returned
     >>> orig_hd = ['a', 'b', 'c']
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
     >>> exp_hd = ['a', 'c']
     >>> exp_ds = [['a2', 'c2'],['a3', 'c3']]
+    >>> exp_ds = [ \
+            ['a2', 'c2'], \
+            ['a3', 'c3']  \
+        ]
     >>> predicate = lambda row, header: row[header.index('c')] > 'c1'
-    >>> ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, predicate, ['a', 'c'])
-    >>> ret_ds is not orig_ds and ret_ds == exp_ds and ret_hd is not orig_hd and ret_hd == exp_hd
+    >>> ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, predicate, \
+                                      ['a', 'c'])
+    >>> ret_ds is not orig_ds \
+        and ret_ds == exp_ds \
+        and ret_hd is not orig_hd \
+        and ret_hd == exp_hd
     True
     """
     # Ensure valid `predicate`
@@ -1418,7 +1464,8 @@ def extract_rows(dataset, header, predicate, colnames=None):
     # Extract only nominated columns for each row
     if _is_valid_colnames(header, colnames):
         # Extract nominated columns
-        columns_to_remove = [x for x in header if x not in set(colnames)]
+        columns_to_remove = \
+            [x for x in header if x not in set(colnames)]
         new_subset, new_header = \
             remove_columns(row_subset, header[:],
                            columns_to_remove,
