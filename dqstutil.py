@@ -854,30 +854,53 @@ def modify_column(dataset, header, colname, coldata, inplace=False):
     >>> ret_ds is None and ret_hd is None
     True
 
-    >>> # Modify column 'b' in dataset copy, return copy and copy of header
+    >>> # Modify column 'b' in dataset copy, return copies
     >>> header = ['a', 'b', 'c']
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> new_ds = [['a1', 'X1', 'c1'],['a2', 'X2', 'c2'],['a3', 'X3', 'c3']]
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> new_ds = [ \
+            ['a1', 'X1', 'c1'], \
+            ['a2', 'X2', 'c2'], \
+            ['a3', 'X3', 'c3'] \
+        ]
     >>> coldata = ['X1', 'X2', 'X3']
     >>> ret_ds, ret_hd = modify_column(orig_ds, header, 'b', coldata)
-    >>> cmpds = lambda: all(map(lambda p, q: p is not q and p == q, ret_ds, new_ds))
+    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
+                                             and p == q, \
+                                ret_ds, new_ds))
     >>> ret_ds is not orig_ds and cmpds()
     True
 
-    >>> # Modify column 'b' in dataset, return original dataset and original header
+    >>> # Modify column 'b' in dataset, return originals
     >>> header = ['a', 'b', 'c']
-    >>> orig_ds = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2'],['a3', 'b3', 'c3']]
-    >>> new_ds = [['a1', 'X1', 'c1'],['a2', 'X2', 'c2'],['a3', 'X3', 'c3']]
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'] \
+        ]
+    >>> new_ds = [ \
+            ['a1', 'X1', 'c1'], \
+            ['a2', 'X2', 'c2'], \
+            ['a3', 'X3', 'c3'] \
+        ]
     >>> coldata = ['X1', 'X2', 'X3']
-    >>> ret_ds, ret_hd = modify_column(orig_ds, header, 'b', coldata, inplace=True)
-    >>> cmpds = lambda: all(map(lambda p,q,r: p is q and p == q and p == r, ret_ds, orig_ds, new_ds))
+    >>> ret_ds, ret_hd = modify_column(orig_ds, header, 'b', coldata, \
+                                       inplace=True)
+    >>> cmpds = lambda: all(map(lambda p, q, r: p is q \
+                                                and p == q \
+                                                and p == r, \
+                                ret_ds, orig_ds, new_ds))
     >>> ret_ds is orig_ds and cmpds()
     True
     """
     if type(colname) is str and len(colname) > 0 \
        and colname in header \
        and len(coldata) == len(dataset):
-        # `inplace` flag determines whether originals or copies modified
+        # `inplace` flag determines whether originals or copies
+        # modified
         dataset = dataset if inplace else [x[:] for x in dataset]
         header = header if inplace else header[:]
         # Column is modified
