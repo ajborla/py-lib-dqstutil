@@ -1,5 +1,6 @@
 import doctest
 
+
 def _is_valid_colnames(header, colnames):
     """
     Given a list of column name, `colnames`, returns True if each
@@ -30,6 +31,7 @@ def _is_valid_colnames(header, colnames):
         and type(colnames) is list \
         and len(colnames) > 0 \
         and all(map(lambda x: x in header, colnames))
+
 
 def is_numeric(s):
     """
@@ -92,6 +94,7 @@ def is_numeric(s):
             s.isnumeric() \
             or to_complex()
 
+
 def is_possible_date(s):
     """
     Given `s`, returns True if it is possibly a date-convertible
@@ -130,6 +133,7 @@ def is_possible_date(s):
     return \
         any(map(lambda m: m in s, month_prefixes)) \
         or len(list(filter(is_date_separator, s))) == 2
+
 
 def is_possible_numeric(s):
     """
@@ -188,6 +192,7 @@ def is_possible_numeric(s):
         and contains_zero_or_one_decimal_point \
         and contains_zero_or_one_dollar_sign
 
+
 def determine_column_type(s):
     """
     Given `s`, returns string indicating its possible type, one of:
@@ -216,6 +221,7 @@ def determine_column_type(s):
     if is_possible_numeric(s): return 'PN'
     if is_possible_date(s): return 'PD'
     return 'T'
+
 
 def inspect_dataset(dataset, header, generate_report=True,
                     printer=print):
@@ -364,6 +370,7 @@ PN - possible numeric, PD - possible date]:
         # Return collected metadata as tuple
         return (rowskip, columns, uniques, duplicates)
 
+
 def extract_unique_values(values, sort=False, sep='|'):
     """
     Given a list, `values`, a type-specific unique-value determination
@@ -491,17 +498,17 @@ def extract_unique_values(values, sort=False, sep='|'):
             lambda v: all(map(lambda x: type(x) is not list, v))
         is_homogenous = \
             lambda v, w: all(map(lambda x: type(x) is type(w), v))
-        if not all(map(lambda v: len(v) == elem_len \
-           and contains_no_list(v) \
+        if not all(map(lambda v: len(v) == elem_len
+           and contains_no_list(v)
            and is_homogenous(v, v[0]), values)):
-                return None
+            return None
         # Return values depend on sublist element number
         if elem_len > 1:
             # Unique values returned as string, concatenation of
             # individual values
             to_str = lambda v: map(lambda x: str(x), v)
             uniques = \
-                [sep.join(to_str(v)) \
+                [sep.join(to_str(v))
                     for v in set([tuple(v) for v in values])]
         else:
             # Unique values returned as original type
@@ -514,6 +521,7 @@ def extract_unique_values(values, sort=False, sep='|'):
             [v for i, v in enumerate(values) if v not in values[:i]]
     # Sorted (ascending) unique value list, if requested
     return sorted(uniques) if sort else uniques
+
 
 def gen_freq_table(dataset, header, colname, sort_by_value=False,
                    reverse=False):
@@ -602,17 +610,18 @@ def gen_freq_table(dataset, header, colname, sort_by_value=False,
             freq_table[colval] = tuple(freq_table[colval])
         # Sort table
         if sort_by_value:
-            return {k: v for k, v in \
+            return {k: v for k, v in
                     sorted(freq_table.items(),
                            key=lambda item: item[1][0],
                            reverse=reverse)}
         else:
-            return {k: v for k, v in \
+            return {k: v for k, v in
                     sorted(freq_table.items(),
                            key=lambda item: item[0],
                            reverse=reverse)}
     # Fallthrough case
     return None
+
 
 def add_column(dataset, header, colname, coldata, inplace=False):
     """
@@ -722,6 +731,7 @@ def add_column(dataset, header, colname, coldata, inplace=False):
     # Fallthrough case
     return None, None
 
+
 def remove_column(dataset, header, colname, inplace=False):
     """
     Given  a `dataset`, its `header`, and a single column name,
@@ -817,6 +827,7 @@ def remove_column(dataset, header, colname, inplace=False):
     # Fallthrough case
     return None, None,
 
+
 def modify_column(dataset, header, colname, coldata, inplace=False):
     """
     Given  a `dataset`, its `header`, and a single column name,
@@ -910,6 +921,7 @@ def modify_column(dataset, header, colname, coldata, inplace=False):
         return dataset, header
     # Fallthrough case
     return None, None
+
 
 def transform_column(dataset, header, colname, transform,
                      inplace=False):
@@ -1040,6 +1052,7 @@ def transform_column(dataset, header, colname, transform,
         return dataset, header
     # Fallthrough case
     return None, None
+
 
 def remove_columns(dataset, header, colnames, inplace=False):
     """
@@ -1249,6 +1262,7 @@ def remove_columns(dataset, header, colnames, inplace=False):
     # Fallthrough case
     return None, None,
 
+
 def extract_row_range(dataset, rowrange):
     """
     Given  a `dataset`, and a `rowrange` (a two-element tuple|list
@@ -1306,6 +1320,7 @@ def extract_row_range(dataset, rowrange):
     if lb < 0 or lb > ub: return None
     if ub < lb or ub > len(dataset)-1: return None
     return dataset[lb:(ub+1)] if lb != ub else [dataset[lb]]
+
 
 def extract_rows(dataset, header, predicate, colnames=None):
     """
@@ -1450,8 +1465,8 @@ def extract_rows(dataset, header, predicate, colnames=None):
     True
     """
     # Ensure valid `predicate`
-    if type(predicate) is not type(lambda x,y: None) or \
-       predicate.__code__.co_argcount != 2:
+    if type(predicate) is not type(lambda x, y: None) \
+       or predicate.__code__.co_argcount != 2:
         return None
     # Extract row(s) meeting `predicate` conditions
     row_subset = []
@@ -1474,6 +1489,6 @@ def extract_rows(dataset, header, predicate, colnames=None):
     # Fallthrough case
     return None
 
+
 if __name__ == "__main__":
     doctest.testmod()
-
