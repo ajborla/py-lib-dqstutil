@@ -203,16 +203,19 @@ def is_possible_numeric(s):
         and contains_zero_or_one_dollar_sign
 
 
-def determine_column_type(s):
+def determine_column_type(coldata):
     """
-    Given `s`, returns string indicating its possible type, one of:
+    Determine a column's possible datatype.
+
+    Given `coldata`, returns string indicating its possible type,
+    one of:
 
         T  - text
         N  - numeric (safely convertible to)
         PD - possibly a date
         PN - possibly a numeric
 
-    :param s: str
+    :param coldata: str
     :return: str
 
     >>> determine_column_type('sgsgsg')
@@ -227,11 +230,11 @@ def determine_column_type(s):
     >>> determine_column_type('January 1, 1999')
     'PD'
     """
-    if is_numeric(s):
+    if is_numeric(coldata):
         return 'N'
-    if is_possible_numeric(s):
+    if is_possible_numeric(coldata):
         return 'PN'
-    if is_possible_date(s):
+    if is_possible_date(coldata):
         return 'PD'
     return 'T'
 
