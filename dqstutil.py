@@ -27,9 +27,9 @@ def _is_valid_colnames(header, colnames):
     False
     """
     return \
-        type(header) is list \
+        isinstance(header, list) \
         and len(header) > 0 \
-        and type(colnames) is list \
+        and isinstance(colnames, list) \
         and len(colnames) > 0 \
         and all(map(lambda x: x in header, colnames))
 
@@ -87,11 +87,11 @@ def is_numeric(s):
         except ValueError:
             return False
 
-    if type(s) is not str:
+    if not isinstance(s, str):
         return \
-            type(s) is int \
-            or type(s) is float \
-            or type(s) is complex
+            isinstance(s, int) \
+            or isinstance(s, float) \
+            or isinstance(s, complex)
     else:
         return \
             s.isnumeric() \
@@ -505,11 +505,11 @@ def extract_unique_values(values, sort=False, sep='|'):
     True
     """
     # Exclude obvious non-candidates
-    if type(values) is not list or len(values) < 1:
+    if not isinstance(values, list) or len(values) < 1:
         return None
     # Ensure homogeneity of list elements
     elem_type = type(values[0])
-    if not all(map(lambda v: type(v) is elem_type, values)):
+    if not all(map(lambda v: isinstance(v, elem_type), values)):
         return None
     # Select algorithm based on element type: list or other
     if elem_type is list:
@@ -520,7 +520,7 @@ def extract_unique_values(values, sort=False, sep='|'):
             return None
 
         def contains_no_list(v):
-            return all(map(lambda x: type(x) is not list, v))
+            return all(map(lambda x: not isinstance(x, list), v))
 
         def is_homogenous(v, w):
             return all(map(lambda x: type(x) is type(w), v))
@@ -749,7 +749,7 @@ def add_column(dataset, header, colname, coldata, inplace=False):
         and cmphd()
     True
     """
-    if type(colname) is str and len(colname) > 0 \
+    if isinstance(colname, str) and len(colname) > 0 \
        and colname not in header \
        and len(coldata) == len(dataset):
         # `inplace` flag determines whether originals or copies
@@ -850,7 +850,7 @@ def remove_column(dataset, header, colname, inplace=False):
         and cmphd()
     True
     """
-    if type(colname) is str and colname in header:
+    if isinstance(colname, str) and colname in header:
         # `inplace` flag determines whether originals or copies
         # modified
         dataset = dataset if inplace else [x[:] for x in dataset]
@@ -945,7 +945,7 @@ def modify_column(dataset, header, colname, coldata, inplace=False):
     >>> ret_ds is orig_ds and cmpds()
     True
     """
-    if type(colname) is str and len(colname) > 0 \
+    if isinstance(colname, str) and len(colname) > 0 \
        and colname in header \
        and len(coldata) == len(dataset):
         # `inplace` flag determines whether originals or copies
@@ -1071,7 +1071,7 @@ def transform_column(dataset, header, colname, transform,
     >>> ret_ds is orig_ds and cmpds()
     True
     """
-    if type(colname) is str \
+    if isinstance(colname, str) \
        and len(colname) > 0 \
        and colname in header \
        and callable(transform):
