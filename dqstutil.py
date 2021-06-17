@@ -3,6 +3,8 @@ import doctest
 
 def _is_valid_colnames(header, colnames):
     """
+    Validate column names against header.
+
     Given a list of column name, `colnames`, returns True if each
     element is also in the list, `header`.
 
@@ -35,6 +37,8 @@ def _is_valid_colnames(header, colnames):
 
 def is_numeric(s):
     """
+    Check string for numeric convertability.
+
     Given `s`, returns True if it is either a numeric type, or a
     numeric-convertible string.
 
@@ -97,6 +101,8 @@ def is_numeric(s):
 
 def is_possible_date(s):
     """
+    Check string for possible date-format conformance.
+
     Given `s`, returns True if it is possibly a date-convertible
     string.
 
@@ -140,6 +146,8 @@ def is_possible_date(s):
 
 def is_possible_numeric(s):
     """
+    Check string for possible numeric-format conformance.
+
     Given `s`, returns True if it is possibly a numeric-convertible
     string, such as a currency value or comma-separted numeric, or a
     suffixed value (such as a measurement). Note that version strings
@@ -232,6 +240,8 @@ def determine_column_type(s):
 def inspect_dataset(dataset, header, generate_report=True,
                     printer=print):
     """
+    Extract metadata, and either return it, or print it.
+
     Given `dataset` and `header`, inspects `dataset` collecting
     metadata, and either returns metadata or generates, and prints,
     a report. By default, data is printed using the built-in `print`
@@ -383,6 +393,8 @@ PN - possible numeric, PD - possible date]:
 
 def extract_unique_values(values, sort=False, sep='|'):
     """
+    Extract unique values from a list of values.
+
     Given a list, `values`, a type-specific unique-value determination
     algorithm is selected, and applied, with the unique values returned
     as a list, optionally sorted in ascending order if `sort` is set.
@@ -542,6 +554,8 @@ def extract_unique_values(values, sort=False, sep='|'):
 def gen_freq_table(dataset, header, colname, sort_by_value=False,
                    reverse=False):
     """
+    Generate a table of frequency counts and relative percetages.
+
     Given  a `dataset`, its `header`, a column name, `colname`,
     generates a frequency table keyed by `colname`, and including both
     the count and relative percentage as a tuple. Returned table is
@@ -641,6 +655,8 @@ def gen_freq_table(dataset, header, colname, sort_by_value=False,
 
 def add_column(dataset, header, colname, coldata, inplace=False):
     """
+    Add a new column to a dataset.
+
     Given  a `dataset`, its `header`, and a single column name,
     `colname`, and a list of data, `coldata` with an element for
     each row in `dataset`, adds `colname` to the dataset and fills
@@ -750,6 +766,8 @@ def add_column(dataset, header, colname, coldata, inplace=False):
 
 def remove_column(dataset, header, colname, inplace=False):
     """
+    Remove a nominated column from a dataset.
+
     Given  a `dataset`, its `header`, and a single column name,
     `colname`, removes the nominated column from `dataset` and
     from the `header`. A copy of the dataset, and of the header,
@@ -846,6 +864,8 @@ def remove_column(dataset, header, colname, inplace=False):
 
 def modify_column(dataset, header, colname, coldata, inplace=False):
     """
+    Modify all data within the nominated column of a dataset.
+
     Given  a `dataset`, its `header`, and a single column name,
     `colname`, and a list of data, `coldata` with an element for
     each row in `dataset`, replaces the data in the column,
@@ -942,6 +962,8 @@ def modify_column(dataset, header, colname, coldata, inplace=False):
 def transform_column(dataset, header, colname, transform,
                      inplace=False):
     """
+    Apply a transform function to the nominated column of a dataset.
+
     Given  a `dataset`, its `header`, a column name, `colname`, and a
     1 or 3-argument function, `transform`, applies the function to
     column `colname` (to all dataset rows) replacing its contents. A
@@ -1073,6 +1095,8 @@ def transform_column(dataset, header, colname, transform,
 
 def remove_columns(dataset, header, colnames, inplace=False):
     """
+    Remove a set of columns from a dataset.
+
     Given a `dataset`, its `header`, and a list of column names,
     `colnames`, removes the nominated columns from `dataset` and
     from the `header`. A copy of the dataset, and of the header,
@@ -1282,6 +1306,8 @@ def remove_columns(dataset, header, colnames, inplace=False):
 
 def extract_row_range(dataset, rowrange):
     """
+    Extract a set of range-defined rows from a dataset.
+
     Given  a `dataset`, and a `rowrange` (a two-element tuple|list
     containing integers), extracts, and returns, from `dataset`,
     the set of rows numbered from `rowrange[0]` through `rowrange[1`,
@@ -1343,6 +1369,8 @@ def extract_row_range(dataset, rowrange):
 
 def extract_rows(dataset, header, predicate, colnames=None):
     """
+    Extract rows meeting a specified condition, from a dataset.
+
     Given  a `dataset`, its `header`, a 2-argument function,
     `predicate`, and, optionally, a list of column names, `colnames`,
     applies the function to each row of the dataset, and retains the
