@@ -861,7 +861,7 @@ def remove_column(dataset, header, colname, inplace=False):
         del header[idx]
         return dataset, header
     # Fallthrough case
-    return None, None,
+    return None, None
 
 
 def modify_column(dataset, header, colname, coldata, inplace=False):
@@ -1303,7 +1303,7 @@ def remove_columns(dataset, header, colnames, inplace=False):
             del header[idx]
         return dataset, header
     # Fallthrough case
-    return None, None,
+    return None, None
 
 
 def extract_row_range(dataset, rowrange):
