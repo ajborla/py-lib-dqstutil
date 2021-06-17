@@ -1,4 +1,3 @@
-import doctest
 
 
 def _is_valid_colnames(header, colnames):
@@ -1538,4 +1537,5 @@ def extract_rows(dataset, header, predicate, colnames=None):
 
 
 if __name__ == "__main__":
+    import doctest
     doctest.testmod()
