@@ -1357,12 +1357,14 @@ def extract_row_range(dataset, rowrange):
     >>> ret_ds == exp_ds and ret_ds is not exp_ds
     True
     """
-    lb, ub = rowrange
-    if lb < 0 or lb > ub:
+    lower_bound, upper_bound = rowrange
+    if lower_bound < 0 or lower_bound > upper_bound:
         return None
-    if ub < lb or ub > len(dataset)-1:
+    if upper_bound < lower_bound or upper_bound > len(dataset)-1:
         return None
-    return dataset[lb:(ub+1)] if lb != ub else [dataset[lb]]
+    if lower_bound != upper_bound:
+        return dataset[lower_bound:(upper_bound+1)]
+    return [dataset[lower_bound]]
 
 
 def extract_rows(dataset, header, predicate, colnames=None):
