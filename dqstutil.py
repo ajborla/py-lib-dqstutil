@@ -92,10 +92,9 @@ def is_numeric(s):
             isinstance(s, int) \
             or isinstance(s, float) \
             or isinstance(s, complex)
-    else:
-        return \
-            s.isnumeric() \
-            or to_complex()
+    return \
+        s.isnumeric() \
+        or to_complex()
 
 
 def is_possible_date(s):
@@ -646,11 +645,10 @@ def gen_freq_table(dataset, header, colname, sort_by_value=False,
                     sorted(freq_table.items(),
                            key=lambda item: item[1][0],
                            reverse=reverse)}
-        else:
-            return {k: v for k, v in
-                    sorted(freq_table.items(),
-                           key=lambda item: item[0],
-                           reverse=reverse)}
+        return {k: v for k, v in
+                sorted(freq_table.items(),
+                       key=lambda item: item[0],
+                       reverse=reverse)}
     # Fallthrough case
     return None
 
