@@ -88,10 +88,8 @@ def is_numeric(s):
             return False
 
     if not isinstance(s, str):
-        return \
-            isinstance(s, int) \
-            or isinstance(s, float) \
-            or isinstance(s, complex)
+        return type(s) in [int, float, complex]
+
     return \
         s.isnumeric() \
         or to_complex()
@@ -132,7 +130,7 @@ def is_possible_date(s):
     ]
 
     def is_date_separator(c):
-        return c == '/' or c == '-'
+        return c in ['/', '-']
     # Lowercase `s` to simplify character comparisons
     s = s.lower()
     # Valid candidate must contain a month name or exactly two
