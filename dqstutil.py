@@ -505,47 +505,47 @@ def extract_unique_values(values, sort=False, sep='|'):
     if not isinstance(values, list) or len(values) < 1:
         return None
     # Ensure homogeneity of list elements
-    elem_type = type(values[0])
-    if not all(map(lambda v: isinstance(v, elem_type), values)):
+    value_type = type(values[0])
+    if not all(map(lambda value: isinstance(value, value_type), values)):
         return None
     # Select algorithm based on element type: list or other
-    if elem_type is list:
-        elem_len = len(values[0])
+    if value_type is list:
+        value_len = len(values[0])
         # Ensure all sublists are non-empty, have identical length,
         # and do not, themselves, contain lists
-        if elem_len == 0:
+        if value_len == 0:
             return None
 
-        def contains_no_list(v):
-            return all(map(lambda x: not isinstance(x, list), v))
+        def contains_no_list(value):
+            return all(map(lambda x: not isinstance(x, list), value))
 
-        def is_homogenous(v, w):
-            return all(map(lambda x: type(x) is type(w), v))
+        def is_homogenous(value, template):
+            return all(map(lambda x: type(x) is type(template), value))
 
-        if not all(map(lambda v: len(v) == elem_len
-           and contains_no_list(v)
-           and is_homogenous(v, v[0]), values)):
+        if not all(map(lambda value: len(value) == value_len
+           and contains_no_list(value)
+           and is_homogenous(value, value[0]), values)):
             return None
         # Return values depend on sublist element number
-        if elem_len > 1:
+        if value_len > 1:
             # Unique values returned as string, concatenation of
             # individual values
 
-            def to_str(v):
-                return map(lambda x: str(x), v)
+            def to_str(value):
+                return map(lambda x: str(x), value)
 
             uniques = \
-                [sep.join(to_str(v))
-                    for v in set([tuple(v) for v in values])]
+                [sep.join(to_str(value))
+                    for value in set([tuple(value) for value in values])]
         else:
             # Unique values returned as original type
             uniques = \
-                [v[0] for v in set([tuple(v) for v in values])]
+                [value[0] for value in set([tuple(value) for value in values])]
     else:
         # Non-list element type; unique values returned as original
         # type
         uniques = \
-            [v for i, v in enumerate(values) if v not in values[:i]]
+            [value for idx, value in enumerate(values) if value not in values[:idx]]
     # Sorted (ascending) unique value list, if requested
     return sorted(uniques) if sort else uniques
 
