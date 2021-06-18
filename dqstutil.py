@@ -140,17 +140,17 @@ def is_possible_date(datestr):
         or len(list(filter(is_date_separator, datestr))) == 2
 
 
-def is_possible_numeric(s):
+def is_possible_numeric(numstr):
     """
     Check string for possible numeric-format conformance.
 
-    Given `s`, returns True if it is possibly a numeric-convertible
+    Given `numstr`, returns True if it is possibly a numeric-convertible
     string, such as a currency value or comma-separted numeric, or a
     suffixed value (such as a measurement). Note that version strings
     (often having two or more decimal points) are NOT considered
     possible numerics.
 
-    :param s: str
+    :param numstr: str
     :return: bool
 
     >>> is_possible_numeric('sgsgsg')
@@ -185,13 +185,13 @@ def is_possible_numeric(s):
     """
     # Tests for string `s` numeric-format compliance
     contains_one_or_more_digits = \
-        any(map(lambda c: c.isdigit(), s))
+        any(map(lambda char: char.isdigit(), numstr))
     contains_zero_or_one_decimal_point = \
-        len(list(filter(lambda c: c == '.', s))) < 2
+        len(list(filter(lambda char: char == '.', numstr))) < 2
     contains_zero_or_one_dollar_sign = \
-        len(list(filter(lambda c: c == '$', s))) < 2
+        len(list(filter(lambda char: char == '$', numstr))) < 2
     is_not_possible_date = \
-        not is_possible_date(s)
+        not is_possible_date(numstr)
     # Apply tests, return result
     return \
         contains_one_or_more_digits \
