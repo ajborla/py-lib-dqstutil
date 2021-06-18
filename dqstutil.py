@@ -633,20 +633,17 @@ def gen_freq_table(dataset, header, colname, sort_by_value=False,
             else:
                 freq_table[colval][0] += 1
         # Compute frequency percentages
-        for colval in freq_table:
-            freq_table[colval][1] = \
-                (freq_table[colval][0] / total_rows) * 100
-            freq_table[colval] = tuple(freq_table[colval])
+        for meta in freq_table.values():
+            meta[1] = (meta[0] / total_rows) * 100
+            meta = tuple(meta)
         # Sort table
         if sort_by_value:
-            return {k: v for k, v in
-                    sorted(freq_table.items(),
-                           key=lambda item: item[1][0],
-                           reverse=reverse)}
-        return {k: v for k, v in
-                sorted(freq_table.items(),
-                       key=lambda item: item[0],
-                       reverse=reverse)}
+            return dict(sorted(freq_table.items(),
+                               key=lambda item: item[1][0],
+                               reverse=reverse))
+        return dict(sorted(freq_table.items(),
+                           key=lambda item: item[0],
+                           reverse=reverse))
     # Fallthrough case
     return None
 
