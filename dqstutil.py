@@ -310,18 +310,18 @@ PN - possible numeric, PD - possible date]:
     <BLANKLINE>
     {'a': 1, 'b': 2, 'c': 1}
     """
-    # Column metadata repository keyed using column headers
+    # 1. Column metadata repository keyed using column headers
     columns = {}
     for colname in header:
         columns[colname] = {}
-    # Collect non length-conformant row numbers
+    # a. Collect non length-conformant row numbers
     skiprows = []
     rowlen = len(header)
     for rowidx, row in enumerate(dataset):
         # Check for row length conformance
         if len(row) != rowlen:
             skiprows.append(rowidx)
-    # Collect column type data
+    # b. Collect column type data
     for rowidx, row in enumerate(dataset):
         # Skip non length-conformant rows
         if rowidx in skiprows:
@@ -333,7 +333,7 @@ PN - possible numeric, PD - possible date]:
                 columns[colname][coltype] += 1
             else:
                 columns[colname][coltype] = 1
-    # Collect unique value data
+    # c. Collect unique value, and duplicates, data
     uniques, duplicates = {}, {}
     for colname in header:
         uniques[colname] = []
@@ -364,7 +364,7 @@ PN - possible numeric, PD - possible date]:
         else:
             uniques[colname] = uqcollen
             duplicates[colname] = ducollen
-    # Generate report if requested
+    # 2. Either generate report if requested, or return collected values
     if generate_report:
         row_rep_header = \
             'Invalid (incorrect length) row numbers:'
@@ -385,9 +385,10 @@ PN - possible numeric, PD - possible date]:
         printer(uniques)
         print('', dup_rep_header, '', sep='\n')
         printer(duplicates)
-    else:
-        # Return collected metadata as tuple
-        return (skiprows, columns, uniques, duplicates)
+        # To signal no values returned
+        return None
+    # Return collected metadata as tuple
+    return (skiprows, columns, uniques, duplicates)
 
 
 def extract_unique_values(values, sort=False, sep='|'):
