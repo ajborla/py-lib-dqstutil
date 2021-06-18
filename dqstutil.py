@@ -532,7 +532,9 @@ def extract_unique_values(values, sort=False, sep='|'):
             # individual values
 
             def to_str(value):
-                return map(lambda x: str(x), value)
+                return \
+                    map(lambda x: x if isinstance(x, str) else str(x),
+                        value)
 
             uniques = \
                 [sep.join(to_str(value))
