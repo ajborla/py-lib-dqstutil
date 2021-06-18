@@ -34,14 +34,14 @@ def _is_valid_colnames(header, colnames):
         and all(map(lambda x: x in header, colnames))
 
 
-def is_numeric(s):
+def is_numeric(numstr):
     """
     Check string for numeric convertability.
 
-    Given `s`, returns True if it is either a numeric type, or a
+    Given `numstr`, returns True if it is either a numeric type, or a
     numeric-convertible string.
 
-    :param s: str
+    :param numstr: str
     :return: bool
 
     >>> is_numeric('sgsgsg')
@@ -82,16 +82,16 @@ def is_numeric(s):
     """
     def to_complex():
         try:
-            complex(s)
+            complex(numstr)
             return True
         except ValueError:
             return False
 
-    if not isinstance(s, str):
-        return type(s) in [int, float, complex]
+    if not isinstance(numstr, str):
+        return type(numstr) in [int, float, complex]
 
     return \
-        s.isnumeric() \
+        numstr.isnumeric() \
         or to_complex()
 
 
