@@ -251,7 +251,7 @@ def inspect_dataset(dataset, header, generate_report=True,
     dataset, `header` is a list of strings, each identifying a
     corresponding 'column' in the dataset. The metadata collected
     includes:
-        rowskip, a list of non length-conformant row numbers
+        skiprows, a list of non length-conformant row numbers
         columns, a dict, keyed by column name, each containing a
           dict of column-type-identifying codes (see the function,
           'determine_column_type' for details)
@@ -276,9 +276,9 @@ def inspect_dataset(dataset, header, generate_report=True,
             ['ay', 'bib', 'x'], \
             ['ay', 'bib', 'x']  \
         ]
-    >>> rowskip, columns, uniques, duplicates = \
+    >>> skiprows, columns, uniques, duplicates = \
             inspect_dataset(dataset, header, generate_report=False)
-    >>> (rowskip, columns, uniques, duplicates)
+    >>> (skiprows, columns, uniques, duplicates)
     ([1], \
 {'a': {'PN': 3, 'T': 2}, 'b': {'PN': 2, 'T': 3}, \
 'c': {'PN': 2, 'N': 1, 'T': 2}}, \
@@ -315,16 +315,16 @@ PN - possible numeric, PD - possible date]:
     for colname in header:
         columns[colname] = {}
     # Collect non length-conformant row numbers
-    rowskip = []
+    skiprows = []
     rowlen = len(header)
-    for r, row in enumerate(dataset):
+    for rowidx, row in enumerate(dataset):
         # Check for row length conformance
         if len(row) != rowlen:
-            rowskip.append(r)
+            skiprows.append(rowidx)
     # Collect column type data
-    for r, row in enumerate(dataset):
+    for rowidx, row in enumerate(dataset):
         # Skip non length-conformant rows
-        if r in rowskip:
+        if rowidx in skiprows:
             continue
         # Check column type conformance
         for colname, colval in zip(header, row):
@@ -338,9 +338,9 @@ PN - possible numeric, PD - possible date]:
     for colname in header:
         uniques[colname] = []
         duplicates[colname] = []
-    for r, row in enumerate(dataset):
+    for rowidx, row in enumerate(dataset):
         # Skip non length-conformant rows
-        if r in rowskip:
+        if rowidx in skiprows:
             continue
         # Collect unique values for non-date and non-numeric columns
         for colname, colval in zip(header, row):
@@ -378,7 +378,7 @@ PN - possible numeric, PD - possible date]:
             'Duplicate value counts (non-numeric and non-date' \
             ' columns only):'
         print(row_rep_header, end='')
-        printer(rowskip)
+        printer(skiprows)
         print('', col_rep_header, '', sep='\n')
         printer(columns)
         print('', unique_rep_header, '', sep='\n')
@@ -387,7 +387,7 @@ PN - possible numeric, PD - possible date]:
         printer(duplicates)
     else:
         # Return collected metadata as tuple
-        return (rowskip, columns, uniques, duplicates)
+        return (skiprows, columns, uniques, duplicates)
 
 
 def extract_unique_values(values, sort=False, sep='|'):
