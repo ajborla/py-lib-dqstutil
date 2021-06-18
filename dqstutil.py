@@ -95,14 +95,14 @@ def is_numeric(numstr):
         or to_complex()
 
 
-def is_possible_date(s):
+def is_possible_date(datestr):
     """
     Check string for possible date-format conformance.
 
-    Given `s`, returns True if it is possibly a date-convertible
+    Given `datestr`, returns True if it is possibly a date-convertible
     string.
 
-    :param s: str
+    :param datestr: str
     :return: bool
 
     >>> is_possible_date('sgsgsg')
@@ -129,15 +129,15 @@ def is_possible_date(s):
         'sep', 'oct', 'nov', 'dec'
     ]
 
-    def is_date_separator(c):
-        return c in ['/', '-']
-    # Lowercase `s` to simplify character comparisons
-    s = s.lower()
+    def is_date_separator(char):
+        return char in ['/', '-']
+    # Lowercase `datestr` to simplify character comparisons
+    datestr = datestr.lower()
     # Valid candidate must contain a month name or exactly two
     # date separator characters
     return \
-        any(map(lambda m: m in s, month_prefixes)) \
-        or len(list(filter(is_date_separator, s))) == 2
+        any(map(lambda month: month in datestr, month_prefixes)) \
+        or len(list(filter(is_date_separator, datestr))) == 2
 
 
 def is_possible_numeric(s):
