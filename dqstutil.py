@@ -1,4 +1,10 @@
+"""
+Collection of utility functions for managing a dataset.
 
+A dataset comprises an ordered collection of rows, with each row
+having an equal number of columns. It may be considered a rectangular
+structure, similar to a spreadsheet.
+"""
 
 def _is_valid_colnames(header, colnames):
     """
