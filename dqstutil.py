@@ -688,6 +688,27 @@ def make_dataset(header):
     return None, None
 
 
+def load_csv_dataset(filename, sep=',', encoding='utf8'):
+    """
+    Load into dataset, data from a comma-separated value (CSV) file.
+
+    :param filename: str
+    :param sep: str
+    :param encoding: str
+
+    :return: list, list|None, None
+    """
+    import os
+    if isinstance(filename, str) and len(filename) > 0 \
+       and os.path.exists(filename):
+        with open(filename, encoding=encoding) as dataset:
+            data = list(csv.reader(dataset, delimiter=sep))
+            header, dataset = data[0], data[1:]
+        return dataset, header
+    # Fallthrough case
+    return None, None
+
+
 def add_column(dataset, header, colname, coldata, inplace=False):
     """
     Add a new column to a dataset.
