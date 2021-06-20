@@ -692,17 +692,43 @@ def load_csv_dataset(filename, sep=',', encoding='utf8'):
     """
     Load into dataset, data from a comma-separated value (CSV) file.
 
+    Given `filename`, the name of a CSV file, that is expected to
+    be encoded with `encoding`, and datums separated with `sep`,
+    loads contents as a list of lists. The dataset is therefore
+    implemented as a list containing a number of sublists, each of
+    which represents a row of data, and each corresponding element
+    of these rows considered to be part of a column.
+
+    It is expected the first row of the CSV file to be a list of
+    column names.
+
     :param filename: str
     :param sep: str
     :param encoding: str
 
     :return: list, list|None, None
+
+    >>> filename = []
+    >>> ret_ds, ret_hd = load_csv_dataset(filename)
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> filename = ''
+    >>> ret_ds, ret_hd = load_csv_dataset(filename)
+    >>> ret_ds is None and ret_hd is None
+    True
+
+    >>> filename = '***NON_EXISTENT_FILE***'
+    >>> ret_ds, ret_hd = load_csv_dataset(filename)
+    >>> ret_ds is None and ret_hd is None
+    True
     """
-    import os
+    from os.path import exists as file_exists
+    from csv import reader as csv_reader
     if isinstance(filename, str) and len(filename) > 0 \
-       and os.path.exists(filename):
-        with open(filename, encoding=encoding) as dataset:
-            data = list(csv.reader(dataset, delimiter=sep))
+       and file_exists(filename):
+        with open(filename, encoding=encoding) as csvdata:
+            data = list(csv_reader(csvdata, delimiter=sep))
             header, dataset = data[0], data[1:]
         return dataset, header
     # Fallthrough case
