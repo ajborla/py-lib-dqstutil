@@ -6,6 +6,7 @@ having an equal number of columns. It may be considered a rectangular
 structure, similar to a spreadsheet.
 """
 
+
 def _is_valid_colnames(header, colnames):
     """
     Validate column names against header.
@@ -549,12 +550,14 @@ def extract_unique_values(values, sort=False, sep='|'):
         else:
             # Unique values returned as original type
             uniques = \
-                [value[0] for value in set([tuple(value) for value in values])]
+                [value[0] for value in
+                    set([tuple(value) for value in values])]
     else:
         # Non-list element type; unique values returned as original
         # type
         uniques = \
-            [value for idx, value in enumerate(values) if value not in values[:idx]]
+            [value for idx, value in
+                enumerate(values) if value not in values[:idx]]
     # Sorted (ascending) unique value list, if requested
     return sorted(uniques) if sort else uniques
 
