@@ -710,15 +710,15 @@ def load_csv_dataset(filename, sep=',', encoding='utf8'):
     >>> file.close()
     >>> ret_ds, ret_hd = load_csv_dataset(filename)
     >>> unlink(filename)
-    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
-                                             and p == q, \
-                                ret_ds, orig_ds))
-    >>> cmphd = lambda: all(map(lambda p, q: p == q, \
-                                ret_hd, orig_hd))
+    >>> cmpds = all(map(lambda p, q: p is not q \
+                                     and p == q, \
+                        ret_ds, orig_ds))
+    >>> cmphd = all(map(lambda p, q: p == q, \
+                        ret_hd, orig_hd))
     >>> ret_ds is not orig_ds \
-        and cmpds() \
+        and cmpds \
         and ret_hd is not orig_hd \
-        and cmphd()
+        and cmphd
     True
     """
     from os.path import exists as file_exists
@@ -787,15 +787,15 @@ def add_column(dataset, header, colname, coldata, inplace=False):
         ]
     >>> coldata = ['d1', 'd2', 'd3']
     >>> ret_ds, ret_hd = add_column(orig_ds, orig_hd, 'd', coldata)
-    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
-                                             and p == q, \
-                                ret_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p, q: p == q, \
-                                ret_hd, new_hd))
+    >>> cmpds = all(map(lambda p, q: p is not q \
+                                     and p == q, \
+                        ret_ds, new_ds))
+    >>> cmphd = all(map(lambda p, q: p == q, \
+                        ret_hd, new_hd))
     >>> ret_ds is not orig_ds \
-        and cmpds() \
+        and cmpds \
         and ret_hd is not orig_hd \
-        and cmphd()
+        and cmphd
     True
 
     >>> # Add column 'd' to dataset and header originals, return both
@@ -814,17 +814,17 @@ def add_column(dataset, header, colname, coldata, inplace=False):
     >>> coldata = ['d1', 'd2', 'd3']
     >>> ret_ds, ret_hd = add_column(orig_ds, orig_hd, 'd', coldata, \
                                     inplace=True)
-    >>> cmpds = lambda: all(map(lambda p, q, r: p is q \
-                                              and p == q \
-                                              and p == r, \
-                                ret_ds, orig_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p, q, r: p == q \
-                                              and p == r, \
-                                ret_hd, orig_hd, new_hd))
+    >>> cmpds = all(map(lambda p, q, r: p is q \
+                                        and p == q \
+                                        and p == r, \
+                        ret_ds, orig_ds, new_ds))
+    >>> cmphd = all(map(lambda p, q, r: p == q \
+                                        and p == r, \
+                        ret_hd, orig_hd, new_hd))
     >>> ret_ds is orig_ds \
-        and cmpds() \
+        and cmpds \
         and ret_hd is orig_hd \
-        and cmphd()
+        and cmphd
     True
     """
     if isinstance(colname, str) and len(colname) > 0 \
@@ -889,15 +889,15 @@ def remove_column(dataset, header, colname, inplace=False):
             ['a3', 'c3'] \
         ]
     >>> ret_ds, ret_hd = remove_column(orig_ds, orig_hd, 'b')
-    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
-                                             and p == q, \
-                                ret_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p, q: p == q, \
-                                ret_hd, new_hd))
+    >>> cmpds = all(map(lambda p, q: p is not q \
+                                     and p == q, \
+                        ret_ds, new_ds))
+    >>> cmphd = all(map(lambda p, q: p == q, \
+                        ret_hd, new_hd))
     >>> ret_ds is not orig_ds \
-        and cmpds() \
+        and cmpds \
         and ret_hd is not orig_hd \
-        and cmphd()
+        and cmphd
     True
 
     >>> # Remove 'b' column from dataset, header, return both originals
@@ -915,17 +915,17 @@ def remove_column(dataset, header, colname, inplace=False):
         ]
     >>> ret_ds, ret_hd = remove_column(orig_ds, orig_hd, 'b', \
                                        inplace=True)
-    >>> cmpds = lambda: all(map(lambda p, q, r: p is q \
-                                                and p == q \
-                                                and p == r, \
-                                ret_ds, orig_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p, q, r: p == q \
-                                                and p == r, \
-                                ret_hd, orig_hd, new_hd))
+    >>> cmpds = all(map(lambda p, q, r: p is q \
+                                        and p == q \
+                                        and p == r, \
+                        ret_ds, orig_ds, new_ds))
+    >>> cmphd = all(map(lambda p, q, r: p == q \
+                                        and p == r, \
+                        ret_hd, orig_hd, new_hd))
     >>> ret_ds is orig_ds \
-        and cmpds() \
+        and cmpds \
         and ret_hd is orig_hd \
-        and cmphd()
+        and cmphd
     True
     """
     if isinstance(colname, str) and colname in header:
@@ -995,10 +995,10 @@ def modify_column(dataset, header, colname, coldata, inplace=False):
         ]
     >>> coldata = ['X1', 'X2', 'X3']
     >>> ret_ds, ret_hd = modify_column(orig_ds, header, 'b', coldata)
-    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
-                                             and p == q, \
-                                ret_ds, new_ds))
-    >>> ret_ds is not orig_ds and cmpds()
+    >>> cmpds = all(map(lambda p, q: p is not q \
+                                     and p == q, \
+                        ret_ds, new_ds))
+    >>> ret_ds is not orig_ds and cmpds
     True
 
     >>> # Modify column 'b' in dataset, return originals
@@ -1016,11 +1016,11 @@ def modify_column(dataset, header, colname, coldata, inplace=False):
     >>> coldata = ['X1', 'X2', 'X3']
     >>> ret_ds, ret_hd = modify_column(orig_ds, header, 'b', coldata, \
                                        inplace=True)
-    >>> cmpds = lambda: all(map(lambda p, q, r: p is q \
-                                                and p == q \
-                                                and p == r, \
-                                ret_ds, orig_ds, new_ds))
-    >>> ret_ds is orig_ds and cmpds()
+    >>> cmpds = all(map(lambda p, q, r: p is q \
+                                        and p == q \
+                                        and p == r, \
+                        ret_ds, orig_ds, new_ds))
+    >>> ret_ds is orig_ds and cmpds
     True
     """
     if isinstance(colname, str) and len(colname) > 0 \
@@ -1121,10 +1121,10 @@ def transform_column(dataset, header, colname, transform,
         ]
     >>> ret_ds, _ = transform_column(orig_ds, header, 'b', \
                                      lambda x: x.upper())
-    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
-                                             and p == q, \
-                                ret_ds, new_ds))
-    >>> ret_ds is not orig_ds and cmpds()
+    >>> cmpds = all(map(lambda p, q: p is not q \
+                                     and p == q, \
+                        ret_ds, new_ds))
+    >>> ret_ds is not orig_ds and cmpds
     True
 
     >>> # Original dataset is modified
@@ -1142,11 +1142,11 @@ def transform_column(dataset, header, colname, transform,
     >>> ret_ds, _ = transform_column(orig_ds, header, 'b', \
                                      lambda x: x.upper(), \
                                      inplace=True)
-    >>> cmpds = lambda: all(map(lambda p, q, r: p is q \
-                                                and p == q \
-                                                and p == r, \
-                                ret_ds, orig_ds, new_ds))
-    >>> ret_ds is orig_ds and cmpds()
+    >>> cmpds = all(map(lambda p, q, r: p is q \
+                                        and p == q \
+                                        and p == r, \
+                        ret_ds, orig_ds, new_ds))
+    >>> ret_ds is orig_ds and cmpds
     True
     """
     if isinstance(colname, str) \
@@ -1224,15 +1224,15 @@ def remove_columns(dataset, header, colnames, inplace=False):
             ['a3', 'c3'] \
         ]
     >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['b'])
-    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
-                                             and p == q, \
-                                ret_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p, q: p == q, \
-                                ret_hd, new_hd))
+    >>> cmpds = all(map(lambda p, q: p is not q \
+                                     and p == q, \
+                        ret_ds, new_ds))
+    >>> cmphd = all(map(lambda p, q: p == q, \
+                        ret_hd, new_hd))
     >>> ret_ds is not orig_ds \
-        and cmpds() \
+        and cmpds \
         and ret_hd is not orig_hd \
-        and cmphd()
+        and cmphd
     True
 
     >>> # Remove 'b' column from dataset, header, return originals
@@ -1250,17 +1250,17 @@ def remove_columns(dataset, header, colnames, inplace=False):
         ]
     >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['b'], \
                                        inplace=True)
-    >>> cmpds = lambda: all(map(lambda p, q, r: p is q \
-                                                and p == q \
-                                                and p == r, \
-                                ret_ds, orig_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p, q, r: p == q \
-                                                and p == r, \
-                                ret_hd, orig_hd, new_hd))
+    >>> cmpds = all(map(lambda p, q, r: p is q \
+                                        and p == q \
+                                        and p == r, \
+                        ret_ds, orig_ds, new_ds))
+    >>> cmphd = all(map(lambda p, q, r: p == q \
+                                        and p == r, \
+                        ret_hd, orig_hd, new_hd))
     >>> ret_ds is orig_ds \
-        and cmpds() \
+        and cmpds \
         and ret_hd is orig_hd \
-        and cmphd()
+        and cmphd
     True
 
     >>> # Remove 'a', 'c' column from dataset, header, return copies
@@ -1277,15 +1277,15 @@ def remove_columns(dataset, header, colnames, inplace=False):
             ['b3'] \
         ]
     >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['a', 'c'])
-    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
-                                             and p == q, \
-                                ret_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p, q: p == q, \
-                                ret_hd, new_hd))
+    >>> cmpds = all(map(lambda p, q: p is not q \
+                                     and p == q, \
+                        ret_ds, new_ds))
+    >>> cmphd = all(map(lambda p, q: p == q, \
+                        ret_hd, new_hd))
     >>> ret_ds is not orig_ds \
-        and cmpds() \
+        and cmpds \
         and ret_hd is not orig_hd \
-        and cmphd()
+        and cmphd
     True
 
     >>> # Remove 'a', 'c' column from dataset, header, return originals
@@ -1303,17 +1303,17 @@ def remove_columns(dataset, header, colnames, inplace=False):
         ]
     >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['a', 'c'], \
                                         inplace=True)
-    >>> cmpds = lambda: all(map(lambda p, q, r: p is q \
-                                                and p == q \
-                                                and p == r, \
-                                ret_ds, orig_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p, q, r: p == q \
-                                                and p == r, \
-                                ret_hd, orig_hd, new_hd))
+    >>> cmpds = all(map(lambda p, q, r: p is q \
+                                        and p == q \
+                                        and p == r, \
+                        ret_ds, orig_ds, new_ds))
+    >>> cmphd = all(map(lambda p, q, r: p == q \
+                                        and p == r, \
+                        ret_hd, orig_hd, new_hd))
     >>> ret_ds is orig_ds \
-        and cmpds() \
+        and cmpds \
         and ret_hd is orig_hd \
-        and cmphd()
+        and cmphd
     True
 
     >>> # Remove all columns from dataset, header, return copies
@@ -1326,15 +1326,15 @@ def remove_columns(dataset, header, colnames, inplace=False):
         ]
     >>> new_ds = []
     >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['a', 'b', 'c'])
-    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
-                                             and p == q, \
-                                ret_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p, q: p == q, \
-                                ret_hd, new_hd))
+    >>> cmpds = all(map(lambda p, q: p is not q \
+                                     and p == q, \
+                        ret_ds, new_ds))
+    >>> cmphd = all(map(lambda p, q: p == q, \
+                        ret_hd, new_hd))
     >>> ret_ds is not orig_ds \
-        and cmpds() \
+        and cmpds \
         and ret_hd is not orig_hd \
-        and cmphd()
+        and cmphd
     True
 
     >>> # Remove all columns from dataset, header, return originals
@@ -1348,17 +1348,17 @@ def remove_columns(dataset, header, colnames, inplace=False):
     >>> new_ds = []
     >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['a', 'c'], \
                                         inplace=True)
-    >>> cmpds = lambda: all(map(lambda p, q, r: p is q \
-                                                and p == q \
-                                                and p == r, \
-                                ret_ds, orig_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p, q, r: p == q \
-                                                and p == r, \
-                                ret_hd, orig_hd, new_hd))
+    >>> cmpds = all(map(lambda p, q, r: p is q \
+                                        and p == q \
+                                        and p == r, \
+                        ret_ds, orig_ds, new_ds))
+    >>> cmphd = all(map(lambda p, q, r: p == q \
+                                        and p == r, \
+                        ret_hd, orig_hd, new_hd))
     >>> ret_ds is orig_ds \
-        and cmpds() \
+        and cmpds \
         and ret_hd is orig_hd \
-        and cmphd()
+        and cmphd
     True
     """
     if _is_valid_colnames(header, colnames):
