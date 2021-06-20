@@ -1223,7 +1223,7 @@ def remove_columns(dataset, header, colnames, inplace=False):
             ['a2', 'c2'], \
             ['a3', 'c3'] \
         ]
-    >>> ret_ds, ret_hd = remove_column(orig_ds, orig_hd, 'b')
+    >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['b'])
     >>> cmpds = lambda: all(map(lambda p, q: p is not q \
                                              and p == q, \
                                 ret_ds, new_ds))
@@ -1248,7 +1248,7 @@ def remove_columns(dataset, header, colnames, inplace=False):
             ['a2', 'c2'], \
             ['a3', 'c3'] \
         ]
-    >>> ret_ds, ret_hd = remove_column(orig_ds, orig_hd, 'b', \
+    >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['b'], \
                                        inplace=True)
     >>> cmpds = lambda: all(map(lambda p, q, r: p is q \
                                                 and p == q \
@@ -1579,7 +1579,6 @@ def extract_rows(dataset, header, predicate, colnames=None):
             ['a3', 'b3', 'c3'] \
         ]
     >>> exp_hd = ['a', 'c']
-    >>> exp_ds = [['a2', 'c2'],['a3', 'c3']]
     >>> exp_ds = [ \
             ['a2', 'c2'], \
             ['a3', 'c3']  \
