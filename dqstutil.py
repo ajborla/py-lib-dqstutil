@@ -660,37 +660,6 @@ def gen_freq_table(dataset, header, colname, sort_by_value=False,
     return None
 
 
-def make_dataset(header):
-    """
-    Make a new, empty dataset.
-
-    :param header: list
-    :return: list, list|None, None
-
-    >>> header = []
-    >>> ret_ds, ret_hd = make_dataset(header)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> header = [1, {}, 'd']
-    >>> ret_ds, ret_hd = make_dataset(header)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> header = ['a', 'b', 'a']
-    >>> ret_ds, ret_hd = make_dataset(header)
-    >>> ret_ds is None and ret_hd is None
-    True
-    """
-    if isinstance(header, list) and len(header) > 0 \
-       and all(map(lambda x: isinstance(x, str), header)) \
-       and len(set(header)) == len(header):
-        dataset = []
-        return dataset, header[:]
-    # Fallthrough case
-    return None, None
-
-
 def load_csv_dataset(filename, sep=',', encoding='utf8'):
     """
     Load into dataset, data from a comma-separated value (CSV) file.
