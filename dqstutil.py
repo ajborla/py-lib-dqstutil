@@ -54,7 +54,7 @@ def is_numeric(numstr):
     >>> is_numeric('sgsgsg')
     False
 
-    >>> is_numeric([4,5,7])
+    >>> is_numeric([4, 5, 7])
     False
 
     >>> is_numeric({'a':5})
@@ -84,7 +84,7 @@ def is_numeric(numstr):
     >>> is_numeric('56M')
     False
 
-    >>> is_numeric(complex(3,4))
+    >>> is_numeric(complex(3, 4))
     True
     """
     def to_complex():
@@ -272,7 +272,7 @@ def inspect_dataset(dataset, header, generate_report=True,
     :param generate_report: bool
     :param printer: function
 
-    :return: None|tuple(list,dict,dict,dict)
+    :return: None|tuple(list, dict, dict, dict)
 
     >>> header = ['a', 'b', 'c']
     >>> dataset = [ \
@@ -755,19 +755,19 @@ def add_column(dataset, header, colname, coldata, inplace=False):
     :return: list, list|None, None
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> ret_ds, ret_hd = add_column(dummy, header, [], dummy)
     >>> ret_ds is None and ret_hd is None
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> ret_ds, ret_hd = add_column(dummy, header, '', dummy)
     >>> ret_ds is None and ret_hd is None
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> ret_ds, ret_hd = add_column(dummy, header, 'a', dummy)
     >>> ret_ds is None and ret_hd is None
     True
@@ -814,11 +814,11 @@ def add_column(dataset, header, colname, coldata, inplace=False):
     >>> coldata = ['d1', 'd2', 'd3']
     >>> ret_ds, ret_hd = add_column(orig_ds, orig_hd, 'd', coldata, \
                                     inplace=True)
-    >>> cmpds = lambda: all(map(lambda p,q,r: p is q \
+    >>> cmpds = lambda: all(map(lambda p, q, r: p is q \
                                               and p == q \
                                               and p == r, \
                                 ret_ds, orig_ds, new_ds))
-    >>> cmphd = lambda: all(map(lambda p,q,r: p == q \
+    >>> cmphd = lambda: all(map(lambda p, q, r: p == q \
                                               and p == r, \
                                 ret_hd, orig_hd, new_hd))
     >>> ret_ds is orig_ds \
@@ -864,13 +864,13 @@ def remove_column(dataset, header, colname, inplace=False):
     :return: list, list|None, None
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> ret_ds, ret_hd = remove_column(dummy, header, [])
     >>> ret_ds is None and ret_hd is None
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> ret_ds, ret_hd = remove_column(dummy, header, 'd')
     >>> ret_ds is None and ret_hd is None
     True
@@ -964,19 +964,19 @@ def modify_column(dataset, header, colname, coldata, inplace=False):
     :return: list, list|None, None
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> ret_ds, ret_hd = modify_column(dummy, header, [], dummy)
     >>> ret_ds is None and ret_hd is None
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> ret_ds, ret_hd = modify_column(dummy, header, '', dummy)
     >>> ret_ds is None and ret_hd is None
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> ret_ds, ret_hd = modify_column(dummy, header, 'd', dummy)
     >>> ret_ds is None and ret_hd is None
     True
@@ -1073,36 +1073,36 @@ def transform_column(dataset, header, colname, transform,
     :return: list, list|None, None
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> transform = lambda x: None
     >>> ret_ds, ret_hd = transform_column(dummy, header, [], transform)
     >>> ret_ds is None and ret_hd is None
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> transform = lambda x: None
     >>> ret_ds, ret_hd = transform_column(dummy, header, '', transform)
     >>> ret_ds is None and ret_hd is None
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> transform = lambda x: None
     >>> ret_ds, ret_hd = transform_column(dummy, header, 'd', transform)
     >>> ret_ds is None and ret_hd is None
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> transform = {}
     >>> ret_ds, ret_hd = transform_column(dummy, header, 'a', transform)
     >>> ret_ds is None and ret_hd is None
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
-    >>> transform = lambda x,y: None
+    >>> dummy = [[], [], []]
+    >>> transform = lambda x, y: None
     >>> ret_ds, ret_hd = transform_column(dummy, header, 'a', transform)
     >>> ret_ds is None and ret_hd is None
     True
@@ -1193,19 +1193,19 @@ def remove_columns(dataset, header, colnames, inplace=False):
     :return: list, list|None, None
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> ret_ds, ret_hd = remove_columns(dummy, header, {})
     >>> ret_ds is None and ret_hd is None
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> ret_ds, ret_hd = remove_columns(dummy, header, [])
     >>> ret_ds is None and ret_hd is None
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> ret_ds, ret_hd = remove_columns(dummy, header, ['d'])
     >>> ret_ds is None and ret_hd is None
     True
@@ -1398,19 +1398,19 @@ def extract_row_range(dataset, rowrange):
 
     :return: None|list
 
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> extract_row_range(dummy, [-1,2]) is None
     True
 
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> extract_row_range(dummy, [2,1]) is None
     True
 
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> extract_row_range(dummy, [3,1]) is None
     True
 
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> extract_row_range(dummy, [1,4]) is None
     True
 
@@ -1481,15 +1481,15 @@ def extract_rows(dataset, header, predicate, colnames=None):
 
     >>> # Pass non-function predicate
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
+    >>> dummy = [[], [], []]
     >>> predicate = []
     >>> extract_rows(dummy, header, predicate) is None
     True
 
     >>> # Pass 3-arg predicate
     >>> header = ['a', 'b', 'c']
-    >>> dummy = [[],[],[]]
-    >>> predicate = lambda x,y,z: None
+    >>> dummy = [[], [], []]
+    >>> predicate = lambda x, y, z: None
     >>> extract_rows(dummy, header, predicate) is None
     True
 
@@ -1538,7 +1538,7 @@ def extract_rows(dataset, header, predicate, colnames=None):
     >>> # `colnames` is an empty list
     >>> header = ['a', 'b', 'c']
     >>> dummy = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2']]
-    >>> predicate = lambda row,header: True
+    >>> predicate = lambda row, header: True
     >>> colnames = []
     >>> extract_rows(dummy, header, predicate, colnames) is None
     True
@@ -1546,7 +1546,7 @@ def extract_rows(dataset, header, predicate, colnames=None):
     >>> # `colnames` contains a non-column name
     >>> header = ['a', 'b', 'c']
     >>> dummy = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2']]
-    >>> predicate = lambda row,header: True
+    >>> predicate = lambda row, header: True
     >>> colnames = ['a', 'd']
     >>> extract_rows(dummy, header, predicate, colnames) is None
     True
