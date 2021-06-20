@@ -722,6 +722,32 @@ def load_csv_dataset(filename, sep=',', encoding='utf8'):
     >>> ret_ds, ret_hd = load_csv_dataset(filename)
     >>> ret_ds is None and ret_hd is None
     True
+
+    >>> orig_hd = ['a', 'b', 'c']
+    >>> orig_ds = [ \
+            ['a1', 'b1', 'c1'], \
+            ['a2', 'b2', 'c2'], \
+            ['a3', 'b3', 'c3'],\
+        ]
+    >>> CSVDATA = 'a,b,c\\na1,b1,c1\\na2,b2,c2\\na3,b3,c3\\n'
+    >>> from os import unlink
+    >>> from tempfile import NamedTemporaryFile
+    >>> file = NamedTemporaryFile(mode='w+', delete=False)
+    >>> filename = file.name
+    >>> _ = file.write(CSVDATA)
+    >>> file.close()
+    >>> ret_ds, ret_hd = load_csv_dataset(filename)
+    >>> unlink(filename)
+    >>> cmpds = lambda: all(map(lambda p, q: p is not q \
+                                             and p == q, \
+                                ret_ds, orig_ds))
+    >>> cmphd = lambda: all(map(lambda p, q: p == q, \
+                                ret_hd, orig_hd))
+    >>> ret_ds is not orig_ds \
+        and cmpds() \
+        and ret_hd is not orig_hd \
+        and cmphd()
+    True
     """
     from os.path import exists as file_exists
     from csv import reader as csv_reader
