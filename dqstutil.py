@@ -583,52 +583,53 @@ def gen_freq_table(dataset, header, colname, sort_by_value=False,
     :return: dict
 
     >>> header = ['a', 'b', 'c']
-    >>> ds = [ \
+    >>> dataset = [ \
             ['a1', 'b1', 'c1'], \
             ['a2', 'b2', 'c2'], \
             ['a3', 'b3', 'c3'], \
             ['a3', 'b3', 'c3'] \
         ]
-    >>> gen_freq_table(ds, header, 'Z') is None
+    >>> gen_freq_table(dataset, header, 'Z') is None
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> ds = [ \
+    >>> dataset = [ \
             ['a1', 'b1', 'c1'], \
             ['a2', 'b2', 'c2'], \
             ['a3', 'b3', 'c3'], \
             ['a3', 'b3', 'c3'] \
         ]
     >>> fqt = {'b1':(1, 25.0), 'b2':(1, 25.0), 'b3':(2, 50.0)}
-    >>> ret_fqt = gen_freq_table(ds, header, 'b')
+    >>> ret_fqt = gen_freq_table(dataset, header, 'b')
     >>> all([fqt[k][0] == ret_fqt[k][0] \
             for k in fqt if k in ret_fqt]) \
                             and fqt.keys() == ret_fqt.keys()
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> ds = [ \
+    >>> dataset = [ \
             ['a1', 'b1', 'c1'], \
             ['a2', 'b2', 'c2'], \
             ['a3', 'b3', 'c3'], \
             ['a3', 'b3', 'c3'] \
         ]
     >>> fqt = {'b3':(2, 50.0), 'b1':(1, 25.0), 'b2':(1, 25.0), }
-    >>> ret_fqt = gen_freq_table(ds, header, 'b', sort_by_value=True)
+    >>> ret_fqt = gen_freq_table(dataset, header, 'b', \
+                                 sort_by_value=True)
     >>> all([fqt[k][0] == ret_fqt[k][0] \
             for k in fqt if k in ret_fqt]) \
                             and fqt.keys() == ret_fqt.keys()
     True
 
     >>> header = ['a', 'b', 'c']
-    >>> ds = [ \
+    >>> dataset = [ \
             ['a1', 'b1', 'c1'], \
             ['a2', 'b2', 'c2'], \
             ['a3', 'b3', 'c3'], \
             ['a3', 'b3', 'c3'] \
         ]
     >>> fqt = {'b3':(2, 50.0), 'b2':(1, 25.0), 'b1':(1, 25.0)}
-    >>> ret_fqt = gen_freq_table(ds, header, 'b', reverse=True)
+    >>> ret_fqt = gen_freq_table(dataset, header, 'b', reverse=True)
     >>> all([fqt[k][0] == ret_fqt[k][0] \
             for k in fqt if k in ret_fqt]) \
                             and fqt.keys() == ret_fqt.keys()
@@ -1502,7 +1503,7 @@ def extract_rows(dataset, header, predicate, colnames=None):
             ['a2', 'b2', 'c2'], \
         ]
 
-    >>> # Extract all rows
+    >>> # Extract all rows, all columns
     >>> header = ['a', 'b', 'c']
     >>> orig_ds = [ \
             ['a1', 'b1', 'c1'], \
@@ -1519,7 +1520,7 @@ def extract_rows(dataset, header, predicate, colnames=None):
     >>> ret_ds is not orig_ds and ret_ds == exp_ds
     True
 
-    >>> # Extract selected rows
+    >>> # Extract selected rows, all columns
     >>> header = ['a', 'b', 'c']
     >>> orig_ds = [ \
             ['a1', 'b1', 'c1'], \
@@ -1551,7 +1552,7 @@ def extract_rows(dataset, header, predicate, colnames=None):
     >>> extract_rows(dummy, header, predicate, colnames) is None
     True
 
-    >>> # Extract selected rows: whole rows returned
+    >>> # Extract all rows: columns 'a', and 'c', returned
     >>> orig_hd = ['a', 'b', 'c']
     >>> orig_ds = [ \
             ['a1', 'b1', 'c1'], \
@@ -1559,12 +1560,14 @@ def extract_rows(dataset, header, predicate, colnames=None):
             ['a3', 'b3', 'c3'] \
         ]
     >>> exp_ds = [ \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3']  \
+            ['a1', 'c1'], \
+            ['a2', 'c2'], \
+            ['a3', 'c3']  \
         ]
-    >>> exp_hd = ['a', 'b', 'c']
-    >>> predicate = lambda row, header: row[header.index('c')] > 'c1'
-    >>> ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, predicate)
+    >>> exp_hd = ['a', 'c']
+    >>> predicate = lambda row, header: True
+    >>> ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, predicate, \
+                                      ['a', 'c'])
     >>> ret_ds is not orig_ds \
         and ret_ds == exp_ds \
         and ret_hd is not orig_hd \
