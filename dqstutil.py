@@ -16,22 +16,8 @@ def _is_valid_colnames(header, colnames):
 
     :param header: list
     :param colnames: list
+
     :return: bool
-
-    >>> _is_valid_colnames(['a', 'b', 'c'], ['b', 'c'])
-    True
-
-    >>> _is_valid_colnames(['a', 'b', 'c'], ['e', 'c'])
-    False
-
-    >>> _is_valid_colnames(['a', 'b', 'c'], {})
-    False
-
-    >>> _is_valid_colnames(['a', 'b', 'c'], [])
-    False
-
-    >>> _is_valid_colnames(['a', 'b', 'c'], [1, 2])
-    False
     """
     return \
         isinstance(header, list) \
@@ -49,43 +35,8 @@ def is_numeric(numstr):
     numeric-convertible string.
 
     :param numstr: str
+
     :return: bool
-
-    >>> is_numeric('sgsgsg')
-    False
-
-    >>> is_numeric([4, 5, 7])
-    False
-
-    >>> is_numeric({'a':5})
-    False
-
-    >>> is_numeric('6')
-    True
-
-    >>> is_numeric(6)
-    True
-
-    >>> is_numeric('4.1')
-    True
-
-    >>> is_numeric(4.1)
-    True
-
-    >>> is_numeric('-4.1')
-    True
-
-    >>> is_numeric(-4.1)
-    True
-
-    >>> is_numeric('4.1.4')
-    False
-
-    >>> is_numeric('56M')
-    False
-
-    >>> is_numeric(complex(3, 4))
-    True
     """
     def to_complex():
         try:
@@ -110,25 +61,8 @@ def is_possible_date(datestr):
     string.
 
     :param datestr: str
+
     :return: bool
-
-    >>> is_possible_date('sgsgsg')
-    False
-
-    >>> is_possible_date('1/1/1')
-    True
-
-    >>> is_possible_date('1/1/1/')
-    False
-
-    >>> is_possible_date('1-1-1')
-    True
-
-    >>> is_possible_date('1--1-1')
-    False
-
-    >>> is_possible_date('January 1, 1999')
-    True
     """
     month_prefixes = [
         'jan', 'feb', 'mar', 'apr',
@@ -158,37 +92,8 @@ def is_possible_numeric(numstr):
     possible numerics.
 
     :param numstr: str
+
     :return: bool
-
-    >>> is_possible_numeric('sgsgsg')
-    False
-
-    >>> is_possible_numeric('1/1/1')
-    False
-
-    >>> is_possible_numeric('January 1, 1999')
-    False
-
-    >>> is_possible_numeric('15M')
-    True
-
-    >>> is_possible_numeric('$14.34')
-    True
-
-    >>> is_possible_numeric('$$59')
-    False
-
-    >>> is_possible_numeric('1,456,234')
-    True
-
-    >>> is_possible_numeric('1.0.23')
-    False
-
-    >>> is_possible_numeric('1.23')
-    True
-
-    >>> is_possible_numeric('1,7kM')
-    True
     """
     # Tests for string `s` numeric-format compliance
     contains_one_or_more_digits = \
@@ -220,19 +125,8 @@ def determine_column_type(coldata):
         PN - possibly a numeric
 
     :param coldata: str
+
     :return: str
-
-    >>> determine_column_type('sgsgsg')
-    'T'
-
-    >>> determine_column_type('15M')
-    'PN'
-
-    >>> determine_column_type('-4.1')
-    'N'
-
-    >>> determine_column_type('January 1, 1999')
-    'PD'
     """
     if is_numeric(coldata):
         return 'N'
@@ -273,49 +167,6 @@ def inspect_dataset(dataset, header, generate_report=True,
     :param printer: function
 
     :return: None|tuple(list, dict, dict, dict)
-
-    >>> header = ['a', 'b', 'c']
-    >>> dataset = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'c2'], \
-            ['a3', 'b3', 'c3'], \
-            ['a4', 'bib', '3'], \
-            ['ay', 'bib', 'x'], \
-            ['ay', 'bib', 'x']  \
-        ]
-    >>> skiprows, columns, uniques, duplicates = \
-            inspect_dataset(dataset, header, generate_report=False)
-    >>> (skiprows, columns, uniques, duplicates)
-    ([1], \
-{'a': {'PN': 3, 'T': 2}, 'b': {'PN': 2, 'T': 3}, \
-'c': {'PN': 2, 'N': 1, 'T': 2}}, \
-{'a': 1, 'b': 1, 'c': 1}, {'a': 1, 'b': 2, 'c': 1})
-
-    >>> header = ['a', 'b', 'c']
-    >>> dataset = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'c2'], \
-            ['a3', 'b3', 'c3'], \
-            ['a4', 'bib', '3'], \
-            ['ay', 'bib', 'x'], \
-            ['ay', 'bib', 'x'] \
-        ]
-    >>> inspect_dataset(dataset, header, generate_report=True)
-    Invalid (incorrect length) row numbers:[1]
-    <BLANKLINE>
-    Tentative column type(s) [T - text, N - numeric, \
-PN - possible numeric, PD - possible date]:
-    <BLANKLINE>
-    {'a': {'PN': 3, 'T': 2}, 'b': {'PN': 2, 'T': 3}, \
-'c': {'PN': 2, 'N': 1, 'T': 2}}
-    <BLANKLINE>
-    Unique value counts (non-numeric and non-date columns only):
-    <BLANKLINE>
-    {'a': 1, 'b': 1, 'c': 1}
-    <BLANKLINE>
-    Duplicate value counts (non-numeric and non-date columns only):
-    <BLANKLINE>
-    {'a': 1, 'b': 2, 'c': 1}
     """
     # 1. Column metadata repository keyed using column headers
     columns = {}
@@ -416,98 +267,8 @@ def extract_unique_values(values, sort=False, sep='|'):
     :param values: list
     :param sort: bool
     :param sep: str
+
     :return: list
-
-    >>> values = {'a': 4}
-    >>> extract_unique_values(values) is None
-    True
-
-    >>> values = []
-    >>> extract_unique_values(values) is None
-    True
-
-    >>> values = ['d', 4, {'a': 4}, [3,4,5]]
-    >>> extract_unique_values(values) is None
-    True
-
-    >>> values = ['a', 't', 'z', 'k', 'v', 'z', 't']
-    >>> uniques = ['a', 't', 'z', 'k', 'v']
-    >>> extract_unique_values(values) == uniques
-    True
-
-    >>> values = [1, 3, 2, 1]
-    >>> uniques = [1, 3, 2]
-    >>> extract_unique_values(values) == uniques
-    True
-
-    >>> values = [1, 3, 2, 1]
-    >>> uniques = [1, 3, 2]
-    >>> extract_unique_values(values, sort=True) == sorted(uniques)
-    True
-
-    >>> values = [ \
-            ['a1'], ['b1'], ['c1'], \
-            ['a2'], ['b1'], ['c1'], \
-            ['a1'], ['b2'], ['c1'] \
-        ]
-    >>> uniques = ['a1', 'b1', 'c1', 'a2', 'b2']
-    >>> sorted(extract_unique_values(values)) == sorted(uniques)
-    True
-
-    >>> values = [[1], [2], [3], [1]]
-    >>> uniques = [1, 2, 3]
-    >>> extract_unique_values(values) == uniques
-    True
-
-    >>> values = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'], \
-            ['a2', 'b2', 'c2'] \
-        ]
-    >>> uniques = ['a1|b1|c1', 'a2|b2|c2', 'a3|b3|c3']
-    >>> sorted(extract_unique_values(values)) == sorted(uniques)
-    True
-
-    >>> values = [['a1'], ['b1'], [], ['a2'], ['b1']]
-    >>> extract_unique_values(values) is None
-    True
-
-    >>> values = [['a1'], ['b1'], 0, ['a2'], ['b1']]
-    >>> extract_unique_values(values) is None
-    True
-
-    >>> values = [ \
-            ['a1', 'b1', 'c1'], \
-            [], \
-            ['a3', 'b3', 'c3'], \
-            ['a2', 'b2', 'c2'] \
-        ]
-    >>> extract_unique_values(values) is None
-    True
-
-    >>> values = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'c2'], \
-            ['a3', 'b3', 'c3'], \
-            ['a2', 'b2', 'c2'] \
-        ]
-    >>> extract_unique_values(values) is None
-    True
-
-    >>> values = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 0, 'c2'], \
-            ['a3', 'b3', 'c3'], \
-            ['a2', 'b2', 'c2'] \
-        ]
-    >>> extract_unique_values(values) is None
-    True
-
-    >>> values = [[11, 12, 13], [34, 0, 85], [11, 12, 13]]
-    >>> uniques = ['11|12|13', '34|0|85']
-    >>> sorted(extract_unique_values(values)) == sorted(uniques)
-    True
     """
     # Exclude obvious non-candidates
     if not isinstance(values, list) or len(values) < 1:
@@ -581,59 +342,6 @@ def gen_freq_table(dataset, header, colname, sort_by_value=False,
     :param reverse: bool
 
     :return: dict
-
-    >>> header = ['a', 'b', 'c']
-    >>> dataset = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> gen_freq_table(dataset, header, 'Z') is None
-    True
-
-    >>> header = ['a', 'b', 'c']
-    >>> dataset = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> fqt = {'b1':(1, 25.0), 'b2':(1, 25.0), 'b3':(2, 50.0)}
-    >>> ret_fqt = gen_freq_table(dataset, header, 'b')
-    >>> all([fqt[k][0] == ret_fqt[k][0] \
-            for k in fqt if k in ret_fqt]) \
-                            and fqt.keys() == ret_fqt.keys()
-    True
-
-    >>> header = ['a', 'b', 'c']
-    >>> dataset = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> fqt = {'b3':(2, 50.0), 'b1':(1, 25.0), 'b2':(1, 25.0), }
-    >>> ret_fqt = gen_freq_table(dataset, header, 'b', \
-                                 sort_by_value=True)
-    >>> all([fqt[k][0] == ret_fqt[k][0] \
-            for k in fqt if k in ret_fqt]) \
-                            and fqt.keys() == ret_fqt.keys()
-    True
-
-    >>> header = ['a', 'b', 'c']
-    >>> dataset = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> fqt = {'b3':(2, 50.0), 'b2':(1, 25.0), 'b1':(1, 25.0)}
-    >>> ret_fqt = gen_freq_table(dataset, header, 'b', reverse=True)
-    >>> all([fqt[k][0] == ret_fqt[k][0] \
-            for k in fqt if k in ret_fqt]) \
-                            and fqt.keys() == ret_fqt.keys()
-    True
     """
     freq_table, total_rows = {}, len(dataset)
     if colname in header:
@@ -680,47 +388,6 @@ def load_csv_dataset(filename, sep=',', encoding='utf8'):
     :param encoding: str
 
     :return: list, list|None, None
-
-    >>> filename = []
-    >>> ret_ds, ret_hd = load_csv_dataset(filename)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> filename = ''
-    >>> ret_ds, ret_hd = load_csv_dataset(filename)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> filename = '***NON_EXISTENT_FILE***'
-    >>> ret_ds, ret_hd = load_csv_dataset(filename)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> orig_hd = ['a', 'b', 'c']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'],\
-        ]
-    >>> CSVDATA = 'a,b,c\\na1,b1,c1\\na2,b2,c2\\na3,b3,c3\\n'
-    >>> from os import unlink
-    >>> from tempfile import NamedTemporaryFile
-    >>> file = NamedTemporaryFile(mode='w+', delete=False)
-    >>> filename = file.name
-    >>> _ = file.write(CSVDATA)
-    >>> file.close()
-    >>> ret_ds, ret_hd = load_csv_dataset(filename)
-    >>> unlink(filename)
-    >>> cmpds = all(map(lambda p, q: p is not q \
-                                     and p == q, \
-                        ret_ds, orig_ds))
-    >>> cmphd = all(map(lambda p, q: p == q, \
-                        ret_hd, orig_hd))
-    >>> ret_ds is not orig_ds \
-        and cmpds \
-        and ret_hd is not orig_hd \
-        and cmphd
-    True
     """
     from os.path import exists as file_exists
     from csv import reader as csv_reader
@@ -754,79 +421,6 @@ def add_column(dataset, header, colname, coldata, inplace=False):
     :param inplace: bool
 
     :return: list, list|None, None
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> ret_ds, ret_hd = add_column(dummy, header, [], dummy)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> ret_ds, ret_hd = add_column(dummy, header, '', dummy)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> ret_ds, ret_hd = add_column(dummy, header, 'a', dummy)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> # Add column 'd' to dataset and header copies, return both
-    >>> orig_hd = ['a', 'b', 'c']
-    >>> new_hd = ['a', 'b', 'c', 'd']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> new_ds = [ \
-            ['a1', 'b1', 'c1', 'd1'], \
-            ['a2', 'b2', 'c2', 'd2'], \
-            ['a3', 'b3', 'c3', 'd3'] \
-        ]
-    >>> coldata = ['d1', 'd2', 'd3']
-    >>> ret_ds, ret_hd = add_column(orig_ds, orig_hd, 'd', coldata)
-    >>> cmpds = all(map(lambda p, q: p is not q \
-                                     and p == q, \
-                        ret_ds, new_ds))
-    >>> cmphd = all(map(lambda p, q: p == q, \
-                        ret_hd, new_hd))
-    >>> ret_ds is not orig_ds \
-        and cmpds \
-        and ret_hd is not orig_hd \
-        and cmphd
-    True
-
-    >>> # Add column 'd' to dataset and header originals, return both
-    >>> orig_hd = ['a', 'b', 'c']
-    >>> new_hd = ['a', 'b', 'c', 'd']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> new_ds = [ \
-            ['a1', 'b1', 'c1', 'd1'], \
-            ['a2', 'b2', 'c2', 'd2'], \
-            ['a3', 'b3', 'c3', 'd3'] \
-        ]
-    >>> coldata = ['d1', 'd2', 'd3']
-    >>> ret_ds, ret_hd = add_column(orig_ds, orig_hd, 'd', coldata, \
-                                    inplace=True)
-    >>> cmpds = all(map(lambda p, q, r: p is q \
-                                        and p == q \
-                                        and p == r, \
-                        ret_ds, orig_ds, new_ds))
-    >>> cmphd = all(map(lambda p, q, r: p == q \
-                                        and p == r, \
-                        ret_hd, orig_hd, new_hd))
-    >>> ret_ds is orig_ds \
-        and cmpds \
-        and ret_hd is orig_hd \
-        and cmphd
-    True
     """
     if isinstance(colname, str) and len(colname) > 0 \
        and colname not in header \
@@ -863,71 +457,6 @@ def remove_column(dataset, header, colname, inplace=False):
     :param inplace: bool
 
     :return: list, list|None, None
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> ret_ds, ret_hd = remove_column(dummy, header, [])
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> ret_ds, ret_hd = remove_column(dummy, header, 'd')
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> # Remove 'b' column from dataset, header, return both copies
-    >>> orig_hd = ['a', 'b', 'c']
-    >>> new_hd = ['a', 'c']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> new_ds = [ \
-            ['a1', 'c1'], \
-            ['a2', 'c2'], \
-            ['a3', 'c3'] \
-        ]
-    >>> ret_ds, ret_hd = remove_column(orig_ds, orig_hd, 'b')
-    >>> cmpds = all(map(lambda p, q: p is not q \
-                                     and p == q, \
-                        ret_ds, new_ds))
-    >>> cmphd = all(map(lambda p, q: p == q, \
-                        ret_hd, new_hd))
-    >>> ret_ds is not orig_ds \
-        and cmpds \
-        and ret_hd is not orig_hd \
-        and cmphd
-    True
-
-    >>> # Remove 'b' column from dataset, header, return both originals
-    >>> orig_hd = ['a', 'b', 'c']
-    >>> new_hd = ['a', 'c']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> new_ds = [ \
-            ['a1', 'c1'], \
-            ['a2', 'c2'], \
-            ['a3', 'c3'] \
-        ]
-    >>> ret_ds, ret_hd = remove_column(orig_ds, orig_hd, 'b', \
-                                       inplace=True)
-    >>> cmpds = all(map(lambda p, q, r: p is q \
-                                        and p == q \
-                                        and p == r, \
-                        ret_ds, orig_ds, new_ds))
-    >>> cmphd = all(map(lambda p, q, r: p == q \
-                                        and p == r, \
-                        ret_hd, orig_hd, new_hd))
-    >>> ret_ds is orig_ds \
-        and cmpds \
-        and ret_hd is orig_hd \
-        and cmphd
-    True
     """
     if isinstance(colname, str) and colname in header:
         # `inplace` flag determines whether originals or copies
@@ -963,66 +492,6 @@ def modify_column(dataset, header, colname, coldata, inplace=False):
     :param inplace: bool
 
     :return: list, list|None, None
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> ret_ds, ret_hd = modify_column(dummy, header, [], dummy)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> ret_ds, ret_hd = modify_column(dummy, header, '', dummy)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> ret_ds, ret_hd = modify_column(dummy, header, 'd', dummy)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> # Modify column 'b' in dataset copy, return copies
-    >>> header = ['a', 'b', 'c']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> new_ds = [ \
-            ['a1', 'X1', 'c1'], \
-            ['a2', 'X2', 'c2'], \
-            ['a3', 'X3', 'c3'] \
-        ]
-    >>> coldata = ['X1', 'X2', 'X3']
-    >>> ret_ds, ret_hd = modify_column(orig_ds, header, 'b', coldata)
-    >>> cmpds = all(map(lambda p, q: p is not q \
-                                     and p == q, \
-                        ret_ds, new_ds))
-    >>> ret_ds is not orig_ds and cmpds
-    True
-
-    >>> # Modify column 'b' in dataset, return originals
-    >>> header = ['a', 'b', 'c']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> new_ds = [ \
-            ['a1', 'X1', 'c1'], \
-            ['a2', 'X2', 'c2'], \
-            ['a3', 'X3', 'c3'] \
-        ]
-    >>> coldata = ['X1', 'X2', 'X3']
-    >>> ret_ds, ret_hd = modify_column(orig_ds, header, 'b', coldata, \
-                                       inplace=True)
-    >>> cmpds = all(map(lambda p, q, r: p is q \
-                                        and p == q \
-                                        and p == r, \
-                        ret_ds, orig_ds, new_ds))
-    >>> ret_ds is orig_ds and cmpds
-    True
     """
     if isinstance(colname, str) and len(colname) > 0 \
        and colname in header \
@@ -1072,83 +541,6 @@ def transform_column(dataset, header, colname, transform,
     :param inplace: bool
 
     :return: list, list|None, None
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> transform = lambda x: None
-    >>> ret_ds, ret_hd = transform_column(dummy, header, [], transform)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> transform = lambda x: None
-    >>> ret_ds, ret_hd = transform_column(dummy, header, '', transform)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> transform = lambda x: None
-    >>> ret_ds, ret_hd = transform_column(dummy, header, 'd', transform)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> transform = {}
-    >>> ret_ds, ret_hd = transform_column(dummy, header, 'a', transform)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> transform = lambda x, y: None
-    >>> ret_ds, ret_hd = transform_column(dummy, header, 'a', transform)
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> # Copy of dataset is modified
-    >>> header = ['a', 'b', 'c']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> new_ds = [ \
-            ['a1', 'B1', 'c1'], \
-            ['a2', 'B2', 'c2'], \
-            ['a3', 'B3', 'c3'] \
-        ]
-    >>> ret_ds, _ = transform_column(orig_ds, header, 'b', \
-                                     lambda x: x.upper())
-    >>> cmpds = all(map(lambda p, q: p is not q \
-                                     and p == q, \
-                        ret_ds, new_ds))
-    >>> ret_ds is not orig_ds and cmpds
-    True
-
-    >>> # Original dataset is modified
-    >>> header = ['a', 'b', 'c']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> new_ds = [ \
-            ['a1', 'B1', 'c1'], \
-            ['a2', 'B2', 'c2'], \
-            ['a3', 'B3', 'c3'] \
-        ]
-    >>> ret_ds, _ = transform_column(orig_ds, header, 'b', \
-                                     lambda x: x.upper(), \
-                                     inplace=True)
-    >>> cmpds = all(map(lambda p, q, r: p is q \
-                                        and p == q \
-                                        and p == r, \
-                        ret_ds, orig_ds, new_ds))
-    >>> ret_ds is orig_ds and cmpds
-    True
     """
     if isinstance(colname, str) \
        and len(colname) > 0 \
@@ -1192,175 +584,6 @@ def remove_columns(dataset, header, colnames, inplace=False):
     :param inplace: bool
 
     :return: list, list|None, None
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> ret_ds, ret_hd = remove_columns(dummy, header, {})
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> ret_ds, ret_hd = remove_columns(dummy, header, [])
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> ret_ds, ret_hd = remove_columns(dummy, header, ['d'])
-    >>> ret_ds is None and ret_hd is None
-    True
-
-    >>> # Remove 'b' column from dataset, header, return copies
-    >>> orig_hd = ['a', 'b', 'c']
-    >>> new_hd = ['a', 'c']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> new_ds = [ \
-            ['a1', 'c1'], \
-            ['a2', 'c2'], \
-            ['a3', 'c3'] \
-        ]
-    >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['b'])
-    >>> cmpds = all(map(lambda p, q: p is not q \
-                                     and p == q, \
-                        ret_ds, new_ds))
-    >>> cmphd = all(map(lambda p, q: p == q, \
-                        ret_hd, new_hd))
-    >>> ret_ds is not orig_ds \
-        and cmpds \
-        and ret_hd is not orig_hd \
-        and cmphd
-    True
-
-    >>> # Remove 'b' column from dataset, header, return originals
-    >>> orig_hd = ['a', 'b', 'c']
-    >>> new_hd = ['a', 'c']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> new_ds = [ \
-            ['a1', 'c1'], \
-            ['a2', 'c2'], \
-            ['a3', 'c3'] \
-        ]
-    >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['b'], \
-                                       inplace=True)
-    >>> cmpds = all(map(lambda p, q, r: p is q \
-                                        and p == q \
-                                        and p == r, \
-                        ret_ds, orig_ds, new_ds))
-    >>> cmphd = all(map(lambda p, q, r: p == q \
-                                        and p == r, \
-                        ret_hd, orig_hd, new_hd))
-    >>> ret_ds is orig_ds \
-        and cmpds \
-        and ret_hd is orig_hd \
-        and cmphd
-    True
-
-    >>> # Remove 'a', 'c' column from dataset, header, return copies
-    >>> orig_hd = ['a', 'b', 'c']
-    >>> new_hd = ['b']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> new_ds = [ \
-            ['b1'], \
-            ['b2'], \
-            ['b3'] \
-        ]
-    >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['a', 'c'])
-    >>> cmpds = all(map(lambda p, q: p is not q \
-                                     and p == q, \
-                        ret_ds, new_ds))
-    >>> cmphd = all(map(lambda p, q: p == q, \
-                        ret_hd, new_hd))
-    >>> ret_ds is not orig_ds \
-        and cmpds \
-        and ret_hd is not orig_hd \
-        and cmphd
-    True
-
-    >>> # Remove 'a', 'c' column from dataset, header, return originals
-    >>> orig_hd = ['a', 'b', 'c']
-    >>> new_hd = ['b']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> new_ds = [ \
-            ['b1'], \
-            ['b2'], \
-            ['b3'] \
-        ]
-    >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['a', 'c'], \
-                                        inplace=True)
-    >>> cmpds = all(map(lambda p, q, r: p is q \
-                                        and p == q \
-                                        and p == r, \
-                        ret_ds, orig_ds, new_ds))
-    >>> cmphd = all(map(lambda p, q, r: p == q \
-                                        and p == r, \
-                        ret_hd, orig_hd, new_hd))
-    >>> ret_ds is orig_ds \
-        and cmpds \
-        and ret_hd is orig_hd \
-        and cmphd
-    True
-
-    >>> # Remove all columns from dataset, header, return copies
-    >>> orig_hd = ['a', 'b', 'c']
-    >>> new_hd = []
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> new_ds = []
-    >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['a', 'b', 'c'])
-    >>> cmpds = all(map(lambda p, q: p is not q \
-                                     and p == q, \
-                        ret_ds, new_ds))
-    >>> cmphd = all(map(lambda p, q: p == q, \
-                        ret_hd, new_hd))
-    >>> ret_ds is not orig_ds \
-        and cmpds \
-        and ret_hd is not orig_hd \
-        and cmphd
-    True
-
-    >>> # Remove all columns from dataset, header, return originals
-    >>> orig_hd = ['a', 'b', 'c']
-    >>> new_hd = []
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> new_ds = []
-    >>> ret_ds, ret_hd = remove_columns(orig_ds, orig_hd, ['a', 'c'], \
-                                        inplace=True)
-    >>> cmpds = all(map(lambda p, q, r: p is q \
-                                        and p == q \
-                                        and p == r, \
-                        ret_ds, orig_ds, new_ds))
-    >>> cmphd = all(map(lambda p, q, r: p == q \
-                                        and p == r, \
-                        ret_hd, orig_hd, new_hd))
-    >>> ret_ds is orig_ds \
-        and cmpds \
-        and ret_hd is orig_hd \
-        and cmphd
-    True
     """
     if _is_valid_colnames(header, colnames):
         # `inplace` flag determines whether originals or copies
@@ -1398,47 +621,6 @@ def extract_row_range(dataset, rowrange):
     :param rowrange: list
 
     :return: None|list
-
-    >>> dummy = [[], [], []]
-    >>> extract_row_range(dummy, [-1,2]) is None
-    True
-
-    >>> dummy = [[], [], []]
-    >>> extract_row_range(dummy, [2,1]) is None
-    True
-
-    >>> dummy = [[], [], []]
-    >>> extract_row_range(dummy, [3,1]) is None
-    True
-
-    >>> dummy = [[], [], []]
-    >>> extract_row_range(dummy, [1,4]) is None
-    True
-
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> exp_ds = [ \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> ret_ds = extract_row_range(orig_ds, [1,2])
-    >>> ret_ds == exp_ds and ret_ds is not exp_ds
-    True
-
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> exp_ds = [ \
-            ['a2', 'b2', 'c2'], \
-        ]
-    >>> ret_ds = extract_row_range(orig_ds, [1,1])
-    >>> ret_ds == exp_ds and ret_ds is not exp_ds
-    True
     """
     lower_bound, upper_bound = rowrange
     if lower_bound < 0 or lower_bound > upper_bound:
@@ -1479,121 +661,6 @@ def extract_rows(dataset, header, predicate, colnames=None):
     :param colnames: None|ist
 
     :return: list, list
-
-    >>> # Pass non-function predicate
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> predicate = []
-    >>> extract_rows(dummy, header, predicate) is None
-    True
-
-    >>> # Pass 3-arg predicate
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [[], [], []]
-    >>> predicate = lambda x, y, z: None
-    >>> extract_rows(dummy, header, predicate) is None
-    True
-
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> exp_ds = [ \
-            ['a2', 'b2', 'c2'], \
-        ]
-
-    >>> # Extract all rows, all columns
-    >>> header = ['a', 'b', 'c']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> exp_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> predicate = lambda row, header: True
-    >>> ret_ds, _ = extract_rows(orig_ds, header, predicate)
-    >>> ret_ds is not orig_ds and ret_ds == exp_ds
-    True
-
-    >>> # Extract selected rows, all columns
-    >>> header = ['a', 'b', 'c']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> exp_ds = [ \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3']  \
-        ]
-    >>> predicate = lambda row, header: row[header.index('c')] > 'c1'
-    >>> ret_ds, _ = extract_rows(orig_ds, header, predicate)
-    >>> ret_ds is not orig_ds and ret_ds == exp_ds
-    True
-
-    >>> # `colnames` is an empty list
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2']]
-    >>> predicate = lambda row, header: True
-    >>> colnames = []
-    >>> extract_rows(dummy, header, predicate, colnames) is None
-    True
-
-    >>> # `colnames` contains a non-column name
-    >>> header = ['a', 'b', 'c']
-    >>> dummy = [['a1', 'b1', 'c1'],['a2', 'b2', 'c2']]
-    >>> predicate = lambda row, header: True
-    >>> colnames = ['a', 'd']
-    >>> extract_rows(dummy, header, predicate, colnames) is None
-    True
-
-    >>> # Extract all rows: columns 'a', and 'c', returned
-    >>> orig_hd = ['a', 'b', 'c']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> exp_ds = [ \
-            ['a1', 'c1'], \
-            ['a2', 'c2'], \
-            ['a3', 'c3']  \
-        ]
-    >>> exp_hd = ['a', 'c']
-    >>> predicate = lambda row, header: True
-    >>> ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, predicate, \
-                                      ['a', 'c'])
-    >>> ret_ds is not orig_ds \
-        and ret_ds == exp_ds \
-        and ret_hd is not orig_hd \
-        and ret_hd == exp_hd
-    True
-
-    >>> # Extract selected rows: columns 'a', and 'c', returned
-    >>> orig_hd = ['a', 'b', 'c']
-    >>> orig_ds = [ \
-            ['a1', 'b1', 'c1'], \
-            ['a2', 'b2', 'c2'], \
-            ['a3', 'b3', 'c3'] \
-        ]
-    >>> exp_hd = ['a', 'c']
-    >>> exp_ds = [ \
-            ['a2', 'c2'], \
-            ['a3', 'c3']  \
-        ]
-    >>> predicate = lambda row, header: row[header.index('c')] > 'c1'
-    >>> ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, predicate, \
-                                      ['a', 'c'])
-    >>> ret_ds is not orig_ds \
-        and ret_ds == exp_ds \
-        and ret_hd is not orig_hd \
-        and ret_hd == exp_hd
-    True
     """
     # Ensure valid `predicate`
     if not callable(predicate) \
@@ -1622,5 +689,4 @@ def extract_rows(dataset, header, predicate, colnames=None):
 
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+    pass
