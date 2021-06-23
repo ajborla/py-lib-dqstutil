@@ -4,6 +4,9 @@ from setuptools import setup, find_packages
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
+with open("LICENSE", "r", encoding="utf-8") as fh:
+    license = fh.read()
+
 setup(
     name="dqstutil-ajborla",
     version="1.0.0",
@@ -12,7 +15,7 @@ setup(
     description="A small suite of data manipulation routines",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    license="MIT License",
+    license=license,
     url="https://github.com/ajborla/dqstutil-py",
     project_urls={
         "Bug Tracker": "https://github.com/ajborla/dqstutil-py/issues",
