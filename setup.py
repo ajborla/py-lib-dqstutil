@@ -1,15 +1,23 @@
 from setuptools import setup, find_packages
+import os
+import sys
 
 
-with open("README.md", "r", encoding="utf-8") as fh:
+_here = os.path.abspath(os.path.dirname(__file__))
+
+with open(os.path.join(_here, "README.md"), "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-with open("LICENSE", "r", encoding="utf-8") as fh:
+with open(os.path.join(_here, "LICENSE"), "r", encoding="utf-8") as fh:
     license = fh.read()
+
+version = {}
+with open(os.path.join(_here, "dqstutil", "version.py"), "r", encoding="utf-8") as fh:
+    exec(fh.read(), version)
 
 setup(
     name="dqstutil-ajborla",
-    version="1.0.0",
+    version=version["__version__"],
     author="Anthony J. Borla",
     author_email="ajborla@bigpond.com",
     description="A small suite of data manipulation routines",

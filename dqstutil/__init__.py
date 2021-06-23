@@ -1,3 +1,5 @@
+from .version import __version__
+
 from .dqstutil import \
     _is_valid_colnames, is_numeric, is_possible_date, \
     is_possible_numeric, determine_column_type, \
