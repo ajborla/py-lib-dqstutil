@@ -249,7 +249,41 @@ def inspect_dataset(dataset, header, generate_report=True,
     return (skiprows, columns, uniques, duplicates)
 
 
-def extract_unique_values(values, sort=False, sep='|'):
+def extract_unique_values(dataset, header, colname, coltype='T',
+                          sort=False):
+    """
+    Extract unique values, of a specific type, from a single \
+    dataset column.
+
+    Given  a `dataset`, its `header`, a column name, `colname`,
+    and `coltype`, one of 'N' (numeric), 'PN' (possible numeric),
+    'PD' (possible date), or 'T' (text), returns the unique values
+    of the nominated `coltype` (defaults to 'T'), optionally
+    sorted, ascending.
+
+    :param dataset: list
+    :param header: list
+    :param colname: str
+    :param coltype: str
+    :param sort: bool
+
+    :return: list|None
+    """
+    if isinstance(colname, str) and colname in header:
+        # Extract the column from the dataset
+        coldata = []
+        colidx = header.index(colname)
+        for row in dataset:
+            colval = row[colidx]
+            if coltype == determine_column_type(colval):
+                coldata.append(colval)
+        # Extract list of the column's unique values
+        return _extract_unique_values(coldata, sort)
+    # Fallthrough case
+    return None
+
+
+def _extract_unique_values(values, sort=False, sep='|'):
     """
     Extract unique values from a list of values.
 
@@ -268,7 +302,7 @@ def extract_unique_values(values, sort=False, sep='|'):
     :param sort: bool
     :param sep: str
 
-    :return: list
+    :return: list|None
     """
     # Exclude obvious non-candidates
     if not isinstance(values, list) or len(values) < 1:

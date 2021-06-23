@@ -10,6 +10,7 @@ The following functions are tested:
 *  determine_column_type
 *  inspect_dataset
 *  extract_unique_values
+*  _extract_unique_values
 *  gen_freq_table
 *  load_csv_dataset
 *  add_column
@@ -275,37 +276,43 @@ class Tests_extract_unique_values_Function(unittest.TestCase):
     Unit tests for the function, `extract_unique_values`.
     """
 
+
+class Tests__extract_unique_values_Function(unittest.TestCase):
+    """
+    Unit tests for the function, `_extract_unique_values`.
+    """
+
     def test_arg_wrong_type(self):
         values = {'a': 4}
-        test_result = extract_unique_values(values)
+        test_result = _extract_unique_values(values)
         self.assertIsNone(test_result)
 
     def test_arg_is_empty(self):
         values = []
-        test_result = extract_unique_values(values)
+        test_result = _extract_unique_values(values)
         self.assertIsNone(test_result)
 
     def test_arg_wrong_list_element_type_01(self):
         values = ['d', 4, {'a': 4}, [3, 4, 5]]
-        test_result = extract_unique_values(values)
+        test_result = _extract_unique_values(values)
         self.assertIsNone(test_result)
 
     def test_extract_unique_values_ok_01(self):
         values = ['a', 't', 'z', 'k', 'v', 'z', 't']
         uniques = ['a', 't', 'z', 'k', 'v']
-        test_result = extract_unique_values(values)
+        test_result = _extract_unique_values(values)
         self.assertEqual(test_result, uniques)
 
     def test_extract_unique_values_ok_02(self):
         values = [1, 3, 2, 1]
         uniques = [1, 3, 2]
-        test_result = extract_unique_values(values)
+        test_result = _extract_unique_values(values)
         self.assertEqual(test_result, uniques)
 
     def test_extract_unique_values_ok_03(self):
         values = [1, 3, 2, 1]
         uniques = [1, 3, 2]
-        test_result = extract_unique_values(values, sort=True)
+        test_result = _extract_unique_values(values, sort=True)
         self.assertEqual(test_result, sorted(uniques))
 
     def test_extract_unique_values_ok_04(self):
@@ -315,13 +322,13 @@ class Tests_extract_unique_values_Function(unittest.TestCase):
             ['a1'], ['b2'], ['c1']
         ]
         uniques = ['a1', 'b1', 'c1', 'a2', 'b2']
-        test_result = sorted(extract_unique_values(values))
+        test_result = sorted(_extract_unique_values(values))
         self.assertEqual(test_result, sorted(uniques))
 
     def test_extract_unique_values_ok_05(self):
         values = [[1], [2], [3], [1]]
         uniques = [1, 2, 3]
-        test_result = extract_unique_values(values)
+        test_result = _extract_unique_values(values)
         self.assertEqual(test_result, uniques)
 
     def test_extract_unique_values_ok_06(self):
@@ -332,17 +339,17 @@ class Tests_extract_unique_values_Function(unittest.TestCase):
             ['a2', 'b2', 'c2']
         ]
         uniques = ['a1|b1|c1', 'a2|b2|c2', 'a3|b3|c3']
-        test_result = sorted(extract_unique_values(values))
+        test_result = sorted(_extract_unique_values(values))
         self.assertEqual(test_result, sorted(uniques))
 
     def test_arg_wrong_list_element_type_02(self):
         values = [['a1'], ['b1'], [], ['a2'], ['b1']]
-        test_result = extract_unique_values(values)
+        test_result = _extract_unique_values(values)
         self.assertIsNone(test_result)
 
     def test_arg_wrong_list_element_type_03(self):
         values = [['a1'], ['b1'], 0, ['a2'], ['b1']]
-        test_result = extract_unique_values(values)
+        test_result = _extract_unique_values(values)
         self.assertIsNone(test_result)
 
     def test_arg_wrong_list_element_type_04(self):
@@ -352,7 +359,7 @@ class Tests_extract_unique_values_Function(unittest.TestCase):
             ['a3', 'b3', 'c3'],
             ['a2', 'b2', 'c2']
         ]
-        test_result = extract_unique_values(values)
+        test_result = _extract_unique_values(values)
         self.assertIsNone(test_result)
 
     def test_arg_wrong_list_element_type_05(self):
@@ -362,7 +369,7 @@ class Tests_extract_unique_values_Function(unittest.TestCase):
             ['a3', 'b3', 'c3'],
             ['a2', 'b2', 'c2']
         ]
-        test_result = extract_unique_values(values)
+        test_result = _extract_unique_values(values)
         self.assertIsNone(test_result)
 
     def test_arg_wrong_list_element_type_06(self):
@@ -372,13 +379,13 @@ class Tests_extract_unique_values_Function(unittest.TestCase):
             ['a3', 'b3', 'c3'],
             ['a2', 'b2', 'c2']
         ]
-        test_result = extract_unique_values(values)
+        test_result = _extract_unique_values(values)
         self.assertIsNone(test_result)
 
     def test_extract_unique_values_ok_07(self):
         values = [[11, 12, 13], [34, 0, 85], [11, 12, 13]]
         uniques = ['11|12|13', '34|0|85']
-        test_result = sorted(extract_unique_values(values))
+        test_result = sorted(_extract_unique_values(values))
         self.assertEqual(test_result, sorted(uniques))
 
 
