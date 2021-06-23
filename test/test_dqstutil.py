@@ -32,12 +32,11 @@ from tempfile import NamedTemporaryFile
 from io import StringIO
 from contextlib import redirect_stdout
 
-from dqstutil import _is_valid_colnames, is_numeric, is_possible_date, \
-                     is_possible_numeric, determine_column_type, \
-                     inspect_dataset, extract_unique_values, \
-                     gen_freq_table, load_csv_dataset, add_column, \
-                     remove_column, modify_column, transform_column, \
-                     remove_columns, extract_row_range, extract_rows
+# System-under-test (SUT) module path context
+import context
+
+# SUT test entities
+from dqstutil import *
 
 
 class Tests__is_valid_colnames_Function(unittest.TestCase):
