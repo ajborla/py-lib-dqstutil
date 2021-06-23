@@ -33,6 +33,8 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    use_scm_version=True,
+    setup_requires=['setuptools_scm'],
     packages=find_packages(exclude=("test", "docs")),
     python_requires=">=3.8",
 )
