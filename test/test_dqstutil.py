@@ -276,6 +276,111 @@ class Tests_extract_unique_values_Function(unittest.TestCase):
     Unit tests for the function, `extract_unique_values`.
     """
 
+    def test_non_existent_column(self):
+        header = ['a', 'b', 'c']
+        dataset = [
+            ['a1', 'bb', '7'],
+        ]
+        test_result = extract_unique_values(dataset, header, 'Z')
+        self.assertIsNone(test_result)
+
+    def test_non_existent_column_type(self):
+        header = ['a', 'b', 'c']
+        dataset = [
+            ['a1', 'bb', '7'],
+        ]
+        test_result = extract_unique_values(dataset, header, 'b',
+                                            coltype='Z')
+        self.assertIsNone(test_result)
+
+    def test_extract_text_type_from_column_ok_1(self):
+        header = ['a', 'b', 'c']
+        dataset = [
+            ['a1', 'bb', '7'],
+            ['jul', 'bx', '4.3'],
+            ['a3', 'b3', '4.2.4'],
+            ['a', 'b4', '1-10-2021']
+        ]
+        values = ['bb', 'bx']
+
+        test_result = extract_unique_values(dataset, header, 'b',
+                                            coltype='T')
+        self.assertEqual(test_result, values)
+
+    def test_extract_text_type_from_column_ok_2(self):
+        header = ['a', 'b', 'c']
+        dataset = [
+            ['a1', 'bb', '7'],
+            ['jul', 'bx', '4.3'],
+            ['a3', 'b3', '4.2.4'],
+            ['a', 'b4', '1-10-2021']
+        ]
+        values = ['4.2.4']
+
+        test_result = extract_unique_values(dataset, header, 'c',
+                                            coltype='T')
+        self.assertEqual(test_result, values)
+
+    def test_extract_numeric_type_from_column_ok(self):
+        header = ['a', 'b', 'c']
+        dataset = [
+            ['a1', 'bb', '7'],
+            ['jul', 'bx', '4.3'],
+            ['jul', 'bx', '4.3'],
+            ['a3', 'b3', '4.2.4'],
+            ['a', 'b4', '1-10-2021']
+        ]
+        values = ['7', '4.3']
+
+        test_result = extract_unique_values(dataset, header, 'c',
+                                            coltype='N')
+        self.assertEqual(test_result, values)
+
+    def test_extract_possible_numeric_type_from_column_ok(self):
+        header = ['a', 'b', 'c']
+        dataset = [
+            ['a1', 'bb', '7'],
+            ['jul', 'bx', '4.3'],
+            ['a3', 'b3', '4.2.4'],
+            ['a3', 'b3', '4.2.4'],
+            ['a', 'b4', '1-10-2021']
+        ]
+        values = ['a1', 'a3']
+
+        test_result = extract_unique_values(dataset, header, 'a',
+                                            coltype='PN')
+        self.assertEqual(test_result, values)
+
+    def test_extract_possible_date_type_from_column_ok_1(self):
+        header = ['a', 'b', 'c']
+        dataset = [
+            ['a1', 'bb', '7'],
+            ['jul', 'bx', '4.3'],
+            ['jul', 'by', '9.5'],
+            ['a3', 'b3', '4.2.4'],
+            ['a', 'b4', '1-10-2021']
+        ]
+        values = ['jul']
+
+        test_result = extract_unique_values(dataset, header, 'a',
+                                            coltype='PD')
+        self.assertEqual(test_result, values)
+
+    def test_extract_possible_date_type_from_column_ok_2(self):
+        header = ['a', 'b', 'c']
+        dataset = [
+            ['a1', 'bb', '7'],
+            ['jul', 'bx', '4.3'],
+            ['a3', 'b3', '4.2.4'],
+            ['a', 'b4', '1-10-2021'],
+            ['a', 'b4', '1-10-2021']
+        ]
+        values = ['1-10-2021']
+
+        test_result = extract_unique_values(dataset, header, 'c',
+                                            coltype='PD')
+        self.assertEqual(test_result, values)
+
 
 class Tests__extract_unique_values_Function(unittest.TestCase):
     """
