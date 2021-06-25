@@ -1067,17 +1067,17 @@ class Tests_extract_rows_Function(unittest.TestCase):
     Unit tests for the function, `extract_rows`.
     """
 
-    def test_predicate_wrong_type(self):
+    def test_sieve_wrong_type(self):
         header = ['a', 'b', 'c']
         dummy = [[], [], []]
-        predicate = []
-        self.assertIsNone(extract_rows(dummy, header, predicate))
+        sieve = []
+        self.assertIsNone(extract_rows(dummy, header, sieve))
 
-    def test_predicate_wrong_arg_number(self):
+    def test_sieve_wrong_arg_number(self):
         header = ['a', 'b', 'c']
         dummy = [[], [], []]
-        predicate = lambda x, y, z: None
-        self.assertIsNone(extract_rows(dummy, header, predicate))
+        sieve = lambda x, y, z: None
+        self.assertIsNone(extract_rows(dummy, header, sieve))
 
     def test_extract_all_rows_and_all_columns(self):
         header = ['a', 'b', 'c']
@@ -1091,8 +1091,8 @@ class Tests_extract_rows_Function(unittest.TestCase):
             ['a2', 'b2', 'c2'],
             ['a3', 'b3', 'c3']
         ]
-        predicate = lambda row, header: True
-        ret_ds, _ = extract_rows(orig_ds, header, predicate)
+        sieve = lambda row, header: True
+        ret_ds, _ = extract_rows(orig_ds, header, sieve)
         self.assertTrue(ret_ds is not orig_ds and ret_ds == exp_ds)
 
     def test_extract_select_rows_and_all_columns(self):
@@ -1106,24 +1106,24 @@ class Tests_extract_rows_Function(unittest.TestCase):
             ['a2', 'b2', 'c2'],
             ['a3', 'b3', 'c3']
         ]
-        predicate = lambda row, header: row[header.index('c')] > 'c1'
-        ret_ds, _ = extract_rows(orig_ds, header, predicate)
+        sieve = lambda row, header: row[header.index('c')] > 'c1'
+        ret_ds, _ = extract_rows(orig_ds, header, sieve)
         self.assertTrue(ret_ds is not orig_ds and ret_ds == exp_ds)
 
     def test_columns_list_is_empty(self):
         header = ['a', 'b', 'c']
         dummy = [['a1', 'b1', 'c1'], ['a2', 'b2', 'c2']]
-        predicate = lambda row, header: True
+        sieve = lambda row, header: True
         colnames = []
-        self.assertIsNone(extract_rows(dummy, header, predicate,
+        self.assertIsNone(extract_rows(dummy, header, sieve,
                                        colnames))
 
     def test_non_existent_column(self):
         header = ['a', 'b', 'c']
         dummy = [['a1', 'b1', 'c1'], ['a2', 'b2', 'c2']]
-        predicate = lambda row, header: True
+        sieve = lambda row, header: True
         colnames = ['a', 'd']
-        self.assertIsNone(extract_rows(dummy, header, predicate,
+        self.assertIsNone(extract_rows(dummy, header, sieve,
                                        colnames))
 
     def test_extract_all_rows_and_select_columns(self):
@@ -1139,8 +1139,8 @@ class Tests_extract_rows_Function(unittest.TestCase):
             ['a2', 'c2'],
             ['a3', 'c3']
         ]
-        predicate = lambda row, header: True
-        ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, predicate,
+        sieve = lambda row, header: True
+        ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, sieve,
                                       ['a', 'c'])
         test_result = \
             ret_ds is not orig_ds \
@@ -1161,8 +1161,8 @@ class Tests_extract_rows_Function(unittest.TestCase):
             ['a2', 'c2'],
             ['a3', 'c3']
         ]
-        predicate = lambda row, header: row[header.index('c')] > 'c1'
-        ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, predicate,
+        sieve = lambda row, header: row[header.index('c')] > 'c1'
+        ret_ds, ret_hd = extract_rows(orig_ds, orig_hd, sieve,
                                       ['a', 'c'])
         test_result = \
             ret_ds is not orig_ds \

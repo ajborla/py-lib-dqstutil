@@ -649,14 +649,15 @@ def extract_row_range(dataset, rowrange):
     return [dataset[lower_bound]]
 
 
-def extract_rows(dataset, header, predicate, colnames=None):
+def extract_rows(dataset, header, sieve=None, colnames=None):
     """
-    Extract rows meeting a specified condition, from a dataset.
+    Extract either all rows, or a subset of rows meeting a
+    sieve condition, from a dataset.
 
-    Given  a `dataset`, its `header`, a 2-argument function,
-    `predicate`, and, optionally, a list of column names, `colnames`,
-    applies the function to each row of the dataset, and retains the
-    row if the function application returns True.
+    Given  a `dataset`, its `header`, and, optionally, a 2-argument
+    function, `sieve`, and (also optionally) a list of column names,
+    `colnames`, applies the sieve to each row of the dataset, and
+    retains the row if the sieve condition returns True.
 
     If `colnames` is supplied, keeps the nominated columns from the
     retained rows, discarding all others. A copy of the header is
@@ -664,30 +665,35 @@ def extract_rows(dataset, header, predicate, colnames=None):
     and header (whether modified or not) are returned (there is no
     'inplace' modification).
 
-    For each row of the dataset, `predicate` receives the row, as well
-    as `header`. `predicate` uses the arguments to craft a boolean
-    expression that returns True if the row is to be retained. Example
-    function implementations:
+    If no sieve is supplied, all rows are returned, otherwise, for
+    each row of the dataset, `sieve` receives the row, as well as
+    `header`. `sieve` uses the arguments to craft a boolean expression
+    that returns True if the row is to be retained. Example sieve
+    implementations:
 
       `lambda row, header: row[header.index('c')] > 'c1'`
-      `def predicate(row, header): return row[header.index('c')] > 'c1'`
+      `def sieve(row, header): return row[header.index('c')] > 'c1'`
 
     :param dataset: list
     :param header: list
-    :param predicate: function
+    :param sieve: function
     :param colnames: None|ist
 
     :return: list, list
     """
-    # Ensure valid `predicate`
-    if not callable(predicate) \
-       or predicate.__code__.co_argcount != 2:
-        return None
-    # Extract row(s) meeting `predicate` conditions
-    row_subset = []
-    for row in dataset:
-        if predicate(row, header):
-            row_subset.append(row[:])
+    # Check for no `sieve`, so whole dataset processed
+    if sieve is None:
+        row_subset = dataset
+    else:
+        # Ensure valid `sieve` passed since sieveing requested
+        if not callable(sieve) \
+           or sieve.__code__.co_argcount != 2:
+            return None
+        # Extract row(s) meeting `sieve` conditions
+        row_subset = []
+        for row in dataset:
+            if sieve(row, header):
+                row_subset.append(row[:])
     # Return whole row set if no column names nominated
     if colnames is None:
         return row_subset, header[:]
