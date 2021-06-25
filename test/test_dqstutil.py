@@ -267,6 +267,47 @@ class Tests_inspect_dataset_Function(unittest.TestCase):
         self.assertEqual(output, exp_output)
 
 
+class Tests_gen_unique_values_count_Function(unittest.TestCase):
+    """
+    Unit tests for the function, `gen_unique_values_count`.
+    """
+
+    def test_non_existent_column(self):
+        header = ['a', 'b', 'c']
+        dataset = [
+            ['a1', 'b1', 'c1'],
+            ['a2', 'b2', 'c2'],
+            ['a3', 'b3', 'c3'],
+            ['a3', 'b3', 'c3']
+        ]
+        test_result = gen_unique_values_count(dataset, header, 'Z')
+        self.assertIsNone(test_result)
+
+    def test_gen_table_ok_1(self):
+        header = ['a', 'b', 'c']
+        dataset = [
+            ['a1', 'bb', '7'],
+            ['jul', 'bx', '4.3'],
+            ['a3', 'b3', '4.2.4'],
+            ['a', 'b4', '1-10-2021']
+        ]
+        values = {'PD': 1, 'PN': 2, 'T': 1}
+        test_result = gen_unique_values_count(dataset, header, 'a')
+        self.assertEqual(test_result, values)
+
+    def test_gen_table_ok_2(self):
+        header = ['a', 'b', 'c']
+        dataset = [
+            ['a1', 'bb', '7'],
+            ['jul', 'bx', '4.3'],
+            ['a3', 'b3', '4.2.4'],
+            ['a', 'b4', '1-10-2021']
+        ]
+        values = {'N': 2, 'PD': 1, 'T': 1}
+        test_result = gen_unique_values_count(dataset, header, 'c')
+        self.assertEqual(test_result, values)
+
+
 class Tests_extract_unique_values_Function(unittest.TestCase):
     """
     Unit tests for the function, `extract_unique_values`.

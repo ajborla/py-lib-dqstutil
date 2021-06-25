@@ -189,7 +189,7 @@ def inspect_dataset(dataset, header, generate_report=True,
                 columns[colname][coltype] += 1
             else:
                 columns[colname][coltype] = 1
-    # c. Collect unique value, and duplicates, data
+    # c. Collect unique values data
     uniques = {}
     for colname in header:
         uniques[colname] = {'N': [], 'PD': [], 'PN': [], 'T': []}
@@ -232,10 +232,44 @@ def inspect_dataset(dataset, header, generate_report=True,
     return skiprows, columns, uniques
 
 
+def gen_unique_values_count(dataset, header, colname):
+    """
+    Generate unique values count of a single dataset column.
+
+    Given  a `dataset`, its `header`, and a column name, `colname`,
+    categorises column contents into one of four categories, and
+    returns a table (dict) of category counts.
+
+    :param dataset: list
+    :param header: list
+    :param colname: str
+
+    :return: dict|None
+    """
+    if isinstance(colname, str) and colname in header:
+        # Collect unique values data
+        unique = {'N': [], 'PD': [], 'PN': [], 'T': []}
+        colidx = header.index(colname)
+        for row in dataset:
+            colval = row[colidx]
+            coltype = determine_column_type(colval)
+            if colval not in unique[coltype]:
+                unique[coltype].append(colval)
+        for coltype in ['N', 'PD', 'PN', 'T']:
+            uqcollen = len(unique[coltype])
+            unique[coltype] = uqcollen
+            # Remove entries with zero unique count
+            if uqcollen < 1:
+                del unique[coltype]
+        return unique
+    # Fallthrough case
+    return None
+
+
 def extract_unique_values(dataset, header, colname, coltype='T',
                           sort=False):
     """
-    Extract unique values, of a specific type, from a single \
+    Extract unique values, of a specific type, from a single
     dataset column.
 
     Given  a `dataset`, its `header`, a column name, `colname`,
