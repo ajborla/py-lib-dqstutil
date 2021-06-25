@@ -683,7 +683,7 @@ def extract_rows(dataset, header, sieve=None, colnames=None):
     """
     # Check for no `sieve`, so whole dataset processed
     if sieve is None:
-        row_subset = dataset
+        row_subset = dataset[:]
     else:
         # Ensure valid `sieve` passed since sieveing requested
         if not callable(sieve) \
