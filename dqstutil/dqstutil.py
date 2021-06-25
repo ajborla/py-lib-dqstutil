@@ -705,7 +705,7 @@ def extract_rows(dataset, header, sieve=None, colnames=None):
         new_subset, new_header = \
             remove_columns(row_subset, header[:],
                            columns_to_remove,
-                           inplace=True)
+                           inplace=False)
         return new_subset, new_header
     # Fallthrough case
     return None
