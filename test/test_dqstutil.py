@@ -235,15 +235,13 @@ class Tests_inspect_dataset_Function(unittest.TestCase):
         ]
         exp_skiprows = [1]
         exp_columns = {'a': {'PN': 3, 'T': 2}, 'b': {'PN': 2, 'T': 3}, 'c': {'PN': 2, 'N': 1, 'T': 2}}
-        exp_uniques = {'a': 1, 'b': 1, 'c': 1}
-        exp_duplicates = {'a': 1, 'b': 2, 'c': 1}
-        skiprows, columns, uniques, duplicates = \
+        exp_uniques = {'a': {'PN': 3, 'T': 1}, 'b': {'PN': 2, 'T': 1}, 'c': {'N': 1, 'PN': 2, 'T': 1}}
+        skiprows, columns, uniques = \
             inspect_dataset(dataset, header, generate_report=False)
         test_result = \
             skiprows == exp_skiprows \
             and columns == exp_columns \
-            and uniques == exp_uniques \
-            and duplicates == exp_duplicates
+            and uniques == exp_uniques
         self.assertTrue(test_result)
 
     def test_report_output(self):
@@ -263,10 +261,8 @@ class Tests_inspect_dataset_Function(unittest.TestCase):
         exp_output = "Invalid (incorrect length) row numbers:[1]\n\n" \
             + "Tentative column type(s) [T - text, N - numeric, PN - possible numeric, PD - possible date]:\n\n" \
             + "{'a': {'PN': 3, 'T': 2}, 'b': {'PN': 2, 'T': 3}, 'c': {'PN': 2, 'N': 1, 'T': 2}}\n\n" \
-            + "Unique value counts (non-numeric and non-date columns only):\n\n" \
-            + "{'a': 1, 'b': 1, 'c': 1}\n\n" \
-            + "Duplicate value counts (non-numeric and non-date columns only):\n\n" \
-            + "{'a': 1, 'b': 2, 'c': 1}\n"
+            + "Unique value counts for each column type:\n\n" \
+            + "{'a': {'PN': 3, 'T': 1}, 'b': {'PN': 2, 'T': 1}, 'c': {'N': 1, 'PN': 2, 'T': 1}}\n"
         self.maxDiff = None
         self.assertEqual(output, exp_output)
 

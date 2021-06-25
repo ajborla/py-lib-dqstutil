@@ -158,15 +158,13 @@ def inspect_dataset(dataset, header, generate_report=True,
           'determine_column_type' for details)
         uniques, a dict, keyed by column name, each containing the
           count of unique values in text-only-type columns
-        duplicates, a dict, keyed by column name, each containing the
-          count of duplicate values in text-only-type columns
 
     :param dataset: list
     :param header: list
     :param generate_report: bool
     :param printer: function
 
-    :return: None|tuple(list, dict, dict, dict)
+    :return: None|tuple(list, dict, dict)
     """
     # 1. Column metadata repository keyed using column headers
     columns = {}
@@ -192,36 +190,27 @@ def inspect_dataset(dataset, header, generate_report=True,
             else:
                 columns[colname][coltype] = 1
     # c. Collect unique value, and duplicates, data
-    uniques, duplicates = {}, {}
+    uniques = {}
     for colname in header:
-        uniques[colname] = []
-        duplicates[colname] = []
+        uniques[colname] = {'N': [], 'PD': [], 'PN': [], 'T': []}
     for rowidx, row in enumerate(dataset):
         # Skip non length-conformant rows
         if rowidx in skiprows:
             continue
-        # Collect unique values for non-date and non-numeric columns
+        # Collect unique values for all column types
         for colname, colval in zip(header, row):
-            # Check both the column type and the current value
-            if 'T' not in columns[colname]:
-                continue
-            if determine_column_type(colval) != 'T':
-                continue
-            if colval not in uniques[colname]:
-                uniques[colname].append(colval)
-            else:
-                duplicates[colname].append(colval)
+            coltype = determine_column_type(colval)
+            if colval not in uniques[colname][coltype]:
+                uniques[colname][coltype].append(colval)
     # Replace collect unique values with their count
     for colname in header:
-        uqcollen = len(uniques[colname])
-        ducollen = len(duplicates[colname])
-        # Remove entries with zero unique count
-        if uqcollen < 1:
-            del uniques[colname]
-            del duplicates[colname]
-        else:
-            uniques[colname] = uqcollen
-            duplicates[colname] = ducollen
+        for coltype in ['N', 'PD', 'PN', 'T']:
+            uqcollen = len(uniques[colname][coltype])
+            # Remove entries with zero unique count
+            if uqcollen < 1:
+                del uniques[colname][coltype]
+            else:
+                uniques[colname][coltype] = uqcollen
     # 2. Either generate report if requested, or return collected values
     if generate_report:
         row_rep_header = \
@@ -230,23 +219,17 @@ def inspect_dataset(dataset, header, generate_report=True,
             'Tentative column type(s) [T - text, N - numeric,' \
             ' PN - possible numeric, PD - possible date]:'
         unique_rep_header = \
-            'Unique value counts (non-numeric and non-date columns' \
-            ' only):'
-        dup_rep_header = \
-            'Duplicate value counts (non-numeric and non-date' \
-            ' columns only):'
+            'Unique value counts for each column type:'
         print(row_rep_header, end='')
         printer(skiprows)
         print('', col_rep_header, '', sep='\n')
         printer(columns)
         print('', unique_rep_header, '', sep='\n')
         printer(uniques)
-        print('', dup_rep_header, '', sep='\n')
-        printer(duplicates)
         # To signal no values returned
         return None
     # Return collected metadata as tuple
-    return (skiprows, columns, uniques, duplicates)
+    return skiprows, columns, uniques
 
 
 def extract_unique_values(dataset, header, colname, coltype='T',
