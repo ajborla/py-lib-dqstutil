@@ -1,9 +1,9 @@
 """
-Collection of utility functions for managing a dataset.
+Collection of functions for querying and managing a table-based dataset.
 
-A dataset comprises an ordered collection of rows, with each row
-having an equal number of columns. It may be considered a rectangular
-structure, similar to a spreadsheet.
+A dataset, as defined here, comprises an ordered collection of rows,
+with each row having an equal number of columns. It may be considered
+a rectangular structure, similar to a spreadsheet.
 """
 
 
@@ -86,7 +86,7 @@ def is_possible_numeric(numstr):
     Check string for possible numeric-format conformance.
 
     Given `numstr`, returns True if it is possibly a numeric-convertible
-    string, such as a currency value or comma-separted numeric, or a
+    string, such as a currency value or comma-separated numeric, or a
     suffixed value (such as a measurement). Note that version strings
     (often having two or more decimal points) are NOT considered
     possible numerics.
@@ -269,8 +269,7 @@ def gen_unique_values_count(dataset, header, colname):
 def extract_unique_values(dataset, header, colname, coltype='T',
                           sort=False):
     """
-    Extract unique values, of a specific type, from a single
-    dataset column.
+    Extract unique values, of a specific type, from a single dataset column.
 
     Given  a `dataset`, its `header`, a column name, `colname`,
     and `coltype`, one of 'N' (numeric), 'PN' (possible numeric),
@@ -579,11 +578,11 @@ def transform_column(dataset, header, colname, transform,
     columns, and tranforms it; its return value then replaces it.
     Example function implementations:
 
-        `lambda c: c.lower()`
-        `def transform(c): return c.lower()`
+        lambda c: c.lower()
+        def transform(c): return c.lower()
 
-        `lambda c, r, h: c + r[h.index('c2')]`
-        `def transform(c, r, h): return c + r[h.index('c2')]`
+        lambda c, r, h: c + r[h.index('c2')]
+        def transform(c, r, h): return c + r[h.index('c2')]
 
     :param dataset: list
     :param header: list
@@ -685,8 +684,8 @@ def extract_row_range(dataset, rowrange):
 
 def extract_rows(dataset, header, sieve=None, colnames=None):
     """
-    Extract either all rows, or a subset of rows meeting a
-    sieve condition, from a dataset.
+    Extract either all rows, or a subset of rows meeting a sieve condition, \
+    from a dataset.
 
     Given  a `dataset`, its `header`, and, optionally, a 2-argument
     function, `sieve`, and (also optionally) a list of column names,
@@ -705,13 +704,14 @@ def extract_rows(dataset, header, sieve=None, colnames=None):
     that returns True if the row is to be retained. Example sieve
     implementations:
 
-      `lambda row, header: row[header.index('c')] > 'c1'`
-      `def sieve(row, header): return row[header.index('c')] > 'c1'`
+        lambda row, header: row[header.index('c')] > 'c1'
+
+        def sieve(row, header): return row[header.index('c')] > 'c1'
 
     :param dataset: list
     :param header: list
     :param sieve: function
-    :param colnames: None|ist
+    :param colnames: None|list
 
     :return: list, list
     """
