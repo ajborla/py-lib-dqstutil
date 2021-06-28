@@ -1,0 +1,495 @@
+
+    <html>
+      <head>
+        <title>dqstutil</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+      </head>
+      <body>
+        <div id='content'>
+    <h1 id="dqstutil">dqstutil</h1>
+<p><strong>Simple table-based dataset query and management</strong>.</p>
+<ul>
+<li><a href="#api">API</a><ul>
+<li><a href="#_is_valid_colnames"><em>is</em>valid_colnames</a></li>
+<li><a href="#is_numeric">is_numeric</a></li>
+<li><a href="#is_possible_date">is<em>possible</em>date</a></li>
+<li><a href="#is_possible_numeric">is<em>possible</em>numeric</a></li>
+<li><a href="#determine_column_type">determine<em>column</em>type</a></li>
+<li><a href="#inspect_dataset">inspect_dataset</a></li>
+<li><a href="#gen_unique_values_count">gen<em>unique</em>values_count</a></li>
+<li><a href="#extract_unique_values">extract<em>unique</em>values</a></li>
+<li><a href="#_extract_unique_values"><em>extract</em>unique_values</a></li>
+<li><a href="#gen_freq_table">gen<em>freq</em>table</a></li>
+<li><a href="#load_csv_dataset">load<em>csv</em>dataset</a></li>
+<li><a href="#add_column">add_column</a></li>
+<li><a href="#remove_column">remove_column</a></li>
+<li><a href="#modify_column">modify_column</a></li>
+<li><a href="#transform_column">transform_column</a></li>
+<li><a href="#remove_columns">remove_columns</a></li>
+<li><a href="#extract_row_range">extract<em>row</em>range</a></li>
+<li><a href="#extract_rows">extract_rows</a></li></ul></li>
+</ul>
+<p>Collection of utility functions for querying and managing a<br />
+table-based dataset.</p>
+<p>This package is registered on the Python Package Index (PyPI) at<br />
+<a href="https://pypi.python.org/pypi/dqstutil">pypi.python.org/pypi/dqstutil</a>.</p>
+<p>The source is hosted on GitHub at<br />
+<a href="https://github.com/ajborla/py-lib-dqstutil">github.com/ajborla/py-lib-dqstutil</a>.</p>
+<p>Please see the README at either location above for more details about<br />
+this package.</p>
+<h2 id="api">API</h2>
+<ul>
+<li><a href="#_is_valid_colnames"><em>is</em>valid_colnames</a></li>
+<li><a href="#is_numeric">is_numeric</a></li>
+<li><a href="#is_possible_date">is<em>possible</em>date</a></li>
+<li><a href="#is_possible_numeric">is<em>possible</em>numeric</a></li>
+<li><a href="#determine_column_type">determine<em>column</em>type</a></li>
+<li><a href="#inspect_dataset">inspect_dataset</a></li>
+<li><a href="#gen_unique_values_count">gen<em>unique</em>values_count</a></li>
+<li><a href="#extract_unique_values">extract<em>unique</em>values</a></li>
+<li><a href="#_extract_unique_values"><em>extract</em>unique_values</a></li>
+<li><a href="#gen_freq_table">gen<em>freq</em>table</a></li>
+<li><a href="#load_csv_dataset">load<em>csv</em>dataset</a></li>
+<li><a href="#add_column">add_column</a></li>
+<li><a href="#remove_column">remove_column</a></li>
+<li><a href="#modify_column">modify_column</a></li>
+<li><a href="#transform_column">transform_column</a></li>
+<li><a href="#remove_columns">remove_columns</a></li>
+<li><a href="#extract_row_range">extract<em>row</em>range</a></li>
+<li><a href="#extract_rows">extract_rows</a></li>
+</ul>
+<h2 id="_is_valid_colnames"><em>is</em>valid_colnames</h2>
+<p>Validate column names against header.</p>
+<p>Given a list of column name, <code>colnames</code>, returns True if each<br />
+element is also in the list, <code>header</code>.</p>
+<p>:param header: list<br><br />
+:param colnames: list</p>
+<p>:return: bool</p>
+<h2 id="is_numeric">is_numeric</h2>
+<p>Check string for numeric convertability.</p>
+<p>Given <code>numstr</code>, returns True if it is either a numeric type, or a<br />
+numeric-convertible string.</p>
+<p>:param numstr: str</p>
+<p>:return: bool</p>
+<h2 id="is_possible_date">is<em>possible</em>date</h2>
+<p>Check string for possible date-format conformance.</p>
+<p>Given <code>datestr</code>, returns True if it is possibly a date-convertible<br />
+string.</p>
+<p>:param datestr: str</p>
+<p>:return: bool</p>
+<h2 id="is_possible_numeric">is<em>possible</em>numeric</h2>
+<p>Check string for possible numeric-format conformance.</p>
+<p>Given <code>numstr</code>, returns True if it is possibly a numeric-convertible<br />
+string, such as a currency value or comma-separated numeric, or a<br />
+suffixed value (such as a measurement). Note that version strings<br />
+(often having two or more decimal points) are NOT considered<br />
+possible numerics.</p>
+<p>:param numstr: str</p>
+<p>:return: bool</p>
+<h2 id="determine_column_type">determine<em>column</em>type</h2>
+<p>Determine a column's possible datatype.</p>
+<p>Given <code>coldata</code>, returns string indicating its possible type,<br />
+one of:</p>
+<pre><code>T  - text
+N  - numeric (safely convertible to)
+PD - possibly a date
+PN - possibly a numeric
+</code></pre>
+<p>:param coldata: str</p>
+<p>:return: str</p>
+<h2 id="inspect_dataset">inspect_dataset</h2>
+<p>Extract metadata, and either return it, or print it.</p>
+<p>Given <code>dataset</code> and <code>header</code>, inspects <code>dataset</code> collecting<br />
+metadata, and either returns metadata or generates, and prints,<br />
+a report. By default, data is printed using the built-in <code>print</code><br />
+function, but allows an alternate function (such as <code>pprint</code>) to<br />
+be used via the <code>printer</code> argument.</p>
+<p><code>dataset</code> is a list of lists, each sublist a 'row' in the<br />
+dataset, <code>header</code> is a list of strings, each identifying a<br />
+corresponding 'column' in the dataset. The metadata collected<br />
+includes:<br />
+    skiprows, a list of non length-conformant row numbers<br />
+    columns, a dict, keyed by column name, each containing a<br />
+      dict of column-type-identifying codes (see the function,<br />
+      'determine<em>column</em>type' for details)<br />
+    uniques, a dict, keyed by column name, each containing the<br />
+      count of unique values in text-only-type columns</p>
+<p>:param dataset: list<br><br />
+:param header: list<br><br />
+:param generate_report: bool<br><br />
+:param printer: function</p>
+<p>:return: None|tuple(list, dict, dict)</p>
+<h2 id="gen_unique_values_count">gen<em>unique</em>values_count</h2>
+<p>Generate unique values count of a single dataset column.</p>
+<p>Given  a <code>dataset</code>, its <code>header</code>, and a column name, <code>colname</code>,<br />
+categorises column contents into one of four categories, and<br />
+returns a table (dict) of category counts.</p>
+<p>:param dataset: list<br><br />
+:param header: list<br><br />
+:param colname: str</p>
+<p>:return: dict|None</p>
+<h2 id="extract_unique_values">extract<em>unique</em>values</h2>
+<p>Extract unique values, of a specific type, from a single dataset column.</p>
+<p>Given  a <code>dataset</code>, its <code>header</code>, a column name, <code>colname</code>,<br />
+and <code>coltype</code>, one of 'N' (numeric), 'PN' (possible numeric),<br />
+'PD' (possible date), or 'T' (text), returns the unique values<br />
+of the nominated <code>coltype</code> (defaults to 'T'), optionally<br />
+sorted, ascending.</p>
+<p>:param dataset: list<br><br />
+:param header: list<br><br />
+:param colname: str<br><br />
+:param coltype: str<br><br />
+:param sort: bool</p>
+<p>:return: list|None</p>
+<h2 id="_extract_unique_values"><em>extract</em>unique_values</h2>
+<p>Extract unique values from a list of values.</p>
+<p>Given a list, <code>values</code>, a type-specific unique-value determination<br />
+algorithm is selected, and applied, with the unique values returned<br />
+as a list, optionally sorted in ascending order if <code>sort</code> is set.<br />
+Optional, too, is <code>sep</code>, used as a separator where <code>values</code>'<br />
+elements are multi-(non-list)-element lists (elements are joined<br />
+to create the entity on which uniqueness is determined).</p>
+<p>Return list comprises the unique values in <code>values</code>, and in the<br />
+case where elements are lists, these are the list-contained values.<br />
+Refer to the tests for examples.</p>
+<p>:param values: list<br><br />
+:param sort: bool<br><br />
+:param sep: str</p>
+<p>:return: list|None</p>
+<h2 id="gen_freq_table">gen<em>freq</em>table</h2>
+<p>Generate a table of frequency counts and relative percetages.</p>
+<p>Given  a <code>dataset</code>, its <code>header</code>, a column name, <code>colname</code>,<br />
+generates a frequency table keyed by <code>colname</code>, and including both<br />
+the count and relative percentage as a tuple. Returned table is<br />
+sorted by key, that is, by <code>colname</code>, ascending. The value of<br />
+optional boolean arguments, <code>sort_by_value</code> and <code>reverse</code>,<br />
+determine alternate ordering of the table entries.</p>
+<p>:param dataset: list<br><br />
+:param header: list<br><br />
+:param colname: str<br><br />
+:param sort<em>by</em>value: bool<br><br />
+:param reverse: bool</p>
+<p>:return: dict</p>
+<h2 id="load_csv_dataset">load<em>csv</em>dataset</h2>
+<p>Load into dataset, data from a comma-separated value (CSV) file.</p>
+<p>Given <code>filename</code>, the name of a CSV file, that is expected to<br />
+be encoded with <code>encoding</code>, and datums separated with <code>sep</code>,<br />
+loads contents as a list of lists. The dataset is therefore<br />
+implemented as a list containing a number of sublists, each of<br />
+which represents a row of data, and each corresponding element<br />
+of these rows considered to be part of a column.</p>
+<p>It is expected the first row of the CSV file to be a list of<br />
+column names.</p>
+<p>:param filename: str<br><br />
+:param sep: str<br><br />
+:param encoding: str</p>
+<p>:return: list, list|None, None</p>
+<h2 id="add_column">add_column</h2>
+<p>Add a new column to a dataset.</p>
+<p>Given  a <code>dataset</code>, its <code>header</code>, and a single column name,<br />
+<code>colname</code>, and a list of data, <code>coldata</code> with an element for<br />
+each row in <code>dataset</code>, adds <code>colname</code> to the dataset and fills<br />
+it with the data from <code>coldata</code>. A copy of the dataset, and<br />
+header is modified unless <code>inplace</code> is True, in which case,<br />
+the original dataset and original header, with modifications,<br />
+are returned. Note dataset copy is a copy of the container and<br />
+copies of the elements too.</p>
+<p>:param dataset: list<br><br />
+:param header: list<br><br />
+:param colname: str<br><br />
+:param coldata: list<br><br />
+:param inplace: bool</p>
+<p>:return: list, list|None, None</p>
+<h2 id="remove_column">remove_column</h2>
+<p>Remove a nominated column from a dataset.</p>
+<p>Given  a <code>dataset</code>, its <code>header</code>, and a single column name,<br />
+<code>colname</code>, removes the nominated column from <code>dataset</code> and<br />
+from the <code>header</code>. A copy of the dataset, and of the header,<br />
+is modified and returned, unless <code>inplace</code> is True, in<br />
+which case, the original dataset and original header, with<br />
+modifications, are returned. Note dataset copy is a copy of<br />
+the container and copies of the elements too.</p>
+<p>:param dataset: list<br><br />
+:param header: list<br><br />
+:param colname: str<br><br />
+:param inplace: bool</p>
+<p>:return: list, list|None, None</p>
+<h2 id="modify_column">modify_column</h2>
+<p>Modify all data within the nominated column of a dataset.</p>
+<p>Given  a <code>dataset</code>, its <code>header</code>, and a single column name,<br />
+<code>colname</code>, and a list of data, <code>coldata</code> with an element for<br />
+each row in <code>dataset</code>, replaces the data in the column,<br />
+<code>colname</code> with the data from <code>coldata</code>. A copy of the dataset,<br />
+is modified unless <code>inplace</code> is True, in which case, the<br />
+original dataset, with modifications, and the original header,<br />
+are returned. Note dataset copy is a copy of the container and<br />
+copies of the elements too.</p>
+<p>:param dataset: list<br><br />
+:param header: list<br><br />
+:param colname: str<br><br />
+:param coldata: list<br><br />
+:param inplace: bool</p>
+<p>:return: list, list|None, None</p>
+<h2 id="transform_column">transform_column</h2>
+<p>Apply a transform function to the nominated column of a dataset.</p>
+<p>Given  a <code>dataset</code>, its <code>header</code>, a column name, <code>colname</code>, and a<br />
+1 or 3-argument function, <code>transform</code>, applies the function to<br />
+column <code>colname</code> (to all dataset rows) replacing its contents. A<br />
+copy of the dataset is modified unless <code>inplace</code> is True, in<br />
+which case, the original dataset, with modifications, and the<br />
+original header, are returned. Note dataset copy is a copy of the<br />
+container and copies of the elements too.</p>
+<p>For each row of the dataset, <code>transform</code> receives <code>colname</code>'s<br />
+contents, and, if implemented as a 3-argument function, receives<br />
+the current row, and the header, so allowing access to other<br />
+columns, and tranforms it; its return value then replaces it.<br />
+Example function implementations:</p>
+<pre><code>lambda c: c.lower()
+def transform(c): return c.lower()
+
+lambda c, r, h: c + r[h.index('c2')]
+def transform(c, r, h): return c + r[h.index('c2')]
+</code></pre>
+<p>:param dataset: list<br><br />
+:param header: list<br><br />
+:param colname: str<br><br />
+:param transform: function<br><br />
+:param inplace: bool</p>
+<p>:return: list, list|None, None</p>
+<h2 id="remove_columns">remove_columns</h2>
+<p>Remove a set of columns from a dataset.</p>
+<p>Given a <code>dataset</code>, its <code>header</code>, and a list of column names,<br />
+<code>colnames</code>, removes the nominated columns from <code>dataset</code> and<br />
+from the <code>header</code>. A copy of the dataset, and of the header,<br />
+is modified and returned, unless <code>inplace</code> is True, in<br />
+which case, the original dataset and original header, with<br />
+modifications, are returned. Note dataset copy is a copy of<br />
+the container and copies of the elements too.</p>
+<p>:param dataset: list<br><br />
+:param header: list<br><br />
+:param colnames: list<br><br />
+:param inplace: bool</p>
+<p>:return: list, list|None, None</p>
+<h2 id="extract_row_range">extract<em>row</em>range</h2>
+<p>Extract a set of range-defined rows from a dataset.</p>
+<p>Given  a <code>dataset</code>, and a <code>rowrange</code> (a two-element tuple|list<br />
+containing integers), extracts, and returns, from <code>dataset</code>,<br />
+the set of rows numbered from <code>rowrange[0]</code> through <code>rowrange[1</code>,<br />
+inclusive. Note row numbering is from 0 through len(dataset)-1.</p>
+<p>:param dataset: list<br><br />
+:param rowrange: list</p>
+<p>:return: None|list</p>
+<h2 id="extract_rows">extract_rows</h2>
+<p>Extract either all rows, or a subset of rows meeting a sieve condition,     from a dataset.</p>
+<p>Given  a <code>dataset</code>, its <code>header</code>, and, optionally, a 2-argument<br />
+function, <code>sieve</code>, and (also optionally) a list of column names,<br />
+<code>colnames</code>, applies the sieve to each row of the dataset, and<br />
+retains the row if the sieve condition returns True.</p>
+<p>If <code>colnames</code> is supplied, keeps the nominated columns from the<br />
+retained rows, discarding all others. A copy of the header is<br />
+updated to reflect these changes. In all cases copies of the dataset<br />
+and header (whether modified or not) are returned (there is no<br />
+'inplace' modification).</p>
+<p>If no sieve is supplied, all rows are returned, otherwise, for<br />
+each row of the dataset, <code>sieve</code> receives the row, as well as<br />
+<code>header</code>. <code>sieve</code> uses the arguments to craft a boolean expression<br />
+that returns True if the row is to be retained. Example sieve<br />
+implementations:</p>
+<pre><code>lambda row, header: row[header.index('c')] &gt; 'c1'
+
+def sieve(row, header): return row[header.index('c')] &gt; 'c1'
+</code></pre>
+<p>:param dataset: list<br><br />
+:param header: list<br><br />
+:param sieve: function<br><br />
+:param colnames: None|list</p>
+<p>:return: list, list</p>
+
+        </div>
+        <style type='text/css'>body {
+  font: 400 16px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #111;
+  background-color: #fdfdfd;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-feature-settings: "kern" 1;
+  -moz-font-feature-settings: "kern" 1;
+  -o-font-feature-settings: "kern" 1;
+  font-feature-settings: "kern" 1;
+  font-kerning: normal;
+  padding: 30px;
+}
+
+@media only screen and (max-width: 600px) {
+  body {
+    padding: 5px;
+  }
+
+  body > #content {
+    padding: 0px 20px 20px 20px !important;
+  }
+}
+
+body > #content {
+  margin: 0px;
+  max-width: 900px;
+  border: 1px solid #e1e4e8;
+  padding: 10px 40px;
+  padding-bottom: 20px;
+  border-radius: 2px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+hr {
+  color: #bbb;
+  background-color: #bbb;
+  height: 1px;
+  flex: 0 1 auto;
+  margin: 1em 0;
+  padding: 0;
+  border: none;
+}
+
+/**
+ * Links
+ */
+a {
+  color: #0366d6;
+  text-decoration: none; }
+  a:visited {
+    color: #0366d6; }
+  a:hover {
+    color: #0366d6;
+    text-decoration: underline; }
+
+pre {
+  background-color: #f6f8fa;
+  border-radius: 3px;
+  font-size: 85%;
+  line-height: 1.45;
+  overflow: auto;
+  padding: 16px;
+}
+
+/**
+  * Code blocks
+  */
+
+code {
+  background-color: rgba(27,31,35,.05);
+  border-radius: 3px;
+  font-size: 85%;
+  margin: 0;
+  word-wrap: break-word;
+  padding: .2em .4em;
+  font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+}
+
+pre > code {
+  background-color: transparent;
+  border: 0;
+  display: inline;
+  line-height: inherit;
+  margin: 0;
+  overflow: visible;
+  padding: 0;
+  word-wrap: normal;
+  font-size: 100%;
+}
+
+
+/**
+ * Blockquotes
+ */
+blockquote {
+  margin-left: 30px;
+  margin-top: 0px;
+  margin-bottom: 16px;
+  border-left-width: 3px;
+  padding: 0 1em;
+  color: #828282;
+  border-left: 4px solid #e8e8e8;
+  padding-left: 15px;
+  font-size: 18px;
+  letter-spacing: -1px;
+  font-style: italic;
+}
+blockquote * {
+  font-style: normal !important;
+  letter-spacing: 0;
+  color: #6a737d !important;
+}
+
+/**
+ * Tables
+ */
+table {
+  border-spacing: 2px;
+  display: block;
+  font-size: 14px;
+  overflow: auto;
+  width: 100%;
+  margin-bottom: 16px;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+td {
+  padding: 6px 13px;
+  border: 1px solid #dfe2e5;
+}
+
+th {
+  font-weight: 600;
+  padding: 6px 13px;
+  border: 1px solid #dfe2e5;
+}
+
+tr {
+  background-color: #fff;
+  border-top: 1px solid #c6cbd1;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+/**
+ * Others
+ */
+
+img {
+  max-width: 100%;
+}
+
+p {
+  line-height: 24px;
+  font-weight: 400;
+  font-size: 16px;
+  color: #24292e; }
+
+ul {
+  margin-top: 0; }
+
+li {
+  color: #24292e;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5; }
+
+li + li {
+  margin-top: 0.25em; }
+
+* {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  color: #24292e; }
+
+a:visited {
+  color: #0366d6; }
+
+h1, h2, h3 {
+  border-bottom: 1px solid #eaecef;
+  color: #111;
+  /* Darker */ }</style>
+      </body>
+    </html>
