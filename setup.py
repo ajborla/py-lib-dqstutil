@@ -8,33 +8,34 @@ _here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(_here, "README.md"), "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-with open(os.path.join(_here, "LICENSE"), "r", encoding="utf-8") as fh:
-    license = fh.read()
-
 version = {}
 with open(os.path.join(_here, "dqstutil", "version.py"), "r", encoding="utf-8") as fh:
     exec(fh.read(), version)
 
+author = "Anthony J. Borla"
+author_email = "ajborla@bigpond.com"
+
 setup(
     name="dqstutil-ajborla",
     version=version["__version__"],
-    author="Anthony J. Borla",
-    author_email="ajborla@bigpond.com",
-    description="A small suite of data manipulation routines",
+    author=author,
+    author_email=author_email,
+    maintainer=author,
+    maintainer_email=author_email,
+    description="Collection of utility functions for querying and managing a table-based dataset",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    license=license,
-    url="https://github.com/ajborla/dqstutil-py",
+    license="MIT License",
+    url="https://github.com/ajborla/py-lib-dqstutil",
     project_urls={
-        "Bug Tracker": "https://github.com/ajborla/dqstutil-py/issues",
+        "Bug Tracker": "https://github.com/ajborla/py-lib-dqstutil/issues",
     },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    use_scm_version=True,
-    setup_requires=['setuptools_scm'],
-    packages=find_packages(exclude=("test", "docs")),
+    use_scm_version=False,
+    packages=find_packages(exclude=("test", "docs", "examples")),
     python_requires=">=3.8",
 )
