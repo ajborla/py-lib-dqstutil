@@ -11,5 +11,13 @@
 A collection of utility functions for querying and managing a table-based dataset, primarily
 targeted for interactive use, either at the REPL, or with a Jupyter Notebook.
 
+### Technologies
+- Python 3.8+
+
+### Features
+- Simple to use, shallow learning curve
+- No classes or frameworks, just a collection of functions
+- No external dependancies
+
 ## Installation
 ## Usage
