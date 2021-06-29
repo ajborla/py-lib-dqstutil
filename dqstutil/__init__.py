@@ -1,5 +1,5 @@
 """
-**Simple table-based dataset query and management**.
+**Simple table-based dataset query and management library**.
 
 Collection of utility functions for querying and managing a
 table-based dataset.
@@ -9,6 +9,9 @@ This package is registered on the Python Package Index (PyPI) at
 
 The source is hosted on GitHub at
 [github.com/ajborla/py-lib-dqstutil](https://github.com/ajborla/py-lib-dqstutil).
+
+Library API reference is available at
+[ajborla.github.io/py-lib-dqstutil](https://ajborla.github.io/py-lib-dqstutil).
 
 Please see the README at either location above for more details about
 this package.

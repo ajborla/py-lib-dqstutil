@@ -1,4 +1,4 @@
-# dqstutil
+# dqstutil - (d)ata (q)uery and (st)atistical (util)ities
 
 **Simple table-based dataset query and management**.
 
