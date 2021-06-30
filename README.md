@@ -20,4 +20,20 @@ targeted for interactive use, either at the REPL, or with a Jupyter Notebook.
 - No external dependancies
 
 ## Installation
+This package is registered on the [Python Package Index (PyPI)](https://pypi.python.org)
+as [dqstutil](https://pypi.python.org/pypi/dqstutil).
+
+Direct installation may be accomplished via:
+
+```sh
+pip install dqstutil
+```
+
+Alternatively you may add the name, **dqstutil**, to your *requirements.txt* file, and
+install it using:
+
+```sh
+pip install -r requirements.txt
+```
+
 ## Usage
