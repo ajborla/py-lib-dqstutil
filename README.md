@@ -74,3 +74,8 @@ subset_rows, subset_header = \
 ```
 
 The [examples](https://github.com/ajborla/py-lib-dqstutil/examples/) area contains more detailed scenarios.
+
+## Documentation
+To get started quickly, refer to the [examples](https://github.com/ajborla/py-lib-dqstutil/examples/).
+
+Details for how to use each function may then be obtained from the [API documentation](https://ajborla.github.io/py-lib-dqstutil/).
