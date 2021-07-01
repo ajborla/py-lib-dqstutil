@@ -79,3 +79,26 @@ The [examples](https://github.com/ajborla/py-lib-dqstutil/examples/) area contai
 To get started quickly, refer to the [examples](https://github.com/ajborla/py-lib-dqstutil/examples/).
 
 Details for how to use each function may then be obtained from the [API documentation](https://ajborla.github.io/py-lib-dqstutil/).
+
+## Meta
+### Motivation
+As part of ongoing professional development, I have been completing the learning tracks
+at [Dataquest](https://www.dataquest.io/). While the curriculum includes use of Python
+libraries like NumPy, Pandas, and Matplotlib in Jupyter Notebook-based projects, the first
+few projects only make use of standard Python.
+
+Rather than hard code the queries and transformations needed for these projects, I instead
+assembled some helper functions with which to perform these tasks. I soon found that as I
+worked on these notebook projects, an idea for a new function, or an expansion of an
+existing one, would arise. It eventually occurred to me that packaging this functionality
+as a Python package, in a form suitable for distribution on [PyPI](https://pypi.python.org),
+would not only enhance my own learning experience, but also provide some utility to others
+working on similar tasks.
+
+### Acknowledgements
+It is only fitting to acknowledge [Dataquest](https://www.dataquest.io/) since the project
+would probably not have started without being inspired through my participation in this
+curriculum.
+
+Please note, however, inspiration aside, there is no connection between this project and
+[Dataquest](https://www.dataquest.io/).
