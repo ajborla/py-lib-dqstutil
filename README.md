@@ -77,6 +77,13 @@ The [examples](https://github.com/ajborla/py-lib-dqstutil/examples/) area contai
 
 ## Development and Testing
 ### Source Code
+The [dqstutil](https://github.com/ajborla/py-lib-dqstutil/) source is hosted on GitHub.
+Clone the project with:
+
+```sh
+git clone https://github.com/ajborla/py-lib-dqstutil.git
+```
+
 ### Requirements
 ### Tests
 ### Documentation
