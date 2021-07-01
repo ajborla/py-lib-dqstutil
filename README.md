@@ -102,3 +102,8 @@ curriculum.
 
 Please note, however, inspiration aside, there is no connection between this project and
 [Dataquest](https://www.dataquest.io/).
+
+### Project Status
+The project is active. However, since it was undertaken as a side project, and primarily as
+part of a learning exercise, little further development is envisaged (but not ruled out). That
+said, ideas, feedback, and contributions are welcome.
