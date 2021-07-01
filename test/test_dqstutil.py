@@ -34,7 +34,7 @@ from io import StringIO
 from contextlib import redirect_stdout
 
 # System-under-test (SUT) module path context
-import context
+from . import context
 
 # SUT test entities
 from dqstutil import *
@@ -1259,4 +1259,5 @@ class Tests_load_csv_dataset_Function(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main(argv=[''], verbosity=2)
+##    unittest.main(argv=[''], verbosity=2)
+    pass

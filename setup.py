@@ -38,4 +38,5 @@ setup(
     use_scm_version=False,
     packages=find_packages(exclude=("test", "docs", "examples")),
     python_requires=">=3.8",
+    test_suite = "test.test_dqstutil_suite",
 )
