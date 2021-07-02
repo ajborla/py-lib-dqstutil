@@ -227,7 +227,7 @@ class Tests_inspect_dataset_Function(unittest.TestCase):
         header = ['a', 'b', 'c']
         dataset = [
             ['a1', 'b1', 'c1'],
-            ['a2', 'c2'], \
+            ['a2', 'c2'],
             ['a3', 'b3', 'c3'],
             ['a4', 'bib', '3'],
             ['ay', 'bib', 'x'],
@@ -1259,5 +1259,4 @@ class Tests_load_csv_dataset_Function(unittest.TestCase):
 
 
 if __name__ == "__main__":
-##    unittest.main(argv=[''], verbosity=2)
     pass

@@ -1,4 +1,8 @@
+"""Insert reference to parent directory into module path."""
+
+
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+parent = os.path.join(os.path.dirname(__file__), '..')
+sys.path.insert(0, os.path.abspath(parent))

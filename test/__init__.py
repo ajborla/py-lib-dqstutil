@@ -1,15 +1,12 @@
-"""
-Module identifier.
-
-This file is needed to allow the test suite to execute via `setup.py`.
-"""
+"""Allow test suite execution via `setup.py`."""
 
 
-import unittest
-
+from unittest import TestLoader
 from . import test_dqstutil
 
+
 def test_dqstutil_suite():
-    loader = unittest.TestLoader()
+    """Return test suite object for test runner use."""
+    loader = TestLoader()
     suite = loader.loadTestsFromModule(test_dqstutil)
     return suite
