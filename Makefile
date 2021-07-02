@@ -5,6 +5,9 @@
 # Ensure default system shell used
 SHELL = /bin/sh
 
+# Override use of tab character (\t) as recipe (i.e. action) prefix
+.RECIPEPREFIX = >
+
 # Tag `phony` targets to avoid being considered perpetually up-to-date
 .PHONY: help build install uninstall clean
 
@@ -16,7 +19,16 @@ SHELL = /bin/sh
 PYTHON = python3
 
 help:
+> @echo $@
+
 build:
+> @echo $@
+
 install:
+> @echo $@
+
 uninstall:
+> @echo $@
+
 clean:
+> @echo $@
