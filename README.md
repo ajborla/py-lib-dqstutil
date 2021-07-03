@@ -89,6 +89,27 @@ Clone the project with:
 git clone https://github.com/ajborla/py-lib-dqstutil.git
 ```
 
+### Tools
+A comprehensive `Makefile` is included to facilitate develeopment and testing. For those
+unfamiliar with the `make` utility, here is an easily digestible tutorial:
+[What is a Makefile and how does it work?](https://opensource.com/article/18/8/what-how-makefile)
+
+The `Makefile`:
+- Attempts to be comprehensive, almost a 'one-stop shop' for development and testing the current project
+- Breaks several `make` conventions (but then, this is a Python, not a C, project)
+- Avoids the tab character trap (this relies on having a fairly recent `make` version)
+- Styled more like a script than a typical `Makefile`
+
+I sincerely hope I have not offended any `make` purists.
+
+To use the `Makefile`:
+
+```sh
+make
+```
+
+and follow the instructions.
+
 ### Requirements
 ### Tests
 ### Documentation
