@@ -18,7 +18,7 @@ endif
 .DEFAULT_GOAL = help
 
 # Tag `phony` targets to avoid being considered perpetually up-to-date
-.PHONY: help build install uninstall clean
+.PHONY: help docs lint test build install uninstall clean
 
 # Clear and replace default suffixes
 .SUFFIXES:
@@ -40,6 +40,9 @@ help:
 > @echo "to perform an action on this system, where"
 > @echo "ACTION is one of:"
 > @echo ""
+> @echo "    docs - generate the system documentation"
+> @echo "    lint - style-check the source code"
+> @echo "    test - execute source code unit tests"
 > @echo "    build - build the system"
 > @echo "    install - install the system"
 > @echo "    uninstall - uninstall the system"
@@ -48,6 +51,17 @@ help:
 > @echo "NOTE: All operations target the LOCAL system."
 > @echo ""
 > @echo "---------------------------------------------"
+
+docs:
+> @echo $@ - not yet implemented
+
+lint:
+> @pydocstyle $(CURDIR)
+> @pycodestyle $(CURDIR)/dqstutil
+> @pycodestyle --ignore=E501,E731 $(CURDIR)/test
+
+test:
+> @$(PYTHON) setup.py test
 
 build: clean
 > @$(PYTHON) -m build
