@@ -21,6 +21,9 @@ SHELL = /bin/sh
 # Enforce Python 3 use
 PYTHON = python3
 
+# Extract package name from `setup.py`
+PACKAGE = $(shell sed -n "s/\s*name=\"\(.*\)\",\$$/\1/p" setup.py)
+
 help:
 > @echo "------------------- HELP --------------------"
 > @echo ""
@@ -36,16 +39,19 @@ help:
 > @echo "    uninstall - uninstall the system"
 > @echo "    clean - remove generated system artefacts"
 > @echo ""
+> @echo "NOTE: All operations target the LOCAL system."
+> @echo ""
 > @echo "---------------------------------------------"
 
-build:
-> @echo $@
+build: clean
+> @$(PYTHON) -m build
+> @$(PYTHON) -m twine check dist/*
 
 install:
-> @echo $@
+> @$(PYTHON) -m pip install $(shell ls dist/*.tar.gz)
 
 uninstall:
-> @echo $@
+> @$(PYTHON) -m pip uninstall $(PACKAGE)
 
 clean:
-> @echo $@
+> @$(RM) -fr dist build *.egg-info
