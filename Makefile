@@ -5,6 +5,12 @@
 # Ensure default system shell used
 SHELL = /bin/sh
 
+# Check `make` version for `.RECIPEPREFIX` support; bail if < 4.0
+VER_OK = $(or $(findstring 4., $(MAKE_VERSION)), $(findstring 5., $(MAKE_VERSION)))
+ifeq ($(VER_OK),)
+    $(error Version 4.0 or later of `make` required)
+endif
+
 # Override use of tab character (\t) as recipe (i.e. action) prefix
 .RECIPEPREFIX = >
 
