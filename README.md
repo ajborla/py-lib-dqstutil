@@ -113,6 +113,21 @@ and follow the instructions.
 ### Requirements
 ### Tests
 ### Documentation
+Project documentation, specifically, the library API reference, resides in the `docs`
+directory, and takes the form of:
+- README.md, the documentation in Markdown form
+- index.html, said README.md rendered as HTML, but styled as Markdown
+
+Since the directory is published as a website, a `robots.txt` file also resides there.
+
+Motivation for the dual provision (via .md and .html) of the documentation is so the same
+information, in the same form, is readily available to both library end users and developers
+accessing the repository.
+
+Document generation is a two step process:
+- Parse source code, converting docstrings to Markdown
+- Convert Markdown to HTML
+
 ### Examples
 
 ## Meta
