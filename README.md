@@ -128,6 +128,27 @@ Document generation is a two step process:
 - Parse source code, converting docstrings to Markdown
 - Convert Markdown to HTML
 
+To perform the first step, a third-party Python utility, [doc2md](https://github.com/coldfix/doc2md)
+ is used, whilst the second step is performed via a [nodejs](https://nodejs.org/en/)-based
+third-party utility, [markdown-to-html-github-style](https://github.com/KrauseFx/markdown-to-html-github-style).
+
+The actual conversion steps may be found in the document generation script, `docgen.sh`,
+residing in the `docs` directory. It may be invoked directly, but is perhaps more conveniently
+called from the `docs` target of the `Makefile`, an action performed via:
+
+```sh
+make docs
+```
+
+Note document generation only occurs if the source file timestamp has changed.
+
+Some may find the reliance on third-party utilities (particularly those outside the
+Python ecosystem) irksome. Possible alternatives/improvements:
+- Use of more standard documentation generation tools such as [pydoc](https://docs.python.org/3/library/pydoc.html) or [Sphinx](https://www.sphinx-doc.org/en/master/)
+- Custom Python conversion script
+
+Candidates, certainly, for the [TODO](#todo) list!
+
 ### Examples
 
 ## Meta
@@ -157,6 +178,8 @@ Please note, however, inspiration aside, there is no connection between this pro
 The project is active. However, since it was undertaken as a side project, and primarily as
 part of a learning exercise, little further development is envisaged (but not ruled out). That
 said, ideas, feedback, and contributions are welcome.
+
+### TODO
 
 ## Contributing
 Please submit and comment on bug reports and feature requests.
