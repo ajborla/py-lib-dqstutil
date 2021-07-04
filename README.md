@@ -132,8 +132,8 @@ To perform the first step, a third-party Python utility, [doc2md](https://github
  is used, whilst the second step is performed via a [nodejs](https://nodejs.org/en/)-based
 third-party utility, [markdown-to-html-github-style](https://github.com/KrauseFx/markdown-to-html-github-style).
 
-The actual conversion steps may be found in the document generation script, `docgen.sh`,
-residing in the `docs` directory. It may be invoked directly, but is perhaps more conveniently
+The actual conversion steps may be found in the document generation script, `docgen.sh`, to
+be found in the main directory. It may be invoked directly, but is perhaps more conveniently
 called from the `docs` target of the `Makefile`, an action performed via:
 
 ```sh
