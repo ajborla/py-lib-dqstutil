@@ -1,6 +1,6 @@
 # dqstutil - (d)ata (q)uery and (st)atistical (util)ities
 
-**Simple table-based dataset query and management**.
+**Simple table-based dataset query and management library**.
 
 - [API](#api)
     - [_is_valid_colnames](#_is_valid_colnames)
@@ -30,6 +30,9 @@ This package is registered on the Python Package Index (PyPI) at
 
 The source is hosted on GitHub at
 [github.com/ajborla/py-lib-dqstutil](https://github.com/ajborla/py-lib-dqstutil).
+
+Library API reference is available at
+[ajborla.github.io/py-lib-dqstutil](https://ajborla.github.io/py-lib-dqstutil).
 
 Please see the README at either location above for more details about
 this package.
@@ -66,7 +69,7 @@ Given a list of column name, `colnames`, returns True if each
 element is also in the list, `header`.
 
 :param header: list<br>
-:param colnames: list
+:param colnames: list<br>
 
 :return: bool
 
@@ -79,7 +82,7 @@ Check string for numeric convertability.
 Given `numstr`, returns True if it is either a numeric type, or a
 numeric-convertible string.
 
-:param numstr: str
+:param numstr: str<br>
 
 :return: bool
 
@@ -92,7 +95,7 @@ Check string for possible date-format conformance.
 Given `datestr`, returns True if it is possibly a date-convertible
 string.
 
-:param datestr: str
+:param datestr: str<br>
 
 :return: bool
 
@@ -108,7 +111,7 @@ suffixed value (such as a measurement). Note that version strings
 (often having two or more decimal points) are NOT considered
 possible numerics.
 
-:param numstr: str
+:param numstr: str<br>
 
 :return: bool
 
@@ -126,7 +129,7 @@ one of:
     PD - possibly a date
     PN - possibly a numeric
 
-:param coldata: str
+:param coldata: str<br>
 
 :return: str
 
@@ -156,7 +159,7 @@ includes:
 :param dataset: list<br>
 :param header: list<br>
 :param generate_report: bool<br>
-:param printer: function
+:param printer: function<br>
 
 :return: None|tuple(list, dict, dict)
 
@@ -172,7 +175,7 @@ returns a table (dict) of category counts.
 
 :param dataset: list<br>
 :param header: list<br>
-:param colname: str
+:param colname: str<br>
 
 :return: dict|None
 
@@ -192,7 +195,7 @@ sorted, ascending.
 :param header: list<br>
 :param colname: str<br>
 :param coltype: str<br>
-:param sort: bool
+:param sort: bool<br>
 
 :return: list|None
 
@@ -215,7 +218,7 @@ Refer to the tests for examples.
 
 :param values: list<br>
 :param sort: bool<br>
-:param sep: str
+:param sep: str<br>
 
 :return: list|None
 
@@ -236,7 +239,7 @@ determine alternate ordering of the table entries.
 :param header: list<br>
 :param colname: str<br>
 :param sort_by_value: bool<br>
-:param reverse: bool
+:param reverse: bool<br>
 
 :return: dict
 
@@ -258,7 +261,7 @@ column names.
 
 :param filename: str<br>
 :param sep: str<br>
-:param encoding: str
+:param encoding: str<br>
 
 :return: list, list|None, None
 
@@ -281,7 +284,7 @@ copies of the elements too.
 :param header: list<br>
 :param colname: str<br>
 :param coldata: list<br>
-:param inplace: bool
+:param inplace: bool<br>
 
 :return: list, list|None, None
 
@@ -302,7 +305,7 @@ the container and copies of the elements too.
 :param dataset: list<br>
 :param header: list<br>
 :param colname: str<br>
-:param inplace: bool
+:param inplace: bool<br>
 
 :return: list, list|None, None
 
@@ -325,7 +328,7 @@ copies of the elements too.
 :param header: list<br>
 :param colname: str<br>
 :param coldata: list<br>
-:param inplace: bool
+:param inplace: bool<br>
 
 :return: list, list|None, None
 
@@ -359,7 +362,7 @@ Example function implementations:
 :param header: list<br>
 :param colname: str<br>
 :param transform: function<br>
-:param inplace: bool
+:param inplace: bool<br>
 
 :return: list, list|None, None
 
@@ -380,7 +383,7 @@ the container and copies of the elements too.
 :param dataset: list<br>
 :param header: list<br>
 :param colnames: list<br>
-:param inplace: bool
+:param inplace: bool<br>
 
 :return: list, list|None, None
 
@@ -396,7 +399,7 @@ the set of rows numbered from `rowrange[0]` through `rowrange[1`,
 inclusive. Note row numbering is from 0 through len(dataset)-1.
 
 :param dataset: list<br>
-:param rowrange: list
+:param rowrange: list<br>
 
 :return: None|list
 
@@ -430,6 +433,6 @@ implementations:
 :param dataset: list<br>
 :param header: list<br>
 :param sieve: function<br>
-:param colnames: None|list
+:param colnames: None|list<br>
 
 :return: list, list
