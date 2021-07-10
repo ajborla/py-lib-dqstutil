@@ -23,3 +23,20 @@ python3 -m doc2md -a -t "${TITLE}" dqstutil > ${DOCDIR}/README.md
 
 # Fix `doc2md` conversion anomalies
 sed -i 's/^### /## /' ${DOCDIR}/README.md
+
+# `markdown-to-html-github-style` checks and tasks
+git clone https://github.com/KrauseFx/markdown-to-html-github-style.git >/dev/null 2>&1
+cd markdown-to-html-github-style
+npm install >/dev/null 2>&1 || { echo Problem installing nodejs support files; exit 1; }
+rm -fr ./README.md \
+    && cp ${DOCDIR}/README.md .
+node convert.js ${TITLE} >/dev/null 2>&1
+[ -e ./README.html ] \
+    && mv README.html index.html \
+    && mv index.html ${DOCDIR}/ \
+    || { echo Problem generating README.html; exit 1; }
+cd ..
+rm -fr markdown-to-html-github-style
+
+# Fix `markdown-to-html-github-style` conversion anomalies
+sed -i 's/\(<em>\|<\/em>\)/\_/g' ${DOCDIR}/index.html
