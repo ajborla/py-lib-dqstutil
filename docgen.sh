@@ -40,3 +40,6 @@ rm -fr markdown-to-html-github-style
 
 # Fix `markdown-to-html-github-style` conversion anomalies
 sed -i 's/\(<em>\|<\/em>\)/\_/g' ${DOCDIR}/index.html
+
+# Fix remaining `doc2md` conversion anomalies
+sed -i 's/^\(\:param .*\)$/\1\<br\>/' ${DOCDIR}/README.md
