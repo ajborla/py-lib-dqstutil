@@ -53,7 +53,7 @@ help:
 > @echo "---------------------------------------------"
 
 docs:
-> @echo $@ - not yet implemented
+> @$(shell echo $(CURDIR)/docgen.sh docs)
 
 lint:
 > @pydocstyle $(CURDIR)
