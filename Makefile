@@ -53,12 +53,13 @@ help:
 > @echo "---------------------------------------------"
 
 docs:
-> @$(shell echo $(CURDIR)/docgen.sh docs)
+> @$(shell echo ./docgen.sh docs)
 
 lint:
-> @pydocstyle $(CURDIR)
-> @pycodestyle $(CURDIR)/dqstutil
-> @pycodestyle --ignore=E501,E731 $(CURDIR)/test
+> @pydocstyle dqstutil
+> @pydocstyle test
+> @pycodestyle dqstutil
+> @pycodestyle --ignore=E501,E731 test
 
 test:
 > @$(PYTHON) setup.py test
