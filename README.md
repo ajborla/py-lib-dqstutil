@@ -112,6 +112,24 @@ and follow the instructions.
 
 ### Requirements
 ### Tests
+The library unit tests are located in the `test` module. More concretely, they reside in
+in a single file, `test_dqstutil.py`, located in the `test` directory. There are currently
+118 unit tests.
+
+Tests utilise the `unittest' module, and are most easily invoked via:
+
+```sh
+make test
+```
+
+Related to testing are checks for code quality. These are implemented using the linting
+tools, `pycodestyle` and `pydocstyle`. As for the unit tests, they are most easily invoked
+via:
+
+```sh
+make lint
+```
+
 ### Documentation
 Project documentation, specifically, the library API reference, resides in the `docs`
 directory, and takes the form of:
