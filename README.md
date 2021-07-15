@@ -111,12 +111,20 @@ make
 and follow the instructions.
 
 ### Requirements
+[Python 3.8+](https://www.python.org) with [pip](https://pip.pypa.io) will be required.
+
+Please set up a development environment with the following dependencies:
+
+```sh
+pip install -r requirements.devel.txt
+```
+
 ### Tests
 The library unit tests are located in the `test` module. More concretely, they reside in
 in a single file, `test_dqstutil.py`, located in the `test` directory. There are currently
 118 unit tests.
 
-Tests utilise the `unittest' module, and are most easily invoked via:
+Tests utilise the `unittest` module, and are most easily invoked via:
 
 ```sh
 make test
